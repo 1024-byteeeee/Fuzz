@@ -18,7 +18,7 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands.argumentHandler;
+package top.byteeeee.kkk.commands.kkkCommands.argumentHandler;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -31,7 +31,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import top.byteeeee.kkk.commands.suggestionStrategy.SuggestionStrategy;
+import top.byteeeee.kkk.commands.kkkCommands.suggestionStrategy.SuggestionStrategy;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;

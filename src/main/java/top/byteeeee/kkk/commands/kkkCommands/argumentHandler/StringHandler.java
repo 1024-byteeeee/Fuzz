@@ -18,10 +18,10 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands.argumentHandler;
+package top.byteeeee.kkk.commands.kkkCommands.argumentHandler;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -31,30 +31,30 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import top.byteeeee.kkk.commands.suggestionStrategy.SuggestionStrategy;
+import top.byteeeee.kkk.commands.kkkCommands.suggestionStrategy.SuggestionStrategy;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
-public class BooleanHandler extends AbstractArgumentHandler<Boolean> {
+public class StringHandler extends AbstractArgumentHandler<String> {
     @Override
-    public ArgumentType<Boolean> getArgumentType() {
-        return BoolArgumentType.bool();
+    public ArgumentType<String> getArgumentType() {
+        return StringArgumentType.greedyString();
     }
 
     @Override
     public void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field) {
-        buildCommonCommand(literal, field);
+        super.configureArgument(literal, field);
     }
 
     @Override
-    public Boolean parseValue(CommandContext<FabricClientCommandSource> ctx) {
-        return BoolArgumentType.getBool(ctx, "value");
+    public String parseValue(CommandContext<FabricClientCommandSource> ctx) {
+        return StringArgumentType.getString(ctx, "value");
     }
 
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder) {
-        return new SuggestionStrategy().suggestOptions(builder, new String[]{"true", "false"});
+        return new SuggestionStrategy().suggestOptions(builder, getAnnotationOptions());
     }
 }

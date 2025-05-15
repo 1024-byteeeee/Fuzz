@@ -18,7 +18,7 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands.suggestionStrategy;
+package top.byteeeee.kkk.commands.kkkCommands.suggestionStrategy;
 
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;

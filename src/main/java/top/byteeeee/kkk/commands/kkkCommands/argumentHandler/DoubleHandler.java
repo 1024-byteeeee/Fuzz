@@ -18,11 +18,12 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands.argumentHandler;
+package top.byteeeee.kkk.commands.kkkCommands.argumentHandler;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
@@ -30,12 +31,30 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
+import top.byteeeee.kkk.commands.kkkCommands.suggestionStrategy.SuggestionStrategy;
+
 import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
-public interface ArgumentHandlerInterface<T> {
-    void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field);
-    T parseValue(CommandContext<FabricClientCommandSource> ctx) throws CommandSyntaxException;
-    CompletableFuture<Suggestions> getSuggestions(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder);
+public class DoubleHandler extends AbstractArgumentHandler<Double> {
+    @Override
+    public ArgumentType<Double> getArgumentType() {
+        return DoubleArgumentType.doubleArg();
+    }
+
+    @Override
+    public void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field) {
+        super.configureArgument(literal, field);
+    }
+
+    @Override
+    public Double parseValue(CommandContext<FabricClientCommandSource> ctx) {
+        return DoubleArgumentType.getDouble(ctx, "value");
+    }
+
+    @Override
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder) {
+        return new SuggestionStrategy().suggestOptions(builder, getAnnotationOptions());
+    }
 }

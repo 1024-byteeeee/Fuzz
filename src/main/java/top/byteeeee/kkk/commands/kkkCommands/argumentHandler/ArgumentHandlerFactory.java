@@ -18,7 +18,7 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands.argumentHandler;
+package top.byteeeee.kkk.commands.kkkCommands.argumentHandler;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

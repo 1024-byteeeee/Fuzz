@@ -32,8 +32,8 @@ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import top.byteeeee.kkk.KKKSettings;
 import top.byteeeee.kkk.settings.KKKFunction;
-import top.byteeeee.kkk.commands.argumentHandler.ArgumentHandlerInterface;
-import top.byteeeee.kkk.commands.argumentHandler.ArgumentHandlerFactory;
+import top.byteeeee.kkk.commands.kkkCommands.argumentHandler.ArgumentHandlerInterface;
+import top.byteeeee.kkk.commands.kkkCommands.argumentHandler.ArgumentHandlerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;

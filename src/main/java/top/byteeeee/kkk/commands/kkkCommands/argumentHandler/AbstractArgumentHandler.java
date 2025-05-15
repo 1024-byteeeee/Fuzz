@@ -18,7 +18,7 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands.argumentHandler;
+package top.byteeeee.kkk.commands.kkkCommands.argumentHandler;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
