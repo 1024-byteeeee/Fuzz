@@ -19,6 +19,7 @@
     "function.iceSlipperinessDisabled.LivingEntityMixin",
     "function.letFluidInteractLikeAir.ClientPlayerEntityMixin",
     "function.letFluidInteractLikeAir.EntityMixin",
+    "function.letFluidInteractLikeAir.LivingEntityMixin",
     "function.letFluidInteractLikeAir.PlayerEntityMixin",
     "function.pickFluidBucketItemInCreative.MinecraftClientMixin",
     "function.renderHandDisabled.GameRendererMixin",
@@ -26,8 +27,8 @@
     "function.slimeBlockBounceDisabled.SlimeBlockMixin",
     "function.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
     "function.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
-    "function.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
-    "function.letFluidInteractLikeAir.LivingEntityMixin"
+    "function.highLightWitherSkeletonEntity.MinecraftClientMixin",
+    "function.usingItemSlowDownDisabled.ClientPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

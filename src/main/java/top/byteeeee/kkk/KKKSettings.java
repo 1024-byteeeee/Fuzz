@@ -126,6 +126,9 @@ public class KKKSettings {
     )
     public static String pickFluidBucketItemInCreative = "false";
 
+    @KKKFunction(categories = {KKK, FEATURE, SURVIVAL})
+    public static boolean highLightWitherSkeletonEntity = false;
+
     static {
         for (Field field : KKKSettings.class.getDeclaredFields()) {
             if (field.isAnnotationPresent(KKKFunction.class)) {

@@ -91,5 +91,7 @@
   "kkk.settings.pickFluidBucketItemInCreative.desc": "在创造模式下可以瞄准流体用鼠标中键取得对应的桶",
   "kkk.settings.pickFluidBucketItemInCreative.extra.0": "[false] - 关闭功能",
   "kkk.settings.pickFluidBucketItemInCreative.extra.1": "[true] - 启用功能",
-  "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - 需潜行时中键"
+  "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - 需潜行时中键",
+  "kkk.settings.highLightWitherSkeletonEntity.name": "高亮凋零骷髅",
+  "kkk.settings.highLightWitherSkeletonEntity.desc": "给予凋零骷髅发光效果"
 }

@@ -91,5 +91,7 @@
   "kkk.settings.pickFluidBucketItemInCreative.desc": "In Creative mode, you can target a fluid and use the middle mouse button to pick up the corresponding bucket",
   "kkk.settings.pickFluidBucketItemInCreative.extra.0": "[false] - Turn off the feature",
   "kkk.settings.pickFluidBucketItemInCreative.extra.1": "[true] - Enable the feature",
-  "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - Middle-click when sneaking is required"
+  "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - Middle-click when sneaking is required",
+  "kkk.settings.highLightWitherSkeletonEntity.name": "highLightWitherSkeletonEntity",
+  "kkk.settings.highLightWitherSkeletonEntity.desc": "Gives the wither skeleton a glowing effect"
 }
