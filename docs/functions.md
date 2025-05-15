@@ -452,26 +452,6 @@
 
 
 
-## 禁用气泡柱交互（bubbleColumnInteractDisabled）
-
-让玩家不会受到来自气泡柱的效果。
-
-- 类型: `boolean`
-
-
-
-- 默认值: `false`
-
-
-
-- 参考选项: `false`, `true`
-
-
-
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
-
-
-
 ## 创造模式中键取得流体桶（pickFluidBucketItemInCreative）
 
 在创造模式下可以瞄准流体用鼠标中键取得对应的桶。
