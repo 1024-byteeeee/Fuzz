@@ -1,0 +1,35 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "top.byteeeee.kkk.mixin",
+  "compatibilityLevel": "/*JAVA_VERSION*/",
+  "mixins": [],
+  "client": [
+    "function.bedRockFlying.ClientPlayerEntityInvoker",
+    "function.bedRockFlying.ClientPlayerEntityMixin",
+    "function.biomeColor.BiomeEffectsMixin",
+    "function.blockOutlineColor.WorldRendererAccessor",
+    "function.blockOutlineColor.WorldRenderMixin",
+    "function.bubbleColumnInteractDisabled.BubbleColumnBlockMixin",
+    "function.campfireSmokeParticleDisabled.CampfireBlockMixin",
+    "function.cobwebSlowDownDisabled.CobwebMixin",
+    "function.fluidPushDisabled.PlayerEntityMixin",
+    "function.honeyBlockSlowDownDisabled.HoneyBlockMixin",
+    "function.hurtShakeDisabled.GameRendererMixin",
+    "function.iceSlipperinessDisabled.LivingEntityMixin",
+    "function.letFluidInteractLikeAir.ClientPlayerEntityMixin",
+    "function.letFluidInteractLikeAir.EntityMixin",
+    "function.letFluidInteractLikeAir.PlayerEntityMixin",
+    "function.pickFluidBucketItemInCreative.MinecraftClientMixin",
+    "function.renderHandDisabled.GameRendererMixin",
+    "function.slimeBlockBounceDisabled.LivingEntityMixin",
+    "function.slimeBlockBounceDisabled.SlimeBlockMixin",
+    "function.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
+    "function.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
+    "function.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
+    "function.letFluidInteractLikeAir.LivingEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
