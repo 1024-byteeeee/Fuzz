@@ -473,3 +473,23 @@ In Creative mode, you can target a fluid and use the middle mouse button to pick
 
 
 - Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+
+
+
+## highLightWitherSkeletonEntity
+
+Gives the wither skeleton a glowing effect.
+
+- Type: `boolean`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `true`
+
+
+
+- Categroies: `AMS`, `FEATURE`, `SURVIVAL`

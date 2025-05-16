@@ -475,3 +475,23 @@
 
 
 - 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+
+
+
+## 高亮凋零骷髅（highLightWitherSkeletonEntity）
+
+给予凋零骷髅发光效果。
+
+- 类型: `boolean`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `true`
+
+
+
+- 分类: `AMS`, `FEATURE`, `SURVIVAL`
