@@ -1,4 +1,4 @@
-version:4325
+version:4428
 ao:true
 biomeBlendRadius:2
 enableVsync:false
@@ -23,6 +23,7 @@ narrator:0
 particles:0
 reducedDebugInfo:false
 renderClouds:"true"
+cloudRange:128
 renderDistance:2
 simulationDistance:12
 screenEffectScale:1.0
@@ -90,6 +91,8 @@ telemetryOptInExtra:false
 onboardAccessibility:false
 menuBackgroundBlurriness:5
 startedCleanly:true
+showNowPlayingToast:false
+musicFrequency:"DEFAULT"
 key_key.attack:key.mouse.left
 key_key.use:key.mouse.right
 key_key.forward:key.keyboard.w

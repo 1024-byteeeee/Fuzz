@@ -20,44 +20,25 @@
 
 package top.byteeeee.kkk.mixin.function.renderHandDisabled;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-//#if MC>=12006
-//$$ import org.joml.Matrix4f;
-//#else
-import net.minecraft.client.util.math.MatrixStack;
-//#endif
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import top.byteeeee.kkk.KKKSettings;
-import top.byteeeee.kkk.helpers.Noop;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @WrapMethod(method = "renderHand")
-    private void worldRenderDisabled(
-        //#if MC>=12006
-        //$$ Camera camera, float tickDelta, Matrix4f matrix4f, Operation<Void> original
-        //#else
-        MatrixStack matrices, Camera camera, float tickDelta, Operation<Void> original
-        //#endif
-    ) {
+    @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
+    private void renderHandDisabled(CallbackInfo ci) {
         if (KKKSettings.renderHandDisabled) {
-            Noop.noop();
-        } else {
-            //#if MC>=12006
-            //$$ original.call(camera, tickDelta, matrix4f);
-            //#else
-            original.call(matrices, camera, tickDelta);
-            //#endif
+            ci.cancel();
         }
     }
 }
