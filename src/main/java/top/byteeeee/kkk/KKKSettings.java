@@ -26,6 +26,8 @@ import net.fabricmc.api.Environment;
 import top.byteeeee.kkk.settings.KKKFunction;
 import top.byteeeee.kkk.config.KKKConfig;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +37,7 @@ import static top.byteeeee.kkk.settings.KKKFunctionCategory.*;
 @Environment(EnvType.CLIENT)
 public class KKKSettings {
     public static Map<String, Object> DEFAULT_VALUES = new ConcurrentHashMap<>();
+    public static List<String> highlightedEntities = new ArrayList<>();
 
     @KKKFunction(categories = {KKK, FEATURE, SURVIVAL, QOL})
     public static boolean usingItemSlowDownDisabled = false;
@@ -128,6 +131,9 @@ public class KKKSettings {
 
     @KKKFunction(categories = {KKK, FEATURE, SURVIVAL})
     public static boolean highLightWitherSkeletonEntity = false;
+
+    @KKKFunction(categories = {KKK, FEATURE, SURVIVAL, COMMAND})
+    public static boolean commandhighLightEntities = false;
 
     static {
         for (Field field : KKKSettings.class.getDeclaredFields()) {

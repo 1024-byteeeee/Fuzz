@@ -7,6 +7,7 @@
   "kkk.categories.experimental": "experimental",
   "kkk.categories.feature": "feature",
   "kkk.categories.carpet": "carpet",
+  "kkk.categories.command": "command",
 
   "kkk.categories.list_title_for_category": "KKK Mod Settings matching \"%s\":",
   "kkk.categories.categories_list": "Browse categories: ",

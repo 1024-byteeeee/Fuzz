@@ -18,29 +18,31 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.commands;
+package top.byteeeee.kkk.mixin.function.commandHighLightEntites;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-//#if MC<11900
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-//#else
-//$$ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-//#endif
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 
-import top.byteeeee.kkk.commands.function.commandHighLightEntity.HighLightEntityCommand;
-import top.byteeeee.kkk.commands.kkkCommands.KKKCommand;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+import top.byteeeee.kkk.KKKSettings;
 
 @Environment(EnvType.CLIENT)
-public class RegisterCommands {
-    public static void registerClientCommands() {
-        //#if MC<11900
-        KKKCommand.register(ClientCommandManager.DISPATCHER);
-        HighLightEntityCommand.register(ClientCommandManager.DISPATCHER);
-        //#else
-        //$$ ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> KKKCommand.register(dispatcher)));
-        //$$ ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> HighLightEntityCommand.register(dispatcher)));
-        //#endif
+@Mixin(MinecraftClient.class)
+public abstract class MinecraftClientMixin {
+    @ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
+    private boolean clairvoyance(boolean original, Entity entity) {
+        if (KKKSettings.commandhighLightEntities && KKKSettings.highlightedEntities.contains(EntityType.getId(entity.getType()).toString())) {
+            return true;
+        } else {
+            return original;
+        }
     }
 }

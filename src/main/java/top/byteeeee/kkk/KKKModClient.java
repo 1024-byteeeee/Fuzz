@@ -49,6 +49,6 @@ public class KKKModClient implements ClientModInitializer {
         VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
         minecraftClient = MinecraftClient.getInstance();
         ClientEvent.register();
-        KeyBindings.Register();
+        KeyBindings.register();
     }
 }

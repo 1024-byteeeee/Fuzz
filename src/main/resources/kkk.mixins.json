@@ -13,7 +13,9 @@
     "function.bubbleColumnInteractDisabled.BubbleColumnBlockMixin",
     "function.campfireSmokeParticleDisabled.CampfireBlockMixin",
     "function.cobwebSlowDownDisabled.CobwebMixin",
+    "function.commandHighLightEntites.MinecraftClientMixin",
     "function.fluidPushDisabled.PlayerEntityMixin",
+    "function.highLightWitherSkeletonEntity.MinecraftClientMixin",
     "function.honeyBlockSlowDownDisabled.HoneyBlockMixin",
     "function.hurtShakeDisabled.GameRendererMixin",
     "function.iceSlipperinessDisabled.LivingEntityMixin",
@@ -27,7 +29,6 @@
     "function.slimeBlockBounceDisabled.SlimeBlockMixin",
     "function.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
     "function.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
-    "function.highLightWitherSkeletonEntity.MinecraftClientMixin",
     "function.usingItemSlowDownDisabled.ClientPlayerEntityMixin"
   ],
   "injectors": {
