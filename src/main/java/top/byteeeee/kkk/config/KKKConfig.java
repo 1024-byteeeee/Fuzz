@@ -46,7 +46,7 @@ public class KKKConfig {
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("KKK");
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("settings.json");
 
-    public static void loadConfig() {
+    public static void load() {
         try {
             if (!Files.exists(CONFIG_FILE)) {
                 saveConfig();

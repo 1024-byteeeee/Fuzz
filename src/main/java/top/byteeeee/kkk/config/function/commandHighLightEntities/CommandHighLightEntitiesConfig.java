@@ -18,31 +18,33 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.mixin.function.commandHighLightEntites;
-
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+package top.byteeeee.kkk.config.function.commandHighLightEntities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.fabricmc.loader.api.FabricLoader;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+import top.byteeeee.kkk.config.template.AbstractListJsonConfig;
 
-import top.byteeeee.kkk.KKKSettings;
+import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
-@Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin {
-    @ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
-    private boolean clairvoyance(boolean original, Entity entity) {
-        if (KKKSettings.commandHighLightEntities && KKKSettings.highlightEntityList.contains(EntityType.getId(entity.getType()).toString())) {
-            return true;
-        } else {
-            return original;
-        }
+public class CommandHighLightEntitiesConfig extends AbstractListJsonConfig<String> {
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("KKK").resolve("commandHighLightEntities").resolve("entities.json");
+
+    private static final CommandHighLightEntitiesConfig INSTANCE = new CommandHighLightEntitiesConfig();
+
+    private CommandHighLightEntitiesConfig() {
+        super(CONFIG_PATH);
+    }
+
+    public static CommandHighLightEntitiesConfig getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    protected Class<String> getElementType() {
+        return String.class;
     }
 }

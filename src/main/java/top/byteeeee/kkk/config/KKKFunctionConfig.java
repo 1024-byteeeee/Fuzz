@@ -18,18 +18,17 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.utils;
+package top.byteeeee.kkk.config;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import java.util.function.Supplier;
+import top.byteeeee.kkk.KKKSettings;
+import top.byteeeee.kkk.config.function.commandHighLightEntities.CommandHighLightEntitiesConfig;
 
-public class CommandUtil {
-    public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
-        if (!condition) {
-            source.sendError(Messenger.s("需开启: " + functionName));
-            return 0;
-        }
-        return action.get();
+@Environment(EnvType.CLIENT)
+public class KKKFunctionConfig {
+    public static void load() {
+        CommandHighLightEntitiesConfig.getInstance().loadFromJson(KKKSettings.highlightEntityList);
     }
 }

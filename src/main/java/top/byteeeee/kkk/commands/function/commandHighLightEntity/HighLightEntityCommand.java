@@ -23,103 +23,103 @@ package top.byteeeee.kkk.commands.function.commandHighLightEntity;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import top.byteeeee.kkk.KKKSettings;
+import top.byteeeee.kkk.commands.suggestionProviders.ListSuggestionProvider;
+import top.byteeeee.kkk.commands.suggestionProviders.SetSuggestionProvider;
+import top.byteeeee.kkk.config.function.commandHighLightEntities.CommandHighLightEntitiesConfig;
+import top.byteeeee.kkk.utils.CommandUtil;
 import top.byteeeee.kkk.utils.Messenger;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
 public class HighLightEntityCommand {
-    private static final SuggestionProvider<FabricClientCommandSource> ENTITY_SUGGESTIONS =
-        (context, builder) -> {
-            Registry.ENTITY_TYPE.forEach(entityType -> {
-                Identifier id = EntityType.getId(entityType);
-                builder.suggest(id.toString());   // minecraft:creeper
-            });
-            return CompletableFuture.completedFuture(builder.build());
-        };
+    private static final String FUNCTION_NAME = "commandHighLightEntities";
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
             ClientCommandManager.literal("highlightEntity")
-            .requires(s -> s.hasPermissionLevel(0))
             // Add entity command
             .then(ClientCommandManager.literal("add")
-            .then(ClientCommandManager.argument("entity", StringArgumentType.greedyString())
-            .suggests(ENTITY_SUGGESTIONS)
-            .executes(context -> add(
-                context.getSource(),
-                StringArgumentType.getString(context, "entity")
-            ))))
+            .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
+            .suggests(SetSuggestionProvider.fromEntityRegistry())
+            .executes(c -> CommandUtil.checkEnabled(
+                c.getSource(), KKKSettings.commandHighLightEntities, FUNCTION_NAME,
+                () -> add(c.getSource(), StringArgumentType.getString(c, "entityId")))
+            )))
 
             // Remove entity command
             .then(ClientCommandManager.literal("remove")
-            .then(ClientCommandManager.argument("entity", StringArgumentType.greedyString())
-            .suggests((context, builder) -> {
-                KKKSettings.highlightedEntities.forEach(builder::suggest);
-                return CompletableFuture.completedFuture(builder.build());
-            })
-            .executes(context -> remove(
-                context.getSource(),
-                StringArgumentType.getString(context, "entity")
-            ))))
+            .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
+            .suggests(ListSuggestionProvider.of(KKKSettings.highlightEntityList))
+            .executes(c -> CommandUtil.checkEnabled(
+                c.getSource(), KKKSettings.commandHighLightEntities, FUNCTION_NAME,
+                () -> remove(c.getSource(), StringArgumentType.getString(c, "entityId")))
+            )))
 
             // Clear all entities
             .then(ClientCommandManager.literal("clear")
-            .executes(context -> clear(context.getSource())))
+            .executes(
+                c -> CommandUtil.checkEnabled(
+                c.getSource(), KKKSettings.commandHighLightEntities, FUNCTION_NAME,
+                () -> clear(c.getSource()))
+            ))
 
             // List entities
             .then(ClientCommandManager.literal("list")
-            .executes(context -> list(context.getSource())))
+            .executes(
+                c -> CommandUtil.checkEnabled(
+                c.getSource(), KKKSettings.commandHighLightEntities, FUNCTION_NAME,
+                () -> list(c.getSource()))
+            ))
 
             // Show help
             .then(ClientCommandManager.literal("help")
-            .executes(context -> help(context.getSource())))
+            .executes(
+                c -> CommandUtil.checkEnabled(
+                c.getSource(), KKKSettings.commandHighLightEntities, FUNCTION_NAME,
+                () -> help(c.getSource()))
+            ))
         );
     }
 
     private static int add(FabricClientCommandSource source, String entity) {
-        if (KKKSettings.highlightedEntities.contains(entity)) {
+        if (KKKSettings.highlightEntityList.contains(entity)) {
             source.sendError(Messenger.s("实体 " + entity + " 已在列表中"));
             return 0;
         }
-        KKKSettings.highlightedEntities.add(entity);
+        KKKSettings.highlightEntityList.add(entity);
+        saveToJson();
         source.sendFeedback(Messenger.s("已添加高亮实体: " + entity));
         return 1;
     }
 
     private static int remove(FabricClientCommandSource source, String entity) {
-        if (!KKKSettings.highlightedEntities.remove(entity)) {
+        if (!KKKSettings.highlightEntityList.remove(entity)) {
             source.sendError(Messenger.s("实体 " + entity + " 不在列表中"));
             return 0;
         }
-
+        saveToJson();
         source.sendFeedback(Messenger.s("已移除高亮实体: " + entity));
         return 1;
     }
 
     private static int clear(FabricClientCommandSource source) {
-        int count = KKKSettings.highlightedEntities.size();
-        KKKSettings.highlightedEntities.clear();
+        int count = KKKSettings.highlightEntityList.size();
+        KKKSettings.highlightEntityList.clear();
+        saveToJson();
         source.sendFeedback(Messenger.s("已清除所有高亮实体 (" + count + " 个)"));
         return 1;
     }
 
     private static int list(FabricClientCommandSource source) {
-        List<String> entities = KKKSettings.highlightedEntities;
+        List<String> entities = KKKSettings.highlightEntityList;
 
         if (entities.isEmpty()) {
             source.sendFeedback(Messenger.s("当前没有高亮实体"));
@@ -127,18 +127,23 @@ public class HighLightEntityCommand {
         }
 
         source.sendFeedback(Messenger.s("高亮实体列表 (" + entities.size() + "):"));
+
         for (String entity : entities) {
             source.sendFeedback(Messenger.s("- " + entity));
         }
+
         return 1;
     }
 
     private static int help(FabricClientCommandSource source) {
-        source.sendFeedback(Messenger.s("高亮实体命令使用说明:"));
         source.sendFeedback(Messenger.s("/highLight add <实体ID> - 添加高亮实体"));
         source.sendFeedback(Messenger.s("/highLight remove <实体ID> - 移除高亮实体"));
         source.sendFeedback(Messenger.s("/highLight clear - 清除所有高亮实体"));
         source.sendFeedback(Messenger.s("/highLight list - 列出所有高亮实体"));
         return 1;
+    }
+
+    private static void saveToJson() {
+        CommandHighLightEntitiesConfig.getInstance().saveToJson(KKKSettings.highlightEntityList);
     }
 }
