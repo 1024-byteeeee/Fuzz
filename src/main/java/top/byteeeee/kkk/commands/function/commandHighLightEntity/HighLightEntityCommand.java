@@ -29,10 +29,13 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
+import net.minecraft.util.Formatting;
+
 import top.byteeeee.kkk.KKKSettings;
 import top.byteeeee.kkk.commands.suggestionProviders.ListSuggestionProvider;
 import top.byteeeee.kkk.commands.suggestionProviders.SetSuggestionProvider;
 import top.byteeeee.kkk.config.function.commandHighLightEntities.CommandHighLightEntitiesConfig;
+import top.byteeeee.kkk.translations.Translator;
 import top.byteeeee.kkk.utils.CommandUtil;
 import top.byteeeee.kkk.utils.Messenger;
 
@@ -40,6 +43,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class HighLightEntityCommand {
+    protected static final Translator tr = new Translator("command.highlightEntity");
     private static final String FUNCTION_NAME = "commandHighLightEntities";
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -91,30 +95,29 @@ public class HighLightEntityCommand {
 
     private static int add(FabricClientCommandSource source, String entity) {
         if (KKKSettings.highlightEntityList.contains(entity)) {
-            source.sendError(Messenger.s("实体 " + entity + " 已在列表中"));
+            Messenger.tell(source, tr.tr("already_in_list", entity).formatted(Formatting.RED));
             return 0;
         }
         KKKSettings.highlightEntityList.add(entity);
         saveToJson();
-        source.sendFeedback(Messenger.s("已添加高亮实体: " + entity));
+        Messenger.tell(source, tr.tr("added", entity).formatted(Formatting.GREEN));
         return 1;
     }
 
     private static int remove(FabricClientCommandSource source, String entity) {
         if (!KKKSettings.highlightEntityList.remove(entity)) {
-            source.sendError(Messenger.s("实体 " + entity + " 不在列表中"));
+            Messenger.tell(source, tr.tr("not_in_list", entity).formatted(Formatting.RED));
             return 0;
         }
         saveToJson();
-        source.sendFeedback(Messenger.s("已移除高亮实体: " + entity));
+        Messenger.tell(source, tr.tr("removed", entity).formatted(Formatting.AQUA));
         return 1;
     }
 
     private static int clear(FabricClientCommandSource source) {
-        int count = KKKSettings.highlightEntityList.size();
         KKKSettings.highlightEntityList.clear();
         saveToJson();
-        source.sendFeedback(Messenger.s("已清除所有高亮实体 (" + count + " 个)"));
+        Messenger.tell(source, tr.tr("cleared").formatted(Formatting.GREEN));
         return 1;
     }
 
@@ -122,24 +125,24 @@ public class HighLightEntityCommand {
         List<String> entities = KKKSettings.highlightEntityList;
 
         if (entities.isEmpty()) {
-            source.sendFeedback(Messenger.s("当前没有高亮实体"));
+            Messenger.tell(source, tr.tr("list_is_empty").formatted(Formatting.YELLOW));
             return 0;
         }
 
-        source.sendFeedback(Messenger.s("高亮实体列表 (" + entities.size() + "):"));
+        Messenger.tell(source, tr.tr("list_title", entities.size()).formatted(Formatting.AQUA, Formatting.BOLD));
 
         for (String entity : entities) {
-            source.sendFeedback(Messenger.s("- " + entity));
+            Messenger.tell(source, Messenger.s("- " + entity).formatted(Formatting.WHITE));
         }
 
         return 1;
     }
 
     private static int help(FabricClientCommandSource source) {
-        source.sendFeedback(Messenger.s("/highLight add <实体ID> - 添加高亮实体"));
-        source.sendFeedback(Messenger.s("/highLight remove <实体ID> - 移除高亮实体"));
-        source.sendFeedback(Messenger.s("/highLight clear - 清除所有高亮实体"));
-        source.sendFeedback(Messenger.s("/highLight list - 列出所有高亮实体"));
+        Messenger.tell(source, tr.tr("add_help").formatted(Formatting.GRAY));
+        Messenger.tell(source, tr.tr("remove_help").formatted(Formatting.GRAY));
+        Messenger.tell(source, tr.tr("clear_help").formatted(Formatting.GRAY));
+        Messenger.tell(source, tr.tr("list_help").formatted(Formatting.GRAY));
         return 1;
     }
 

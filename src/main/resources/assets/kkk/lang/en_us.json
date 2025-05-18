@@ -34,6 +34,18 @@
   "kkk.keyBinding.quickKickFakePlayer.name": "quickKickFakePlayer",
   "kkk.keyBinding.quickDropFakePlayerAllItemStack.name": "quickDropFakePlayerAllItemStack",
 
+  "kkk.command.highlightEntity.already_in_list": "<KKK> %s is already in list",
+  "kkk.command.highlightEntity.added": "<KKK> Highlight effect added: %s",
+  "kkk.command.highlightEntity.not_in_list": "<KKK> Not in list: %s",
+  "kkk.command.highlightEntity.removed": "<KKK> Highlight effect cleared: %s",
+  "kkk.command.highlightEntity.cleared": "<KKK> All highlighted entities have been cleared",
+  "kkk.command.highlightEntity.list_is_empty": "<KKK> There are currently no highlighted entities",
+  "kkk.command.highlightEntity.list_title": "Highlight entity list (%s):",
+  "kkk.command.highlightEntity.add_help": "/highLight add <entityId> - Add a highlighted entity",
+  "kkk.command.highlightEntity.remove_help": "/highLight remove <entityId> - Remove the highlighted entity",
+  "kkk.command.highlightEntity.clear_help": "/highLight clear - Clears all highlighted entities",
+  "kkk.command.highlightEntity.list_help": "/highLight list - Lists all highlighted entities",
+
   "kkk.settings.usingItemSlowDownDisabled.name": "usingItemSlowDownDisabled",
   "kkk.settings.usingItemSlowDownDisabled.desc": "Disable the slow effect when using items",
   "kkk.settings.sneakingSlowDownDisabled.name": "sneakingSlowDownDisabled",
@@ -93,6 +105,7 @@
   "kkk.settings.pickFluidBucketItemInCreative.extra.0": "[false] - Turn off the feature",
   "kkk.settings.pickFluidBucketItemInCreative.extra.1": "[true] - Enable the feature",
   "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - Middle-click when sneaking is required",
-  "kkk.settings.highLightWitherSkeletonEntity.name": "highLightWitherSkeletonEntity",
-  "kkk.settings.highLightWitherSkeletonEntity.desc": "Gives the wither skeleton a glowing effect"
+  "kkk.settings.commandHighLightEntities.name": "commandHighLightEntities",
+  "kkk.settings.commandHighLightEntities.desc": "Use command to highlight one or more specified entities",
+  "kkk.settings.commandHighLightEntities.extra.0": "Use /highlightEntity help command to view the user guide"
 }
