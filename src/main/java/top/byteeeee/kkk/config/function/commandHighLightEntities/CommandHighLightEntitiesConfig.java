@@ -18,23 +18,33 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.utils;
+package top.byteeeee.kkk.config.function.commandHighLightEntities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.fabricmc.loader.api.FabricLoader;
 
-import top.byteeeee.kkk.KKKModClient;
+import top.byteeeee.kkk.config.template.AbstractListJsonConfig;
+
+import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
-public class ClientUtil {
-    public static ClientPlayerEntity getCurrentPlayer() {
-        return KKKModClient.minecraftClient.player;
+public class CommandHighLightEntitiesConfig extends AbstractListJsonConfig<String> {
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("KKK").resolve("commandHighLightEntities").resolve("entities.json");
+
+    private static final CommandHighLightEntitiesConfig INSTANCE = new CommandHighLightEntitiesConfig();
+
+    private CommandHighLightEntitiesConfig() {
+        super(CONFIG_PATH);
     }
 
-    public static MinecraftClient getCurrentClient() {
-        return KKKModClient.minecraftClient;
+    public static CommandHighLightEntitiesConfig getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    protected Class<String> getElementType() {
+        return String.class;
     }
 }

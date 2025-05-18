@@ -478,9 +478,11 @@
 
 
 
-## 高亮凋零骷髅（highLightWitherSkeletonEntity）
+## 高亮实体（commandHighLightEntities）
 
-给予凋零骷髅发光效果。
+使用指令高亮一个或多个指定实体。
+
+使用 /highlightEntity help 指令查看使用指南
 
 - 类型: `boolean`
 
@@ -494,4 +496,4 @@
 
 
 
-- 分类: `AMS`, `FEATURE`, `SURVIVAL`
+- 分类: `AMS`, `FEATURE`, `SURVIVAL`, `COMMAND`

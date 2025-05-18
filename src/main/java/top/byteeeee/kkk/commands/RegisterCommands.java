@@ -20,6 +20,8 @@
 
 package top.byteeeee.kkk.commands;
 
+import com.mojang.brigadier.CommandDispatcher;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -28,16 +30,25 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 //#else
 //$$ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 //#endif
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
+import top.byteeeee.kkk.commands.function.commandHighLightEntity.HighLightEntityCommand;
 import top.byteeeee.kkk.commands.kkkCommands.KKKCommand;
+
+import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class RegisterCommands {
-    public static void registerClientCommands() {
+    public static void register() {
+        registerCommand(KKKCommand::register);
+        registerCommand(HighLightEntityCommand::register);
+    }
+
+    private static void registerCommand(Consumer<CommandDispatcher<FabricClientCommandSource>> registrator) {
         //#if MC<11900
-        KKKCommand.register(ClientCommandManager.DISPATCHER);
+        registrator.accept(ClientCommandManager.DISPATCHER);
         //#else
-        //$$ ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> KKKCommand.register(dispatcher)));
+        //$$ ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> registrator.accept(dispatcher));
         //#endif
     }
 }

@@ -20,21 +20,16 @@
 
 package top.byteeeee.kkk.utils;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import java.util.function.Supplier;
 
-import top.byteeeee.kkk.KKKModClient;
-
-@Environment(EnvType.CLIENT)
-public class ClientUtil {
-    public static ClientPlayerEntity getCurrentPlayer() {
-        return KKKModClient.minecraftClient.player;
-    }
-
-    public static MinecraftClient getCurrentClient() {
-        return KKKModClient.minecraftClient;
+public class CommandUtil {
+    public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
+        if (!condition) {
+            source.sendError(Messenger.s("需开启: " + functionName));
+            return 0;
+        }
+        return action.get();
     }
 }

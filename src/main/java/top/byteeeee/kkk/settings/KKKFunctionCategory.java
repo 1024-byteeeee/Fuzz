@@ -33,4 +33,5 @@ public class KKKFunctionCategory {
     public static final String EXPERIMENTAL = "experimental";
     public static final String FEATURE = "feature";
     public static final String CARPET = "carpet";
+    public static final String COMMAND = "command";
 }

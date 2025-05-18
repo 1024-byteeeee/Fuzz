@@ -7,6 +7,7 @@
   "kkk.categories.experimental": "实验性",
   "kkk.categories.feature": "特性",
   "kkk.categories.carpet": "carpet",
+  "kkk.categories.command": "指令",
 
   "kkk.categories.list_title_for_category": "KKK Mod中符合“%s”的选项:",
   "kkk.categories.categories_list": "浏览分类：",
@@ -32,6 +33,18 @@
   "kkk.keyBinding.category": "KKK",
   "kkk.keyBinding.quickKickFakePlayer.name": "快捷踢出假人",
   "kkk.keyBinding.quickDropFakePlayerAllItemStack.name": "快捷扔出假人背包",
+
+  "kkk.command.highlightEntity.already_in_list": "<KKK> %s 已在列表中",
+  "kkk.command.highlightEntity.added": "<KKK> 已添加高亮效果: %s",
+  "kkk.command.highlightEntity.not_in_list": "<KKK> 不在列表中: %s",
+  "kkk.command.highlightEntity.removed": "<KKK> 已清除高亮效果: %s",
+  "kkk.command.highlightEntity.cleared": "<KKK> 已清除所有高亮实体: %s",
+  "kkk.command.highlightEntity.list_is_empty": "<KKK> 当前无高亮实体",
+  "kkk.command.highlightEntity.list_title": "高亮实体列表 (%s):",
+  "kkk.command.highlightEntity.add_help": "/highLight add <实体ID> - 添加高亮实体",
+  "kkk.command.highlightEntity.remove_help": "/highLight remove <实体ID> - 移除高亮实体",
+  "kkk.command.highlightEntity.clear_help": "/highLight clear - 清除所有高亮实体",
+  "kkk.command.highlightEntity.list_help": "/highLight list - 列出所有高亮实体",
 
   "kkk.settings.usingItemSlowDownDisabled.name": "禁用使用物品减速",
   "kkk.settings.usingItemSlowDownDisabled.desc": "禁用使用物品时的减速效果",
@@ -92,6 +105,7 @@
   "kkk.settings.pickFluidBucketItemInCreative.extra.0": "[false] - 关闭功能",
   "kkk.settings.pickFluidBucketItemInCreative.extra.1": "[true] - 启用功能",
   "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - 需潜行时中键",
-  "kkk.settings.highLightWitherSkeletonEntity.name": "高亮凋零骷髅",
-  "kkk.settings.highLightWitherSkeletonEntity.desc": "给予凋零骷髅发光效果"
+  "kkk.settings.commandHighLightEntities.name": "高亮实体",
+  "kkk.settings.commandHighLightEntities.desc": "使用指令高亮一个或多个指定实体",
+  "kkk.settings.commandHighLightEntities.extra.0": "使用 /highlightEntity help 指令查看使用指南"
 }

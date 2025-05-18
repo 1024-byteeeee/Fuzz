@@ -18,28 +18,17 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.mixin.function.highLightWitherSkeletonEntity;
+package top.byteeeee.kkk.config;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-
-import net.minecraft.entity.mob.WitherSkeletonEntity;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import top.byteeeee.kkk.KKKSettings;
+import top.byteeeee.kkk.config.function.commandHighLightEntities.CommandHighLightEntitiesConfig;
 
-@Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin {
-    @ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
-    private boolean clairvoyance(boolean original, Entity entity) {
-        if (KKKSettings.highLightWitherSkeletonEntity && entity instanceof WitherSkeletonEntity) {
-            return true;
-        } else {
-            return original;
-        }
+@Environment(EnvType.CLIENT)
+public class KKKFunctionConfig {
+    public static void load() {
+        CommandHighLightEntitiesConfig.getInstance().loadFromJson(KKKSettings.highlightEntityList);
     }
 }

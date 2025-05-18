@@ -18,23 +18,31 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.utils;
+package top.byteeeee.kkk.mixin.function.commandHighLightEntites;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 
-import top.byteeeee.kkk.KKKModClient;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+import top.byteeeee.kkk.KKKSettings;
 
 @Environment(EnvType.CLIENT)
-public class ClientUtil {
-    public static ClientPlayerEntity getCurrentPlayer() {
-        return KKKModClient.minecraftClient.player;
-    }
-
-    public static MinecraftClient getCurrentClient() {
-        return KKKModClient.minecraftClient;
+@Mixin(MinecraftClient.class)
+public abstract class MinecraftClientMixin {
+    @ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
+    private boolean clairvoyance(boolean original, Entity entity) {
+        if (KKKSettings.commandHighLightEntities && KKKSettings.highlightEntityList.contains(EntityType.getId(entity.getType()).toString())) {
+            return true;
+        } else {
+            return original;
+        }
     }
 }

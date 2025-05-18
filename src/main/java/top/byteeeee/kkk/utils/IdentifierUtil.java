@@ -23,18 +23,23 @@ package top.byteeeee.kkk.utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-
-import top.byteeeee.kkk.KKKModClient;
+import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class ClientUtil {
-    public static ClientPlayerEntity getCurrentPlayer() {
-        return KKKModClient.minecraftClient.player;
+public class IdentifierUtil {
+    public static Identifier of(String namespace, String path) {
+        //#if MC>=12100
+        //$$ return Identifier.of(namespace, path);
+        //#else
+        return new Identifier(namespace, path);
+        //#endif
     }
 
-    public static MinecraftClient getCurrentClient() {
-        return KKKModClient.minecraftClient;
+    public static Identifier ofId(String id) {
+        //#if MC>=12100
+        //$$ return Identifier.of(id);
+        //#else
+        return new Identifier(id);
+        //#endif
     }
 }

@@ -45,10 +45,10 @@ public class KKKModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info(MOD_NAME + " " + "loaded!");
-        RegisterCommands.registerClientCommands();
         VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
         minecraftClient = MinecraftClient.getInstance();
+        RegisterCommands.register();
         ClientEvent.register();
-        KeyBindings.Register();
+        KeyBindings.register();
     }
 }

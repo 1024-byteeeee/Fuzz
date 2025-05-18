@@ -19,3 +19,21 @@
   /kkk <功能> <选项>: 修改指定功能的选项
 
 ---
+
+## 高亮实体（commandHighLightEntities）
+
+- /highLight add <实体ID> 
+
+  添加高亮实体。
+
+- /highLight remove <实体ID> 
+
+  移除高亮实体。
+
+- /highLight clear 
+
+  清除所有高亮实体。
+
+- /highLight list 
+
+  列出所有高亮实体。

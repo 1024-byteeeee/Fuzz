@@ -8,14 +8,32 @@
 
     - /kkk
 
-        - /kkk list <category>
+        - /kkk list &lt;category&gt;
 
-        - /kkk <function> <option>
+        - /kkk &lt;function&gt; &lt;option&gt;
 
   /kkk: View the list of currently enabled functions
 
-  /kkk list <category>: View the list of functions under the specified category tag
+  /kkk list &lt;category&gt;: View the list of functions under the specified category tag
 
-  /kkk <function> <option>: Modify options for the specified function
+  /kkk &lt;function&gt; &lt;option&gt;: Modify options for the specified function
 
 ---
+
+## commandHighLightEntities
+
+- /highLight add &lt;entityId&gt; 
+
+  Add a highlighted entity.
+
+- /highLight remove &lt;entityId&gt; 
+
+  Remove the highlighted entity.
+
+- /highLight clear 
+
+  Clears all highlighted entities.
+
+- /highLight list 
+
+  Lists all highlighted entities.

@@ -36,10 +36,11 @@ import top.byteeeee.kkk.translations.Translator;
 public class KeyBindings {
     private static final Translator tr = new Translator("keyBinding");
     private static final BaseText CATEGORY = tr.tr("category");
+
     public static KeyBinding quickKickFakePlayer;
     public static KeyBinding quickDropFakePlayerAllItemStack;
 
-    public static void Register() {
+    public static void register() {
         quickKickFakePlayer = registerKeyBinding(generalKeyBinding(tr.tr("quickKickFakePlayer.name")));
         quickDropFakePlayerAllItemStack = registerKeyBinding(generalKeyBinding(tr.tr("quickDropFakePlayerAllItemStack.name")));
     }
