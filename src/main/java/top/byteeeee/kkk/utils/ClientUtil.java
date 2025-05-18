@@ -29,7 +29,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import top.byteeeee.kkk.KKKModClient;
 
 @Environment(EnvType.CLIENT)
-public abstract class ClientUtil {
+public class ClientUtil {
     public static ClientPlayerEntity getCurrentPlayer() {
         return KKKModClient.minecraftClient.player;
     }
