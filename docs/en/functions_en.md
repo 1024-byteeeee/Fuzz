@@ -476,9 +476,11 @@ In Creative mode, you can target a fluid and use the middle mouse button to pick
 
 
 
-## highLightWitherSkeletonEntity
+## commandHighLightEntities
 
-Gives the wither skeleton a glowing effect.
+Use command to highlight one or more specified entities.
+
+Use /highlightEntity help command to view the user guide
 
 - Type: `boolean`
 
@@ -492,4 +494,4 @@ Gives the wither skeleton a glowing effect.
 
 
 
-- Categroies: `AMS`, `FEATURE`, `SURVIVAL`
+- Categroies: `AMS`, `FEATURE`, `SURVIVAL`, `COMMAND`
