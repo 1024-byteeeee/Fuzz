@@ -130,9 +130,6 @@ public class KKKSettings {
     )
     public static String pickFluidBucketItemInCreative = "false";
 
-    @KKKFunction(categories = {KKK, FEATURE, SURVIVAL})
-    public static boolean highLightWitherSkeletonEntity = false;
-
     @KKKFunction(categories = {KKK, FEATURE, SURVIVAL, COMMAND})
     public static boolean commandHighLightEntities = false;
 

@@ -15,7 +15,6 @@
     "function.cobwebSlowDownDisabled.CobwebMixin",
     "function.commandHighLightEntites.MinecraftClientMixin",
     "function.fluidPushDisabled.PlayerEntityMixin",
-    "function.highLightWitherSkeletonEntity.MinecraftClientMixin",
     "function.honeyBlockSlowDownDisabled.HoneyBlockMixin",
     "function.hurtShakeDisabled.GameRendererMixin",
     "function.iceSlipperinessDisabled.LivingEntityMixin",
