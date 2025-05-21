@@ -69,6 +69,12 @@ public class KKKSettings {
 
     @KKKFunction(
         categories = {KKK, FEATURE, SURVIVAL, RENDER},
+        options = {"-1.0", "0.0", "10.0"}
+    )
+    public static double blockOutlineWidth = -1.0D;
+
+    @KKKFunction(
+        categories = {KKK, FEATURE, SURVIVAL, RENDER},
         options = {"false", "#FF88C2"}
     )
     public static String skyColor = "false";

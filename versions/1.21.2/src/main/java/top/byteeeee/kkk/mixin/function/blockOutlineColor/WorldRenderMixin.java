@@ -23,14 +23,19 @@ package top.byteeeee.kkk.mixin.function.blockOutlineColor;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
+//#if MC>=12105
+//$$ import com.mojang.blaze3d.vertex.VertexFormat;
+//$$ import com.mojang.blaze3d.pipeline.RenderPipeline;
+//#endif
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexRendering;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -45,6 +50,7 @@ import top.byteeeee.kkk.KKKSettings;
 import top.byteeeee.kkk.helpers.HexValidator;
 
 import java.util.Objects;
+import java.util.OptionalDouble;
 
 @GameVersion(version = "Minecraft >= 1.21.2")
 @Environment(EnvType.CLIENT)
@@ -78,5 +84,55 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
         }
     }
-}
 
+    @WrapOperation(
+        method = "renderTargetBlockOutline",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/RenderLayer;getLines()Lnet/minecraft/client/render/RenderLayer;"
+        )
+    )
+    private RenderLayer setBlockOutlineWidth(Operation<RenderLayer> original) {
+        RenderLayer.MultiPhase multiPhase =
+            //#if MC>=12105
+            //$$ RenderLayer.of("custom_block_outline", 168, false, false, original.call().getPipeline(),
+            //$$ RenderLayer.MultiPhaseParameters.builder()
+            //$$ .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(KKKSettings.blockOutlineWidth)))
+            //$$ .target(RenderPhase.MAIN_TARGET)
+            //$$ .build(false));
+            //#else
+            RenderLayer.of("custom_block_outline", VertexFormats.LINES, VertexFormat.DrawMode.LINES, 168,
+                RenderLayer.MultiPhaseParameters.builder()
+                .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(KKKSettings.blockOutlineWidth)))
+                .program(RenderPhase.LINES_PROGRAM)
+                .layering(RenderPhase.VIEW_OFFSET_Z_LAYERING)
+                .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
+                .target(RenderPhase.MAIN_TARGET)
+                .writeMaskState(RenderPhase.COLOR_MASK)
+                .cull(RenderPhase.DISABLE_CULLING)
+                .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
+                .build(false));
+        //#endif
+        return KKKSettings.blockOutlineWidth != -1 ? multiPhase : original.call();
+    }
+
+    @WrapOperation(
+        method = "renderTargetBlockOutline",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/option/GameOptions;getHighContrastBlockOutline()Lnet/minecraft/client/option/SimpleOption;"
+        )
+    )
+    private SimpleOption<Boolean> setBlockOutlineColor(GameOptions option, Operation<SimpleOption<Boolean>> original) {
+        if (!Objects.equals(KKKSettings.blockOutlineColor, "false") || KKKSettings.blockOutlineWidth != -1) {
+            return new SimpleOption<>(
+                "kkk", SimpleOption.emptyTooltip(),
+                (text, value) -> text, SimpleOption.BOOLEAN,
+                false,
+                value -> {}
+            );
+        } else {
+            return original.call(option);
+        }
+    }
+}
