@@ -73,12 +73,13 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
                 float red = Integer.parseInt(colorString.substring(1, 3), 16) / 255.0F;
                 float green = Integer.parseInt(colorString.substring(3, 5), 16) / 255.0F;
                 float blue = Integer.parseInt(colorString.substring(5, 7), 16) / 255.0F;
-                double alpha = KKKSettings.blockOutlineAlpha / 255.0D;
+                float alpha = (float) (KKKSettings.blockOutlineAlpha / 255.0D);
+                float lineWidth = (float) (KKKSettings.blockOutlineWidth != -1.0D ? KKKSettings.blockOutlineWidth : 1.5D);
                 double X = pos.getX() - cameraX;
                 double Y = pos.getY() - cameraY;
                 double Z = pos.getZ() - cameraZ;
                 VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
-                renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, (float) alpha, (float) KKKSettings.blockOutlineWidth);
+                renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
             }
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);

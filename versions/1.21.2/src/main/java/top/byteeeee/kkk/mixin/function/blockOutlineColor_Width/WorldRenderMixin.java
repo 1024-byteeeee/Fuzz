@@ -112,8 +112,8 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
                 .cull(RenderPhase.DISABLE_CULLING)
                 .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
                 .build(false));
-        //#endif
-        return KKKSettings.blockOutlineWidth != -1 ? multiPhase : original.call();
+            //#endif
+        return KKKSettings.blockOutlineWidth != -1.0D ? multiPhase : original.call();
     }
 
     @WrapOperation(
