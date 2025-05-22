@@ -62,6 +62,8 @@
   "kkk.settings.blockOutlineAlpha.name": "方块轮廓线透明度",
   "kkk.settings.blockOutlineAlpha.desc": "修改方块轮廓线透明度",
   "kkk.settings.blockOutlineAlpha.extra.0": "需开启blockOutlineColor功能",
+  "kkk.settings.blockOutlineWidth.name": "方块轮廓线宽度",
+  "kkk.settings.blockOutlineWidth.desc": "修改方块轮廓线的线宽",
   "kkk.settings.skyColor.name": "天空颜色",
   "kkk.settings.skyColor.desc": "修改天空颜色",
   "kkk.settings.skyColor.extra.0": "使用十六进制RGB代码",

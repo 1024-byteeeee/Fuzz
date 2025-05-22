@@ -18,7 +18,7 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.mixin.function.blockOutlineColor;
+package top.byteeeee.kkk.mixin.function.blockOutlineColor_Width;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
