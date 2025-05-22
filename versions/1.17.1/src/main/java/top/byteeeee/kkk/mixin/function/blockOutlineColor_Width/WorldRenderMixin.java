@@ -18,25 +18,25 @@
  * along with KKK. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.kkk.mixin.function.blockOutlineColor;
+package top.byteeeee.kkk.mixin.function.blockOutlineColor_Width;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.shape.VoxelShape;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,10 +47,9 @@ import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.kkk.KKKSettings;
 import top.byteeeee.kkk.helpers.HexValidator;
 
-import java.nio.FloatBuffer;
 import java.util.Objects;
 
-@GameVersion(version = "Minecraft == 1.16.5")
+@GameVersion(version = "Minecraft >= 1.17.1 && Minecraft < 1.21.2")
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
 public abstract class WorldRenderMixin implements WorldRendererAccessor {
@@ -90,38 +89,77 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
         MatrixStack matrices, VoxelShape shape, double x, double y, double z,
         float red, float green, float blue, float alpha, float lineWidth
     ) {
-        Matrix4f matrix = matrices.peek().getModel();
+        //#if MC>=12100
+        //$$ Tessellator tessellator = Tessellator.getInstance();
+        //$$ BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+        //#else
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        //#endif
+        RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(
+            GlStateManager.SrcFactor.SRC_ALPHA,
+            GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA,
+            GlStateManager.SrcFactor.ONE,
+            GlStateManager.DstFactor.ZERO
+        );
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthFunc(GL11.GL_LEQUAL);
+        RenderSystem.depthMask(false);
+        RenderSystem.disableCull();
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glDepthMask(true);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glLineWidth(lineWidth);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
-        FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(168);
-        matrix.writeRowFirst(matrixBuffer);
-        matrixBuffer.rewind();
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glPushMatrix();
-        GL11.glLoadMatrixf(matrixBuffer);
-        GL11.glBegin(GL11.GL_LINES);
+        RenderSystem.lineWidth(lineWidth);
+
+        //#if MC<12100
+        buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+        //#endif
+        MatrixStack.Entry entry = matrices.peek();
+
         shape.forEachEdge((x1, y1, z1, x2, y2, z2) -> {
-            GL11.glColor4f(red, green, blue, alpha);
-            double offset = 0.001;
-            GL11.glVertex3d((x1 + x) + offset, (y1 + y) + offset, (z1 + z) + offset);
-            GL11.glVertex3d((x2 + x) + offset, (y2 + y) + offset, (z2 + z) + offset);
+            double offset = 0.0001D;
+
+            float startX = (float)(x1 + x + offset);
+            float startY = (float)(y1 + y + offset);
+            float startZ = (float)(z1 + z + offset);
+
+            float endX = (float)(x2 + x + offset);
+            float endY = (float)(y2 + y + offset);
+            float endZ = (float)(z2 + z + offset);
+
+            float dirX = endX - startX;
+            float dirY = endY - startY;
+            float dirZ = endZ - startZ;
+
+            float length = (float)Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
+
+            float normalX = length > 0.0F ? dirX / length : 0.0F;
+            float normalY = length > 0.0F ? dirY / length : 1.0F;
+            float normalZ = length > 0.0F ? dirZ / length : 0.0F;
+
+            //#if MC>=12100 && MC<12102
+            //$$ buffer.vertex(entry.getPositionMatrix(), startX, startY, startZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ);
+            //$$ buffer.vertex(entry.getPositionMatrix(), endX, endY, endZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ);
+            //#elseif MC>=12006
+            //$$ buffer.vertex(entry.getPositionMatrix(), startX, startY, startZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ).next();
+            //$$ buffer.vertex(entry.getPositionMatrix(), endX, endY, endZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ).next();
+            //#else
+            buffer.vertex(entry.getModel(), startX, startY, startZ).color(red, green, blue, alpha).normal(entry.getNormal(), normalX, normalY, normalZ).next();
+            buffer.vertex(entry.getModel(), endX, endY, endZ).color(red, green, blue, alpha).normal(entry.getNormal(), normalX, normalY, normalZ).next();
+            //#endif
         });
-        GL11.glEnd();
-        GL11.glPopMatrix();
-        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
+
+        //#if MC>=12100
+        //$$ BufferRenderer.drawWithGlobalProgram(buffer.end());
+        //#else
+        tessellator.draw();
+        //#endif
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        RenderSystem.enableCull();
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
+        RenderSystem.disableDepthTest();
     }
 }
-

@@ -62,6 +62,8 @@
   "kkk.settings.blockOutlineAlpha.name": "blockOutlineAlpha",
   "kkk.settings.blockOutlineAlpha.desc": "Modify the alpha of the block outline",
   "kkk.settings.blockOutlineAlpha.extra.0": "Need enable blockOutlineColor function",
+  "kkk.settings.blockOutlineWidth.name": "blockOutlineWidth",
+  "kkk.settings.blockOutlineWidth.desc": "Modify the line width of the block outline",
   "kkk.settings.skyColor.name": "skyColor",
   "kkk.settings.skyColor.desc": "Modify the color of the sky",
   "kkk.settings.skyColor.extra.0": "Use Hex RGB codes",
@@ -107,5 +109,5 @@
   "kkk.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - Middle-click when sneaking is required",
   "kkk.settings.commandHighLightEntities.name": "commandHighLightEntities",
   "kkk.settings.commandHighLightEntities.desc": "Use command to highlight one or more specified entities",
-  "kkk.settings.commandHighLightEntities.extra.0": "Use /highlightEntity help command to view the user guide"
+  "kkk.settings.commandHighLightEntities.extra.0": "Use /highlightEntity help command to view the user guide",
 }
