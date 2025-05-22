@@ -140,6 +140,26 @@ Modify the alpha of the block outline, Need enable `blockOutlineColor` function.
 
 
 
+## blockOutlineWidth
+
+Modify the line width of the block outline.
+
+- Type: `double`
+
+
+
+- Default: `-1`
+
+
+
+- Suggested options: `-1.0`, `0.0`, `10.0`
+
+
+
+- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+
+
+
 ## skyColor
 
 Modify the color of the sky, Use Hex RGB codes.
