@@ -35,7 +35,7 @@
 
 ## 文档
 
-- [功能](./docs/rules)
+- [规则](./docs/rules)
 - [指令](./docs/commands.md)
 - [开发](./docs/development.md)
 

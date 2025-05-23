@@ -1,4 +1,4 @@
-# rule list
+# Rule list
 
 [中文](../rules) | **English** | [HOME](../../README.md)
 

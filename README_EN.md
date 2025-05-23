@@ -36,7 +36,7 @@ All features are disabled by default.
 
 ## Document
 
-- [Functions](./docs/en/rules_en.md)
+- [Rules](./docs/en/rules_en.md)
 - [Commands](./docs/en/commands_en.md)
 - [Development](./docs/en/development_en.md)
 
