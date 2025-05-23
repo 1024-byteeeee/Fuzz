@@ -109,5 +109,5 @@
   "fuzz.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - Middle-click when sneaking is required",
   "fuzz.settings.commandHighLightEntities.name": "commandHighLightEntities",
   "fuzz.settings.commandHighLightEntities.desc": "Use command to highlight one or more specified entities",
-  "fuzz.settings.commandHighLightEntities.extra.0": "Use /highlightEntity help command to view the user guide",
+  "fuzz.settings.commandHighLightEntities.extra.0": "Use /highlightEntity help command to view the user guide"
 }
