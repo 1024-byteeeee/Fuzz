@@ -20,7 +20,7 @@ Disable the slow effect when using items.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -40,7 +40,7 @@ Disable the slow effect while sneaking.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 ## hurtShakeDisabled
 
@@ -58,7 +58,7 @@ Disable the jitter of the first-person view when the player is injured.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -78,7 +78,7 @@ Disable the rendering of the arm.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 ## bedRockFlying
 
@@ -96,7 +96,7 @@ Removed the drift effect while flying, just like Bedrock Edition.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -116,7 +116,7 @@ Modify the color of the block outline, Use Hex RGB codes.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -136,7 +136,7 @@ Modify the alpha of the block outline, Need enable `blockOutlineColor` function.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -156,7 +156,7 @@ Modify the line width of the block outline.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -176,7 +176,7 @@ Modify the color of the sky, Use Hex RGB codes.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -196,7 +196,7 @@ Modify the color of the fog, Use Hex RGB codes.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -216,7 +216,7 @@ Modify the color of the water, Use Hex RGB codes.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -236,7 +236,7 @@ Modify the color of the water fog, Use Hex RGB codes.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -256,7 +256,7 @@ Disable campfire smoke particles.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -280,7 +280,7 @@ Specify hotkeys in the game settings
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
 
 
 
@@ -306,7 +306,7 @@ Specify hotkeys in the game settings
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
 
 
 
@@ -326,7 +326,7 @@ Let the player interact with the fluid like air.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`, `EXPERIMENTAL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`, `EXPERIMENTAL`
 
 
 
@@ -346,7 +346,7 @@ Let fluid can't push player.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -366,7 +366,7 @@ Prevents the player from slowing and bouncing from slime blocks.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -386,7 +386,7 @@ Prevents the player from being slowed by cobwebs.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -406,7 +406,7 @@ Prevents the player from slipping from ice blocks.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -426,7 +426,7 @@ Prevents the player from slowing from soul sands.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -446,7 +446,7 @@ Prevents the player from slowing and jumping falloff from honey blocks.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -466,7 +466,7 @@ Prevents the player from being affected by the bubble column.
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -492,7 +492,7 @@ In Creative mode, you can target a fluid and use the middle mouse button to pick
 
 
 
-- Categroies: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 

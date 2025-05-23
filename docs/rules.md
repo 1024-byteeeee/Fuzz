@@ -20,7 +20,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -40,7 +40,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -60,7 +60,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -80,7 +80,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 ## 基岩版飞行（bedRockFlying）
 
@@ -98,7 +98,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -118,7 +118,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -138,7 +138,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -158,7 +158,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -178,7 +178,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -198,7 +198,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -218,7 +218,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -238,7 +238,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `RENDER`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
 
 
 
@@ -258,7 +258,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -282,7 +282,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
 
 
 
@@ -308,7 +308,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`, `CARPET`
 
 
 
@@ -328,7 +328,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`, `EXPERIMENTAL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`, `EXPERIMENTAL`
 
 
 
@@ -348,7 +348,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -368,7 +368,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -388,7 +388,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -408,7 +408,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -428,7 +428,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -448,7 +448,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -468,7 +468,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
@@ -494,7 +494,7 @@
 
 
 
-- 分类: `KKK`, `FEATURE`, `SURVIVAL`, `QOL`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
 
 
 
