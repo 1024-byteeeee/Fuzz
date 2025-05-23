@@ -6,17 +6,17 @@
 
 - Main Command
 
-    - /kkk
+    - /fuzz
 
-        - /kkk list &lt;category&gt;
+        - /fuzz list &lt;category&gt;
 
-        - /kkk &lt;function&gt; &lt;option&gt;
+        - /fuzz &lt;rule&gt; &lt;option&gt;
 
-  /kkk: View the list of currently enabled functions
+  /fuzz: View the list of currently enabled rules
 
-  /kkk list &lt;category&gt;: View the list of functions under the specified category tag
+  /fuzz list &lt;category&gt;: View the list of rules under the specified category tag
 
-  /kkk &lt;function&gt; &lt;option&gt;: Modify options for the specified function
+  /fuzz &lt;rule&gt; &lt;option&gt;: Modify options for the specified rule
 
 ---
 

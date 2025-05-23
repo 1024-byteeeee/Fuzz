@@ -13,17 +13,20 @@
     "issues": "https://github.com/Minecraft-AMS/fabric-mod-template-preprocessor/issues"
   },
   "license": "LGPL-3.0",
-  "icon": "assets/kkk/icon.png",
+  "icon": "assets/fuzz/icon.png",
   "entrypoints": {
+    "preLaunch": [
+      "top.byteeeee.fuzz.FuzzPreLaunch"
+    ],
     "main": [
-      "top.byteeeee.kkk.KKKMod"
+      "top.byteeeee.fuzz.FuzzMod"
     ],
     "client": [
-      "top.byteeeee.kkk.KKKModClient"
+      "top.byteeeee.fuzz.FuzzModClient"
     ]
   },
   "mixins": [
-    "kkk.mixins.json"
+    "fuzz.mixins.json"
   ],
   "depends": {
     "minecraft": "${minecraft_dependency}",

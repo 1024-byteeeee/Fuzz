@@ -22,7 +22,7 @@ mipmapLevels:4
 narrator:0
 particles:0
 reducedDebugInfo:false
-renderClouds:"true"
+renderClouds:"false"
 cloudRange:128
 renderDistance:2
 simulationDistance:12
@@ -127,8 +127,8 @@ key_key.hotbar.6:key.keyboard.6
 key_key.hotbar.7:key.keyboard.7
 key_key.hotbar.8:key.keyboard.8
 key_key.hotbar.9:key.keyboard.9
-key_kkk.keyBinding.quickKickFakePlayer.name:key.keyboard.down
-key_kkk.keyBinding.quickDropFakePlayerAllItemStack.name:key.keyboard.unknown
+key_fuzz.keyBinding.quickKickFakePlayer.name:key.keyboard.unknown
+key_fuzz.keyBinding.quickDropFakePlayerAllItemStack.name:key.keyboard.unknown
 soundCategory_master:0.24668874
 soundCategory_music:0.0
 soundCategory_record:1.0

@@ -60,7 +60,7 @@ loom {
 		}
 	}
 
-	accessWidenerPath = file("kkk.accesswidener")
+	accessWidenerPath = file("fuzz.accesswidener")
 }
 
 remapJar {
@@ -105,7 +105,7 @@ processResources {
 		expand valueMap
 	}
 
-	filesMatching("kkk.mixins.json") {
+	filesMatching("fuzz.mixins.json") {
 		filter {
 			text -> text.replace("/*JAVA_VERSION*/", "JAVA_${MIXIN_COMPATIBILITY_LEVEL.ordinal() + 1}")
 		}

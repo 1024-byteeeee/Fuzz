@@ -1,4 +1,4 @@
-# KKK
+# Fuzz
 
 **中文** | [English](./README_EN.md)
 
@@ -16,26 +16,26 @@
 
 - 主命令
 
-  - /kkk
-    - /kkk list
+  - /fuzz
+    - /fuzz list
 
-      - /kkk list <分类标签>
+      - /fuzz list <分类标签>
 
-    - /kkk <功能> <选项>
+    - /fuzz <规则> <选项>
 
-  /kkk: 查看当前已启用的功能列表
+  /fuzz: 查看当前已启用的规则列表
 
-  /kkk list: 查看完整功能列表
+  /fuzz list: 查看完整规则列表
 
-  /kkk list <分类标签>: 查看指定分类标签下的功能列表
+  /fuzz list <分类标签>: 查看指定分类标签下的规则列表
 
-  /kkk <功能> <选项>: 修改指定功能的选项
+  /fuzz <规则> <选项>: 修改指定规则的选项
 
 
 
 ## 文档
 
-- [功能](./docs/functions.md)
+- [功能](./docs/rules)
 - [指令](./docs/commands.md)
 - [开发](./docs/development.md)
 
