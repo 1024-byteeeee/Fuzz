@@ -1,6 +1,6 @@
 # Rule list
 
-[中文](../rules) | **English** | [HOME](../../README.md)
+[中文](../rules.md) | **English** | [HOME](../../README.md)
 
 ---
 
