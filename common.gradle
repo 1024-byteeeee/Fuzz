@@ -92,6 +92,8 @@ group = project.maven_group
 archivesBaseName = project.archives_base_name + '-mc' + project.minecraft_version
 
 processResources {
+	from "fuzz.accesswidener"
+
 	inputs.property "version", fullModVersion
 
 	filesMatching("fabric.mod.json") {
