@@ -2,7 +2,7 @@
 
 [中文](./README.md) | **English**
 
-A client-side mod using [Carpet Mod](https://github.com/gnembon/fabric-carpet) operation logic, providing some useful features. Some features have cheat-like properties, so please consult server administrators before using them on servers.
+A client-side mod using [Carpet Mod](https://github.com/gnembon/fabric-carpet) operation logic, providing some useful features. 
 
 All features are disabled by default.
 

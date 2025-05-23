@@ -2,7 +2,7 @@
 
 **中文** | [English](./README_EN.md)
 
-一款使用[Carpet Mod](https://github.com/gnembon/fabric-carpet)操作逻辑的客户端模组，提供了一些实用功能，部分功能带有作弊性质，服务器内使用前建议询问管理员是否允许使用。
+一款使用[Carpet Mod](https://github.com/gnembon/fabric-carpet)操作逻辑的客户端模组，提供了一些实用功能。
 
 默认情况下，所有功能处于禁用状态。
 
