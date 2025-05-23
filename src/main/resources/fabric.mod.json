@@ -28,6 +28,7 @@
   "mixins": [
     "fuzz.mixins.json"
   ],
+  "accessWidener": "fuzz.accesswidener",
   "depends": {
     "minecraft": "${minecraft_dependency}",
     "fabric": "${fabric_api_dependency}"
