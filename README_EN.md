@@ -1,8 +1,8 @@
-# KKK
+# Fuzz
 
 [中文](./README.md) | **English**
 
-A client-side mod using [Carpet Mod](https://github.com/gnembon/fabric-carpet) operation logic, providing some useful features. Some features have cheat-like properties, so please consult server administrators before using them on servers.
+A client-side mod using [Carpet Mod](https://github.com/gnembon/fabric-carpet) operation logic, providing some useful features. 
 
 All features are disabled by default.
 
@@ -16,27 +16,27 @@ All features are disabled by default.
 
 - Main Command
 
-  - /kkk
+  - /fuzz
   
-    - /kkk list
+    - /fuzz list
 
-      - /kkk list &lt;category&gt;
+      - /fuzz list &lt;category&gt;
 
-    - /kkk &lt;function&gt; &lt;option&gt;
+    - /fuzz &lt;rule&gt; &lt;option&gt;
 
-  /kkk: View the list of currently enabled functions
+  /fuzz: View the list of currently enabled rules
 
-  /kkk list: View full list of functions
+  /fuzz list: View full list of rules
 
-  /kkk list &lt;category&gt;: View the list of functions under the specified category tag
+  /fuzz list &lt;category&gt;: View the list of rules under the specified category tag
 
-  /kkk &lt;function&gt; &lt;option&gt;: Modify options for the specified function
+  /fuzz &lt;function&gt; &lt;option&gt;: Modify options for the specified rule
 
 
 
 ## Document
 
-- [Functions](./docs/en/functions_en.md)
+- [Rules](./docs/en/rules_en.md)
 - [Commands](./docs/en/commands_en.md)
 - [Development](./docs/en/development_en.md)
 
