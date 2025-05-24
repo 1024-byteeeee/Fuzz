@@ -46,6 +46,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;
 
@@ -67,19 +68,30 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
     ) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
-            colorString = HexValidator.appendSharpIfNone(colorString);
-            if (HexValidator.isValidHexColor(colorString)) {
-                float red = Integer.parseInt(colorString.substring(1, 3), 16) / 255.0F;
-                float green = Integer.parseInt(colorString.substring(3, 5), 16) / 255.0F;
-                float blue = Integer.parseInt(colorString.substring(5, 7), 16) / 255.0F;
-                float alpha = (float) (FuzzSettings.blockOutlineAlpha / 255.0D);
-                float lineWidth = (float) (FuzzSettings.blockOutlineWidth != -1.0D ? FuzzSettings.blockOutlineWidth : 1.5D);
-                double X = pos.getX() - cameraX;
-                double Y = pos.getY() - cameraY;
-                double Z = pos.getZ() - cameraZ;
-                VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
-                renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
+            float red, green, blue;
+            if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
+                float[] rainbowRgb = RainbowColorHelper.getRainbowColorComponents();
+                red = rainbowRgb[0];
+                green = rainbowRgb[1];
+                blue = rainbowRgb[2];
+            } else {
+                colorString = HexValidator.appendSharpIfNone(colorString);
+                if (HexValidator.isValidHexColor(colorString)) {
+                    red = Integer.parseInt(colorString.substring(1, 3), 16) / 255.0F;
+                    green = Integer.parseInt(colorString.substring(3, 5), 16) / 255.0F;
+                    blue = Integer.parseInt(colorString.substring(5, 7), 16) / 255.0F;
+                } else {
+                    original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);
+                    return;
+                }
             }
+            float alpha = (float) (FuzzSettings.blockOutlineAlpha / 255.0D);
+            float lineWidth = (float) (FuzzSettings.blockOutlineWidth != -1.0D ? FuzzSettings.blockOutlineWidth : 1.5D);
+            double X = pos.getX() - cameraX;
+            double Y = pos.getY() - cameraY;
+            double Z = pos.getZ() - cameraZ;
+            VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
+            renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);
         }

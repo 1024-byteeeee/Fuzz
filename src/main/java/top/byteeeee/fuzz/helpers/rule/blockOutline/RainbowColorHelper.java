@@ -20,63 +20,58 @@
 
 package top.byteeeee.fuzz.helpers.rule.blockOutline;
 
-import net.minecraft.util.math.MathHelper;
+//#if MC>=12102
+//$$ import top.byteeeee.fuzz.FuzzSettings;
+//#endif
 
 public class RainbowColorHelper {
-    public static int hsvToRgb(float hue, float saturation, float brightness) {
-        int r = 0, g = 0, b = 0;
-        if (saturation == 0) {
-            r = g = b = (int) (brightness * 255.0f + 0.5f);
+    public static float[] hsvToRgb(float h, float s, float v) {
+        float c = v * s;
+        float x = c * (1 - Math.abs((h * 6) % 2 - 1));
+        float m = v - c;
+
+        float r, g, b;
+
+        if (h < 1.0F / 6.0F) {
+            r = c; g = x; b = 0;
+        } else if (h < 2.0F / 6.0F) {
+            r = x; g = c; b = 0;
+        } else if (h < 3.0F / 6.0F) {
+            r = 0; g = c; b = x;
+        } else if (h < 4.0F / 6.0F) {
+            r = 0; g = x; b = c;
+        } else if (h < 5.0F / 6.0F) {
+            r = x; g = 0; b = c;
         } else {
-            float h = (hue - MathHelper.floor(hue)) * 6.0f;
-            float f = h - MathHelper.floor(h);
-            float p = brightness * (1.0f - saturation);
-            float q = brightness * (1.0f - saturation * f);
-            float t = brightness * (1.0f - saturation * (1.0f - f));
-            switch ((int) h) {
-                case 0:
-                    r = (int) (brightness * 255.0f + 0.5f);
-                    g = (int) (t * 255.0f + 0.5f);
-                    b = (int) (p * 255.0f + 0.5f);
-                    break;
-                case 1:
-                    r = (int) (q * 255.0f + 0.5f);
-                    g = (int) (brightness * 255.0f + 0.5f);
-                    b = (int) (p * 255.0f + 0.5f);
-                    break;
-                case 2:
-                    r = (int) (p * 255.0f + 0.5f);
-                    g = (int) (brightness * 255.0f + 0.5f);
-                    b = (int) (t * 255.0f + 0.5f);
-                    break;
-                case 3:
-                    r = (int) (p * 255.0f + 0.5f);
-                    g = (int) (q * 255.0f + 0.5f);
-                    b = (int) (brightness * 255.0f + 0.5f);
-                    break;
-                case 4:
-                    r = (int) (t * 255.0f + 0.5f);
-                    g = (int) (p * 255.0f + 0.5f);
-                    b = (int) (brightness * 255.0f + 0.5f);
-                    break;
-                case 5:
-                    r = (int) (brightness * 255.0f + 0.5f);
-                    g = (int) (p * 255.0f + 0.5f);
-                    b = (int) (q * 255.0f + 0.5f);
-                    break;
-            }
+            r = c; g = 0; b = x;
         }
-        return 0xff000000 | (r << 16) | (g << 8) | (b);
+
+        return new float[] { r + m, g + m, b + m };
     }
 
-    public static float[] calculateRainbowColor() {
+    //#if MC>=12102
+    //$$public static int getRainbowColor() {
+    //$$    long time = System.currentTimeMillis();
+    //$$    float speed = 3000.0F;
+    //$$    float hue = (time % (long) speed) / speed;
+    //$$    float[] rgb = RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
+    //$$    int red = (int) (rgb[0] * 255);
+    //$$    int green = (int) (rgb[1] * 255);
+    //$$    int blue = (int) (rgb[2] * 255);
+    //$$    return getArgb(FuzzSettings.blockOutlineAlpha, red, green, blue);
+    //$$}
+    //#else
+    public static float[] getRainbowColorComponents() {
         long time = System.currentTimeMillis();
-        float hue = (time % 5000) / 5000f;
-        int rgb = RainbowColorHelper.hsvToRgb(hue, 1.0f, 1.0f);
-        return new float[] {
-            ((rgb >> 16) & 0xFF) / 255.0f,
-            ((rgb >> 8) & 0xFF) / 255.0f,
-            (rgb & 0xFF) / 255.0f
-        };
+        float speed = 3000.0F;
+        float hue = (time % (long) speed) / speed;
+        return RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
     }
+    //#endif
+
+    //#if MC>=12102
+    //$$ public static int getArgb(int alpha, int red, int green, int blue) {
+    //$$     return alpha << 24 | red << 16 | green << 8 | blue;
+    //$$ }
+    //#endif
 }

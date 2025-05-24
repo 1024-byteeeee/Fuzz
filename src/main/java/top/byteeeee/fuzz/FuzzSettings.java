@@ -57,7 +57,7 @@ public class FuzzSettings {
 
     @Rule(
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FFFFFF", "#FF88C2"}
+        options = {"false", "rainbow", "#FFFFFF", "#FF88C2"}
     )
     public static String blockOutlineColor = "false";
 

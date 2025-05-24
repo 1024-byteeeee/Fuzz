@@ -48,6 +48,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;
 import java.util.OptionalDouble;
@@ -70,16 +71,29 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
     ) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
-            colorString = HexValidator.appendSharpIfNone(colorString);
-            if (HexValidator.isValidHexColor(colorString)) {
-                int red = Integer.parseInt(colorString.substring(1, 3), 16);
-                int green = Integer.parseInt(colorString.substring(3, 5), 16);
-                int blue = Integer.parseInt(colorString.substring(5, 7), 16);
-                double alpha = FuzzSettings.blockOutlineAlpha;
-                int customColor = ColorHelper.getArgb((int) alpha, red, green, blue);
-                VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
-                VertexRendering.drawOutline(matrices, vertexConsumer, shape, pos.getX() - cameraX, pos.getY() - cameraY, pos.getZ() - cameraZ, customColor);
+            int customColor;
+
+            // 检查是否为彩虹颜色模式
+            if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
+                customColor = RainbowColorHelper.getRainbowColor();
+            } else {
+                // 静态颜色处理
+                colorString = HexValidator.appendSharpIfNone(colorString);
+                if (HexValidator.isValidHexColor(colorString)) {
+                    int red = Integer.parseInt(colorString.substring(1, 3), 16);
+                    int green = Integer.parseInt(colorString.substring(3, 5), 16);
+                    int blue = Integer.parseInt(colorString.substring(5, 7), 16);
+                    double alpha = FuzzSettings.blockOutlineAlpha;
+                    customColor = ColorHelper.getArgb((int) alpha, red, green, blue);
+                } else {
+                    // 如果颜色无效，使用原始渲染
+                    original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
+                    return;
+                }
             }
+
+            VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
+            VertexRendering.drawOutline(matrices, vertexConsumer, shape, pos.getX() - cameraX, pos.getY() - cameraY, pos.getZ() - cameraZ, customColor);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
         }
@@ -101,7 +115,8 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
             //$$ .target(RenderPhase.MAIN_TARGET)
             //$$ .build(false));
             //#else
-            RenderLayer.of("custom_block_outline", VertexFormats.LINES, VertexFormat.DrawMode.LINES, 168,
+            RenderLayer.of(
+                "custom_block_outline", VertexFormats.LINES, VertexFormat.DrawMode.LINES, 168,
                 RenderLayer.MultiPhaseParameters.builder()
                 .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(FuzzSettings.blockOutlineWidth)))
                 .program(RenderPhase.LINES_PROGRAM)
@@ -111,7 +126,8 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
                 .writeMaskState(RenderPhase.COLOR_MASK)
                 .cull(RenderPhase.DISABLE_CULLING)
                 .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
-                .build(false));
+                .build(false)
+            );
             //#endif
         return FuzzSettings.blockOutlineWidth != -1.0D ? multiPhase : original.call();
     }
@@ -126,7 +142,7 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
     private SimpleOption<Boolean> setBlockOutlineColor(GameOptions option, Operation<SimpleOption<Boolean>> original) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false") || FuzzSettings.blockOutlineWidth != -1) {
             return new SimpleOption<>(
-                "kkk", SimpleOption.emptyTooltip(),
+                "fuzz", SimpleOption.emptyTooltip(),
                 (text, value) -> text, SimpleOption.BOOLEAN,
                 false,
                 value -> {}
