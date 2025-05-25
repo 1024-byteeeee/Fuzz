@@ -53,13 +53,13 @@ import java.util.Objects;
 @GameVersion(version = "Minecraft == 1.16.5")
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
-public abstract class WorldRenderMixin implements WorldRendererAccessor {
+public abstract class WorldRenderMixin {
     @WrapOperation(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;DDDLnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V"
-            )
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;DDDLnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V"
+        )
     )
     private void renderBlockOutlineWrapper(
             WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity,
@@ -90,7 +90,7 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
             double X = pos.getX() - cameraX;
             double Y = pos.getY() - cameraY;
             double Z = pos.getZ() - cameraZ;
-            VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
+            VoxelShape shape = state.getOutlineShape(((WorldRendererAccessor) this).getWorld(), pos, ShapeContext.of(entity));
             renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);

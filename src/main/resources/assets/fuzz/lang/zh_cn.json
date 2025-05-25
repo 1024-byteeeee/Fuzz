@@ -59,6 +59,7 @@
   "fuzz.settings.blockOutlineColor.name": "方块轮廓线颜色",
   "fuzz.settings.blockOutlineColor.desc": "修改方块轮廓线颜色",
   "fuzz.settings.blockOutlineColor.extra.0": "使用十六进制RGB代码",
+  "fuzz.settings.blockOutlineColor.extra.1": "[rainbow] - 动态RGB",
   "fuzz.settings.blockOutlineAlpha.name": "方块轮廓线透明度",
   "fuzz.settings.blockOutlineAlpha.desc": "修改方块轮廓线透明度",
   "fuzz.settings.blockOutlineAlpha.extra.0": "需开启blockOutlineColor功能",

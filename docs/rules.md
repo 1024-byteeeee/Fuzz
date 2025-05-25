@@ -106,6 +106,8 @@
 
 修改方块轮廓线颜色，使用十六进制RGB代码。
 
+[rainbow] - 动态RGB
+
 - 类型: `String`
 
 
@@ -114,7 +116,7 @@
 
 
 
-- 参考选项: `false`, `#FFFFFF`, `#FF88C2`
+- 参考选项: `false`, `rainbow`, `#FFFFFF`, `#FF88C2`
 
 
 

@@ -104,6 +104,8 @@ Removed the drift effect while flying, just like Bedrock Edition.
 
 Modify the color of the block outline, Use Hex RGB codes.
 
+[rainbow] - Dynamic RGB
+
 - Type: `String`
 
 

@@ -53,7 +53,7 @@ import java.util.Objects;
 @GameVersion(version = "Minecraft >= 1.17.1 && Minecraft < 1.21.2")
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
-public abstract class WorldRenderMixin implements WorldRendererAccessor {
+public abstract class WorldRenderMixin {
     @WrapOperation(
         method = "render",
         at = @At(
@@ -90,7 +90,7 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
             double X = pos.getX() - cameraX;
             double Y = pos.getY() - cameraY;
             double Z = pos.getZ() - cameraZ;
-            VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
+            VoxelShape shape = state.getOutlineShape(((WorldRendererAccessor) this).getWorld(), pos, ShapeContext.of(entity));
             renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);

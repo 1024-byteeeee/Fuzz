@@ -59,6 +59,7 @@
   "fuzz.settings.blockOutlineColor.name": "blockOutlineColor",
   "fuzz.settings.blockOutlineColor.desc": "Modify the color of the block outline",
   "fuzz.settings.blockOutlineColor.extra.0": "Use Hex RGB codes",
+  "fuzz.settings.blockOutlineColor.extra.1": "[rainbow] - Dynamic RGB",
   "fuzz.settings.blockOutlineAlpha.name": "blockOutlineAlpha",
   "fuzz.settings.blockOutlineAlpha.desc": "Modify the alpha of the block outline",
   "fuzz.settings.blockOutlineAlpha.extra.0": "Need enable blockOutlineColor function",
