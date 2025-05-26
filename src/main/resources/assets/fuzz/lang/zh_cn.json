@@ -110,5 +110,7 @@
   "fuzz.settings.pickFluidBucketItemInCreative.extra.2": "[sneaking] - 需潜行时中键",
   "fuzz.settings.commandHighLightEntities.name": "高亮实体",
   "fuzz.settings.commandHighLightEntities.desc": "使用指令高亮一个或多个指定实体",
-  "fuzz.settings.commandHighLightEntities.extra.0": "使用 /highlightEntity help 指令查看使用指南"
+  "fuzz.settings.commandHighLightEntities.extra.0": "使用 /highlightEntity help 指令查看使用指南",
+  "fuzz.settings.fuzzCommandAlias.name": "fuzz命令别名",
+  "fuzz.settings.fuzzCommandAlias.desc": "为fuzz命令指定一个别名"
 }

@@ -56,44 +56,44 @@ public class FuzzSettings {
     public static boolean bedRockFlying = false;
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "rainbow", "#FFFFFF", "#FF88C2"}
+        options = {"false", "rainbow", "#FFFFFF", "#FF88C2"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static String blockOutlineColor = "false";
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"-1", "0", "255"}
+        options = {"-1", "0", "255"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static int blockOutlineAlpha = -1;
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"-1.0", "0.0", "10.0"}
+        options = {"-1.0", "0.0", "10.0"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static double blockOutlineWidth = -1.0D;
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        options = {"false", "#FF88C2"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static String skyColor = "false";
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        options = {"false", "#FF88C2"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static String fogColor = "false";
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        options = {"false", "#FF88C2"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static String waterColor = "false";
 
     @Rule(
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        options = {"false", "#FF88C2"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
     )
     public static String waterFogColor = "false";
 
@@ -131,13 +131,19 @@ public class FuzzSettings {
     public static boolean bubbleColumnInteractDisabled = false;
 
     @Rule(
-        categories = {FUZZ, FEATURE, CREATIVE, QOL},
-        options = {"false", "true", "sneaking"}
+        options = {"false", "true", "sneaking"},
+        categories = {FUZZ, FEATURE, CREATIVE, QOL}
     )
     public static String pickFluidBucketItemInCreative = "false";
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, COMMAND})
     public static boolean commandHighLightEntities = false;
+
+    @Rule(
+        options = "false",
+        categories = {FUZZ, COMMAND}
+    )
+    public static String fuzzCommandAlias = "false";
 
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {

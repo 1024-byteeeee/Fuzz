@@ -41,7 +41,14 @@ import java.util.concurrent.CompletableFuture;
 @Environment(EnvType.CLIENT)
 public class FuzzCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        LiteralArgumentBuilder<FabricClientCommandSource> main = ClientCommandManager.literal("fuzz")
+        dispatcher.register(buildFuzzCommand("fuzz"));
+        if (!Objects.equals(FuzzSettings.fuzzCommandAlias, "false")) {
+            dispatcher.register(buildFuzzCommand(FuzzSettings.fuzzCommandAlias));
+        }
+    }
+
+    private static LiteralArgumentBuilder<FabricClientCommandSource> buildFuzzCommand(String commandName) {
+        LiteralArgumentBuilder<FabricClientCommandSource> main = ClientCommandManager.literal(commandName)
         .executes(ctx -> FuzzCommandContext.showFunctionList(ctx.getSource()));
         LiteralArgumentBuilder<FabricClientCommandSource> listCommand = ClientCommandManager.literal("list")
         .executes(ctx -> FuzzCommandContext.showAllFunctions(ctx.getSource()))
@@ -55,19 +62,21 @@ public class FuzzCommand {
             return FuzzCategories.showFunctionListByCategory(ctx.getSource(), category);
         }));
         main.then(listCommand);
+
         Arrays.stream(FuzzSettings.class.getDeclaredFields())
         .filter(f -> f.isAnnotationPresent(Rule.class))
         .forEach(field -> {
             LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal(field.getName())
-            .executes(context -> {
-                FuzzCommandContext.showFunctionList(context.getSource());
-                FuzzCommandContext.showFunctionInfo(context.getSource(), field);
-                return 1;
-            });
+                .executes(context -> {
+                    FuzzCommandContext.showFunctionList(context.getSource());
+                    FuzzCommandContext.showFunctionInfo(context.getSource(), field);
+                    return 1;
+                });
             ArgumentHandlerInterface<?> handler = ArgumentHandlerFactory.create(field.getType());
             handler.configureArgument(cmd, field);
             main.then(cmd);
         });
-        dispatcher.register(main);
+
+        return main;
     }
 }
