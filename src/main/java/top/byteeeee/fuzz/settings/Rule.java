@@ -30,4 +30,5 @@ import java.lang.annotation.Target;
 public @interface Rule {
     String[] options() default {};
     String[] categories() default {};
+    boolean strict() default true;
 }

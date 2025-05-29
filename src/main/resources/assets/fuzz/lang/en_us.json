@@ -29,6 +29,7 @@
   "fuzz.command.options_option": "Options: ",
   "fuzz.command.function_info_categories": "Tags: ",
   "fuzz.command.function_info_click_to_view": "list all \"%s\" settings",
+  "fuzz.command.is_not_valid_value": "Is not valid value",
 
   "fuzz.keyBinding.category": "FUZZ",
   "fuzz.keyBinding.quickKickFakePlayer.name": "quickKickFakePlayer",

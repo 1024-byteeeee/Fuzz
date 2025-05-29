@@ -29,6 +29,7 @@
   "fuzz.command.options_option": "设置: ",
   "fuzz.command.function_info_categories": "分类: ",
   "fuzz.command.function_info_click_to_view": "列出所有 “%s (%s)” 选项",
+  "fuzz.command.is_not_valid_value": "不是有效的值",
 
   "fuzz.keyBinding.category": "FUZZ",
   "fuzz.keyBinding.quickKickFakePlayer.name": "快捷踢出假人",

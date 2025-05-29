@@ -31,6 +31,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
+import net.minecraft.util.Formatting;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
 import top.byteeeee.fuzz.commands.fuzzCommands.FuzzCommandContext;
@@ -39,6 +40,7 @@ import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.Messenger;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 @Environment(EnvType.CLIENT)
 public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInterface<T> {
@@ -57,6 +59,26 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         ).then(valueArg);
     }
 
+    private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {
+        T value = parseValue(ctx);
+
+        if (isStrictMode() && !isValidOption(value.toString())) {
+            Messenger.tell(ctx.getSource(), tr.tr("is_not_valid_value").formatted(Formatting.RED));
+            return 0;
+        }
+
+        setFieldValue(field, value);
+        String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
+
+        if (LanguageJudge.isEnglish()) {
+            Messenger.tell(ctx.getSource(), tr.tr("set_value", field.getName(), value));
+        } else {
+            Messenger.tell(ctx.getSource(), tr.tr("set_value", Messenger.tr(funcNameTrKey), field.getName(), value));
+        }
+
+        return 1;
+    }
+
     protected void setFieldValue(Field field, T value) {
         try {
             field.set(null, value);
@@ -64,6 +86,24 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         } catch (Exception e) {
             throw new IllegalStateException("Failed to set field value", e);
         }
+    }
+
+    protected boolean isValidOption(String value) {
+        if (!isStrictMode()) {
+            return true;
+        }
+
+        String[] options = getAnnotationOptions();
+        if (options.length == 0) {
+            return true;
+        }
+
+        return Arrays.asList(options).contains(value);
+    }
+
+    protected boolean isStrictMode() {
+        Rule annotation = this.currentField.getAnnotation(Rule.class);
+        return annotation != null && annotation.strict();
     }
 
     protected String[] getAnnotationOptions() {
@@ -76,21 +116,6 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         .then(ClientCommandManager.argument("value", getArgumentType())
         .suggests(this::getSuggestions)
         .executes(ctx -> executeSetValue(ctx, field)));
-    }
-
-    private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {
-        T value = parseValue(ctx);
-        setFieldValue(field, value);
-        String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
-        if (LanguageJudge.isEnglish()) {
-            Messenger.tell(ctx.getSource(), tr.tr("set_value", field.getName(), value));
-        } else {
-            Messenger.tell(
-                ctx.getSource(),
-                tr.tr("set_value", Messenger.tr(funcNameTrKey), field.getName(), value)
-            );
-        }
-        return 1;
     }
 
     protected abstract ArgumentType<T> getArgumentType();
