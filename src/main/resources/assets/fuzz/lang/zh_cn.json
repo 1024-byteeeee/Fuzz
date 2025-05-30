@@ -29,6 +29,7 @@
   "fuzz.command.options_option": "设置: ",
   "fuzz.command.function_info_categories": "分类: ",
   "fuzz.command.function_info_click_to_view": "列出所有 “%s (%s)” 选项",
+  "fuzz.command.is_not_valid_value": "不是有效的值",
 
   "fuzz.keyBinding.category": "FUZZ",
   "fuzz.keyBinding.quickKickFakePlayer.name": "快捷踢出假人",
@@ -45,6 +46,8 @@
   "fuzz.command.highlightEntity.remove_help": "/highLight remove <实体ID> - 移除高亮实体",
   "fuzz.command.highlightEntity.clear_help": "/highLight clear - 清除所有高亮实体",
   "fuzz.command.highlightEntity.list_help": "/highLight list - 列出所有高亮实体",
+
+  "fuzz.validator.blockOutlineColor.value_range": "该值必须是 “rainbow” 或有效的十六进制颜色",
 
   "fuzz.settings.usingItemSlowDownDisabled.name": "禁用使用物品减速",
   "fuzz.settings.usingItemSlowDownDisabled.desc": "禁用使用物品时的减速效果",

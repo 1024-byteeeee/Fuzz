@@ -45,7 +45,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.validators.HexValidator;
 import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;
@@ -62,13 +62,19 @@ public abstract class WorldRenderMixin {
         )
     )
     private void renderBlockOutlineWrapper(
-            WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity,
-            double cameraX, double cameraY, double cameraZ,
-            BlockPos pos, BlockState state, Operation<Void> original
+        WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity,
+        double cameraX, double cameraY, double cameraZ,
+        BlockPos pos, BlockState state, Operation<Void> original
     ) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
             float red, green, blue;
+            float alpha = (float) (FuzzSettings.blockOutlineAlpha / 255.0D);
+            float lineWidth = (float) (FuzzSettings.blockOutlineWidth != -1.0D ? FuzzSettings.blockOutlineWidth : 1.5D);
+            double X = pos.getX() - cameraX;
+            double Y = pos.getY() - cameraY;
+            double Z = pos.getZ() - cameraZ;
+            VoxelShape shape = state.getOutlineShape(((WorldRendererAccessor) this).getWorld(), pos, ShapeContext.of(entity));
             if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
                 float[] rainbowRgb = RainbowColorHelper.getRainbowColorComponents();
                 red = rainbowRgb[0];
@@ -85,12 +91,6 @@ public abstract class WorldRenderMixin {
                     return;
                 }
             }
-            float alpha = (float) (FuzzSettings.blockOutlineAlpha / 255.0D);
-            float lineWidth = (float) (FuzzSettings.blockOutlineWidth != -1.0D ? FuzzSettings.blockOutlineWidth : 1.5D);
-            double X = pos.getX() - cameraX;
-            double Y = pos.getY() - cameraY;
-            double Z = pos.getZ() - cameraZ;
-            VoxelShape shape = state.getOutlineShape(((WorldRendererAccessor) this).getWorld(), pos, ShapeContext.of(entity));
             renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);

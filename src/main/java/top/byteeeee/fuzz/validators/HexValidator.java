@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.helpers;
+package top.byteeeee.fuzz.validators;
 
 public class HexValidator {
     public static boolean isValidHexColor(String color) {

@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.validators.HexValidator;
 
 import java.util.Objects;
 

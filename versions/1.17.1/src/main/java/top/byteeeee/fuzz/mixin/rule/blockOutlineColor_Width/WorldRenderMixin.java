@@ -45,7 +45,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.validators.HexValidator;
 import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;

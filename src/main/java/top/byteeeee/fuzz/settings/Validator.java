@@ -20,19 +20,16 @@
 
 package top.byteeeee.fuzz.settings;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Rule {
-    String[] options() default {};
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-    String[] categories() default {};
+import java.lang.reflect.Field;
 
-    boolean strict() default true;
+@Environment(EnvType.CLIENT)
+public abstract class Validator<T> {
+    public abstract boolean validate(FabricClientCommandSource source, Field field, T value, String stringValue);
 
-    Class<? extends Validator<?>>[] validators() default {};
+    public abstract String description();
 }

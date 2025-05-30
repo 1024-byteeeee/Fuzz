@@ -29,6 +29,7 @@
   "fuzz.command.options_option": "Options: ",
   "fuzz.command.function_info_categories": "Tags: ",
   "fuzz.command.function_info_click_to_view": "list all \"%s\" settings",
+  "fuzz.command.is_not_valid_value": "Is not valid value",
 
   "fuzz.keyBinding.category": "FUZZ",
   "fuzz.keyBinding.quickKickFakePlayer.name": "quickKickFakePlayer",
@@ -45,6 +46,8 @@
   "fuzz.command.highlightEntity.remove_help": "/highLight remove <entityId> - Remove the highlighted entity",
   "fuzz.command.highlightEntity.clear_help": "/highLight clear - Clears all highlighted entities",
   "fuzz.command.highlightEntity.list_help": "/highLight list - Lists all highlighted entities",
+
+  "fuzz.validator.blockOutlineColor.value_range": "The value must be \"rainbow\" or a valid hex color",
 
   "fuzz.settings.usingItemSlowDownDisabled.name": "usingItemSlowDownDisabled",
   "fuzz.settings.usingItemSlowDownDisabled.desc": "Disable the slow effect when using items",

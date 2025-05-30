@@ -47,7 +47,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.validators.HexValidator;
 import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;
@@ -72,12 +72,9 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
             int customColor;
-
-            // 检查是否为彩虹颜色模式
             if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
                 customColor = RainbowColorHelper.getRainbowColor();
             } else {
-                // 静态颜色处理
                 colorString = HexValidator.appendSharpIfNone(colorString);
                 if (HexValidator.isValidHexColor(colorString)) {
                     int red = Integer.parseInt(colorString.substring(1, 3), 16);
@@ -86,7 +83,6 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
                     double alpha = FuzzSettings.blockOutlineAlpha;
                     customColor = ColorHelper.getArgb((int) alpha, red, green, blue);
                 } else {
-                    // 如果颜色无效，使用原始渲染
                     original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
                     return;
                 }

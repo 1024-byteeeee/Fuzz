@@ -26,6 +26,8 @@ import net.fabricmc.api.Environment;
 import top.byteeeee.fuzz.config.FuzzRuleConfig;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
+import top.byteeeee.fuzz.settings.ValidatorManager;
+import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,43 +59,51 @@ public class FuzzSettings {
 
     @Rule(
         options = {"false", "rainbow", "#FFFFFF", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BlockOutlineColorValidator.class,
+        strict = false
     )
     public static String blockOutlineColor = "false";
 
     @Rule(
         options = {"-1", "0", "255"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        strict = false
     )
     public static int blockOutlineAlpha = -1;
 
     @Rule(
         options = {"-1.0", "0.0", "10.0"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        strict = false
     )
     public static double blockOutlineWidth = -1.0D;
 
     @Rule(
         options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        strict = false
     )
     public static String skyColor = "false";
 
     @Rule(
         options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        strict = false
     )
     public static String fogColor = "false";
 
     @Rule(
         options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        strict = false
     )
     public static String waterColor = "false";
 
     @Rule(
         options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER}
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        strict = false
     )
     public static String waterFogColor = "false";
 
@@ -141,7 +151,8 @@ public class FuzzSettings {
 
     @Rule(
         options = "false",
-        categories = {FUZZ, COMMAND}
+        categories = {FUZZ, COMMAND},
+        strict = false
     )
     public static String fuzzCommandAlias = "false";
 
@@ -152,6 +163,7 @@ public class FuzzSettings {
                     field.setAccessible(true);
                     Object defaultValue = field.get(null);
                     DEFAULT_VALUES.put(field.getName(), defaultValue);
+                    ValidatorManager.initializeValidators(field);
                 } catch (IllegalAccessException e) {
                     FuzzModClient.LOGGER.warn(e);
                 }
