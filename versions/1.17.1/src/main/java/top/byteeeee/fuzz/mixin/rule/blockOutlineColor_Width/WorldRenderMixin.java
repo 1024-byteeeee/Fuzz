@@ -75,7 +75,6 @@ public abstract class WorldRenderMixin {
                 green = rainbowRgb[1];
                 blue = rainbowRgb[2];
             } else {
-                colorString = HexValidator.appendSharpIfNone(colorString);
                 if (HexValidator.isValidHexColor(colorString)) {
                     red = Integer.parseInt(colorString.substring(1, 3), 16) / 255.0F;
                     green = Integer.parseInt(colorString.substring(3, 5), 16) / 255.0F;

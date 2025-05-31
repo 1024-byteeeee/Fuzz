@@ -24,10 +24,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import top.byteeeee.fuzz.config.FuzzRuleConfig;
+import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
 import top.byteeeee.fuzz.settings.ValidatorManager;
+import top.byteeeee.fuzz.validators.rule.BiomeColor.BiomeColorValidator;
+import top.byteeeee.fuzz.validators.rule.blockOutlineAlpha.BlockOutlineAlphaValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorValidator;
+import top.byteeeee.fuzz.validators.rule.blockOutlineWidth.BlockOutlineWidthValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +72,7 @@ public class FuzzSettings {
     @Rule(
         options = {"-1", "0", "255"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BlockOutlineAlphaValidator.class,
         strict = false
     )
     public static int blockOutlineAlpha = -1;
@@ -75,6 +80,7 @@ public class FuzzSettings {
     @Rule(
         options = {"-1.0", "0.0", "10.0"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BlockOutlineWidthValidator.class,
         strict = false
     )
     public static double blockOutlineWidth = -1.0D;
@@ -82,6 +88,7 @@ public class FuzzSettings {
     @Rule(
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BiomeColorValidator.class,
         strict = false
     )
     public static String skyColor = "false";
@@ -89,6 +96,7 @@ public class FuzzSettings {
     @Rule(
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BiomeColorValidator.class,
         strict = false
     )
     public static String fogColor = "false";
@@ -96,6 +104,7 @@ public class FuzzSettings {
     @Rule(
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BiomeColorValidator.class,
         strict = false
     )
     public static String waterColor = "false";
@@ -103,6 +112,7 @@ public class FuzzSettings {
     @Rule(
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = BiomeColorValidator.class,
         strict = false
     )
     public static String waterFogColor = "false";
@@ -152,6 +162,7 @@ public class FuzzSettings {
     @Rule(
         options = "false",
         categories = {FUZZ, COMMAND},
+        validators = FuzzCommandAliasObserver.class,
         strict = false
     )
     public static String fuzzCommandAlias = "false";

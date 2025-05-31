@@ -24,8 +24,4 @@ public class HexValidator {
     public static boolean isValidHexColor(String color) {
         return color != null && color.startsWith("#") && color.length() == 7 && color.substring(1).matches("[0-9A-Fa-f]{6}");
     }
-
-    public static String appendSharpIfNone(String hexColorCode) {
-        return !hexColorCode.startsWith("#") ? "#" + hexColorCode : hexColorCode;
-    }
 }

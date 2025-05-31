@@ -45,7 +45,9 @@ public class ValidatorManager {
         }
 
         Class<? extends Validator<?>>[] validatorClasses = annotation.validators();
-        if (validatorClasses.length == 0) return;
+        if (validatorClasses.length == 0) {
+            return;
+        }
 
         List<Validator<?>> validators = new ArrayList<>();
         for (Class<? extends Validator<?>> validatorClass : validatorClasses) {
@@ -63,7 +65,7 @@ public class ValidatorManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> boolean validateValue(Field field, T value, String stringValue, FabricClientCommandSource source) {
+    public static <T> boolean validateValue(Field field, T value, FabricClientCommandSource source) {
         List<Validator<?>> validators = fieldValidators.get(field);
         if (validators == null || validators.isEmpty()) {
             return true;
@@ -71,7 +73,7 @@ public class ValidatorManager {
 
         for (Validator<?> validator : validators) {
             Validator<T> typedValidator = (Validator<T>) validator;
-            if (!typedValidator.validate(source, field, value, stringValue)) {
+            if (!typedValidator.validate(source, field, value)) {
                 return false;
             }
         }

@@ -64,7 +64,6 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
 
     private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {
         T value = parseValue(ctx);
-        String stringValue = value.toString();
         String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
 
         if (isStrictMode() && !isValidOption(value.toString())) {
@@ -72,7 +71,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
             return 0;
         }
 
-        if (!ValidatorManager.validateValue(field, value, stringValue, ctx.getSource())) {
+        if (!ValidatorManager.validateValue(field, value, ctx.getSource())) {
             List<String> descriptions = ValidatorManager.getValidatorDescriptions(field);
             String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.get(0);
             Messenger.tell(ctx.getSource(), Messenger.s(errorMsg).formatted(Formatting.RED));
@@ -113,6 +112,9 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
     }
 
     protected boolean isStrictMode() {
+        if (this.currentField == null) {
+            return false;
+        }
         Rule annotation = this.currentField.getAnnotation(Rule.class);
         return annotation != null && annotation.strict();
     }

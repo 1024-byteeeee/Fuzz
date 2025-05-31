@@ -75,7 +75,6 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
             if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
                 customColor = RainbowColorHelper.getRainbowColor();
             } else {
-                colorString = HexValidator.appendSharpIfNone(colorString);
                 if (HexValidator.isValidHexColor(colorString)) {
                     int red = Integer.parseInt(colorString.substring(1, 3), 16);
                     int green = Integer.parseInt(colorString.substring(3, 5), 16);

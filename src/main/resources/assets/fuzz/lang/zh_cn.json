@@ -47,7 +47,11 @@
   "fuzz.command.highlightEntity.clear_help": "/highLight clear - 清除所有高亮实体",
   "fuzz.command.highlightEntity.list_help": "/highLight list - 列出所有高亮实体",
 
-  "fuzz.validator.blockOutlineColor.value_range": "该值必须是 “rainbow” 或有效的十六进制颜色",
+  "fuzz.validator.blockOutlineColor.value_range": "设定的值必须为 “rainbow” 或有效的十六进制颜色码",
+  "fuzz.validator.biomeColorValidator.value_range": "设定的值必须为有效的十六进制颜色码",
+  "fuzz.validator.blockOutlineAlpha.value_range": "设定的值必须为 0 - 255 或 -1",
+  "fuzz.validator.blockOutlineWidth.value_range": "设定的值必须为 0.0 - 80.0 或 -1.0",
+  "fuzz.validator.fuzzCommandAlias.value_range": "只能输入大写或小写字母",
 
   "fuzz.settings.usingItemSlowDownDisabled.name": "禁用使用物品减速",
   "fuzz.settings.usingItemSlowDownDisabled.desc": "禁用使用物品时的减速效果",

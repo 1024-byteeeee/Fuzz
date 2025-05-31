@@ -48,6 +48,10 @@
   "fuzz.command.highlightEntity.list_help": "/highLight list - Lists all highlighted entities",
 
   "fuzz.validator.blockOutlineColor.value_range": "The value must be \"rainbow\" or a valid hex color",
+  "fuzz.validator.biomeColorValidator.value_range": "The value must be a valid hex color",
+  "fuzz.validator.blockOutlineAlpha.value_range": "The value must be 0 - 255 or -1",
+  "fuzz.validator.blockOutlineWidth.value_range": "The value must be 0.0 - 80.0 or -1.0",
+  "fuzz.validator.fuzzCommandAlias.value_range": "Only letters (A-Z/a-z) are accepted",
 
   "fuzz.settings.usingItemSlowDownDisabled.name": "usingItemSlowDownDisabled",
   "fuzz.settings.usingItemSlowDownDisabled.desc": "Disable the slow effect when using items",

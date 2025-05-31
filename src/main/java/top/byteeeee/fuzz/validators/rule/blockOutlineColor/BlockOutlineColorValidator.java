@@ -20,6 +20,9 @@
 
 package top.byteeeee.fuzz.validators.rule.blockOutlineColor;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.settings.Validator;
@@ -29,16 +32,13 @@ import top.byteeeee.fuzz.validators.HexValidator;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 public class BlockOutlineColorValidator extends Validator<String> {
     private static final Translator tr = new Translator("validator.blockOutlineColor");
 
     @Override
-    public boolean validate(FabricClientCommandSource source, Field field, String value, String stringValue) {
-        if (!value.equals("rainbow")) {
-            value = HexValidator.appendSharpIfNone(value);
-        }
-
-        return HexValidator.isValidHexColor(value) || Objects.equals(value, "rainbow");
+    public boolean validate(FabricClientCommandSource source, Field field, String value) {
+        return HexValidator.isValidHexColor(value) || Objects.equals(value, "rainbow") || Objects.equals(value, "false");
     }
 
     @Override
