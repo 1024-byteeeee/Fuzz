@@ -11,12 +11,12 @@ import top.byteeeee.fuzz.translations.Translator;
 import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
-public class FuzzCommandAliasObserver extends Validator<String> {
+public class FuzzCommandAliasValidator extends Validator<String> {
     private static final Translator tr = new Translator("validator.fuzzCommandAlias");
 
     @Override
-    public boolean validate(FabricClientCommandSource source, Field field, String value) {
-        return value != null && value.matches("^[a-zA-Z]+$");
+    public String validate(FabricClientCommandSource source, Field field, String value) {
+        return value.matches("^[a-zA-Z]+$") ? value : null;
     }
 
     @Override

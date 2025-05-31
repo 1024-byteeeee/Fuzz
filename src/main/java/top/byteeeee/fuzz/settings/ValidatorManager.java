@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ValidatorManager {
     private static final ConcurrentHashMap<Field, List<Validator<?>>> fieldValidators = new ConcurrentHashMap<>();
 
-    public static void initializeValidators(Field field) {
+    public static void init(Field field) {
         Rule annotation = field.getAnnotation(Rule.class);
 
         if (annotation == null) {
@@ -45,40 +45,38 @@ public class ValidatorManager {
         }
 
         Class<? extends Validator<?>>[] validatorClasses = annotation.validators();
-        if (validatorClasses.length == 0) {
-            return;
-        }
-
-        List<Validator<?>> validators = new ArrayList<>();
-        for (Class<? extends Validator<?>> validatorClass : validatorClasses) {
-            try {
-                Validator<?> validator = validatorClass.getDeclaredConstructor().newInstance();
-                validators.add(validator);
-            } catch (Exception e) {
-                FuzzModClient.LOGGER.error("Failed to instantiate validator: {}", validatorClass.getName(), e);
+        if (validatorClasses.length > 0) {
+            List<Validator<?>> validators = new ArrayList<>();
+            for (Class<? extends Validator<?>> validatorClass : validatorClasses) {
+                try {
+                    Validator<?> validator = validatorClass.getDeclaredConstructor().newInstance();
+                    validators.add(validator);
+                } catch (Exception e) {
+                    FuzzModClient.LOGGER.error("Failed to instantiate validator: {}", validatorClass.getName(), e);
+                }
             }
-        }
-
-        if (!validators.isEmpty()) {
-            fieldValidators.put(field, validators);
+            if (!validators.isEmpty()) {
+                fieldValidators.put(field, validators);
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> boolean validateValue(Field field, T value, FabricClientCommandSource source) {
-        List<Validator<?>> validators = fieldValidators.get(field);
-        if (validators == null || validators.isEmpty()) {
-            return true;
-        }
+    public static <T> T validateValue(Field field, T value, FabricClientCommandSource source) {
+        T resultValue = value;
 
-        for (Validator<?> validator : validators) {
-            Validator<T> typedValidator = (Validator<T>) validator;
-            if (!typedValidator.validate(source, field, value)) {
-                return false;
+        List<Validator<?>> validators = fieldValidators.get(field);
+        if (validators != null && !validators.isEmpty()) {
+            for (Validator<?> validator : validators) {
+                Validator<T> typedValidator = (Validator<T>) validator;
+                resultValue = typedValidator.validate(source, field, resultValue);
+                if (resultValue == null) {
+                    return null;
+                }
             }
         }
 
-        return true;
+        return resultValue;
     }
 
     public static List<String> getValidatorDescriptions(Field field) {
@@ -89,7 +87,6 @@ public class ValidatorManager {
         }
 
         List<String> descriptions = new ArrayList<>();
-
         for (Validator<?> validator : validators) {
             descriptions.add(validator.description());
         }

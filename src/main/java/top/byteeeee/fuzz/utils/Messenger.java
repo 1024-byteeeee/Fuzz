@@ -64,4 +64,12 @@ public class Messenger {
             //#endif
         }
     }
+
+    public static void sendMsgToPlayer(MutableText text) {
+        ClientUtil.getCurrentPlayer().sendMessage(text, false);
+    }
+
+    public static void sendMsgToPlayer(MutableText text, boolean actionBar) {
+        ClientUtil.getCurrentPlayer().sendMessage(text, actionBar);
+    }
 }

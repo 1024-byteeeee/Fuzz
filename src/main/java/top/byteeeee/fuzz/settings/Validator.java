@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
 public abstract class Validator<T> {
-    public abstract boolean validate(FabricClientCommandSource source, Field field, T value);
+    public abstract T validate(FabricClientCommandSource source, Field field, T value);
 
     public abstract String description();
 }

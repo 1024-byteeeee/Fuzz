@@ -52,6 +52,7 @@
   "fuzz.validator.blockOutlineAlpha.value_range": "设定的值必须为 0 - 255 或 -1",
   "fuzz.validator.blockOutlineWidth.value_range": "设定的值必须为 0.0 - 80.0 或 -1.0",
   "fuzz.validator.fuzzCommandAlias.value_range": "只能输入大写或小写字母",
+  "fuzz.validator.fuzzCommandAlias.onValueChange": "重启客户端后生效",
 
   "fuzz.settings.usingItemSlowDownDisabled.name": "禁用使用物品减速",
   "fuzz.settings.usingItemSlowDownDisabled.desc": "禁用使用物品时的减速效果",

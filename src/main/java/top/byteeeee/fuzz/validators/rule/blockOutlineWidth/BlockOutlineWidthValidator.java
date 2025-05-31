@@ -15,8 +15,8 @@ public class BlockOutlineWidthValidator extends Validator<Double> {
     private static final Translator tr = new Translator("validator.blockOutlineWidth");
 
     @Override
-    public boolean validate(FabricClientCommandSource source, Field field, Double value) {
-        return value >= -1.0D && value <= 80.0D;
+    public Double validate(FabricClientCommandSource source, Field field, Double value) {
+        return value >= -1.0D && value <= 80.0D ? value : null;
     }
 
     @Override

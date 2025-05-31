@@ -37,8 +37,12 @@ public class BlockOutlineColorValidator extends Validator<String> {
     private static final Translator tr = new Translator("validator.blockOutlineColor");
 
     @Override
-    public boolean validate(FabricClientCommandSource source, Field field, String value) {
-        return HexValidator.isValidHexColor(value) || Objects.equals(value, "rainbow") || Objects.equals(value, "false");
+    public String validate(FabricClientCommandSource source, Field field, String value) {
+        if (!HexValidator.isValidHexColor(value) && !Objects.equals(value, "rainbow") && !Objects.equals(value, "false")) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
     @Override

@@ -17,8 +17,8 @@ public class BiomeColorValidator extends Validator<String> {
     private static final Translator tr = new Translator("validator.biomeColorValidator");
 
     @Override
-    public boolean validate(FabricClientCommandSource source, Field field, String value) {
-        return HexValidator.isValidHexColor(value) || Objects.equals(value, "false");
+    public String validate(FabricClientCommandSource source, Field field, String value) {
+        return HexValidator.isValidHexColor(value) || Objects.equals(value, "false") ? value : null;
     }
 
     @Override

@@ -24,7 +24,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import top.byteeeee.fuzz.config.FuzzRuleConfig;
-import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
+import top.byteeeee.fuzz.observers.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
+import top.byteeeee.fuzz.settings.ObserverManager;
+import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasValidator;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
 import top.byteeeee.fuzz.settings.ValidatorManager;
@@ -162,7 +164,8 @@ public class FuzzSettings {
     @Rule(
         options = "false",
         categories = {FUZZ, COMMAND},
-        validators = FuzzCommandAliasObserver.class,
+        validators = FuzzCommandAliasValidator.class,
+        observers = FuzzCommandAliasObserver.class,
         strict = false
     )
     public static String fuzzCommandAlias = "false";
@@ -174,7 +177,8 @@ public class FuzzSettings {
                     field.setAccessible(true);
                     Object defaultValue = field.get(null);
                     DEFAULT_VALUES.put(field.getName(), defaultValue);
-                    ValidatorManager.initializeValidators(field);
+                    ValidatorManager.init(field);
+                    ObserverManager.init(field);
                 } catch (IllegalAccessException e) {
                     FuzzModClient.LOGGER.warn(e);
                 }

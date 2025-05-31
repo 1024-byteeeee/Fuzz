@@ -15,8 +15,8 @@ public class BlockOutlineAlphaValidator extends Validator<Integer> {
     private static final Translator tr = new Translator("validator.blockOutlineAlpha");
 
     @Override
-    public boolean validate(FabricClientCommandSource source, Field field, Integer value) {
-        return value >= -1 && value <= 255;
+    public Integer validate(FabricClientCommandSource source, Field field, Integer value) {
+        return value >= -1 && value <= 255 ? null : value;
     }
 
     @Override

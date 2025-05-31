@@ -52,6 +52,7 @@
   "fuzz.validator.blockOutlineAlpha.value_range": "The value must be 0 - 255 or -1",
   "fuzz.validator.blockOutlineWidth.value_range": "The value must be 0.0 - 80.0 or -1.0",
   "fuzz.validator.fuzzCommandAlias.value_range": "Only letters (A-Z/a-z) are accepted",
+  "fuzz.validator.fuzzCommandAlias.onValueChange": "Requires a client restart to apply",
 
   "fuzz.settings.usingItemSlowDownDisabled.name": "usingItemSlowDownDisabled",
   "fuzz.settings.usingItemSlowDownDisabled.desc": "Disable the slow effect when using items",
