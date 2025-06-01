@@ -3,19 +3,6 @@
  * GNU Lesser General Public License v3.0
  *
  * Copyright (C) 2025 1024_byteeeee and contributors
- *
- * Fuzz is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Fuzz is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler;
@@ -28,6 +15,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
@@ -36,7 +24,7 @@ import net.minecraft.util.Formatting;
 import top.byteeeee.fuzz.settings.ObserverManager;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
-import top.byteeeee.fuzz.commands.fuzzCommands.FuzzCommandContext;
+import top.byteeeee.fuzz.commands.fuzzCommands.context.FuzzCommandContext;
 import top.byteeeee.fuzz.translations.LanguageJudge;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.Messenger;
@@ -45,6 +33,7 @@ import top.byteeeee.fuzz.settings.ValidatorManager;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInterface<T> {
@@ -54,90 +43,103 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
     @Override
     public void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field) {
         this.currentField = field;
-        RequiredArgumentBuilder<FabricClientCommandSource, T> valueArg = ClientCommandManager
-        .argument("value", getArgumentType())
-        .suggests(this::getSuggestions)
-        .executes(ctx -> executeSetValue(ctx, field));
-        literal.executes(
-            ctx -> FuzzCommandContext.showFunctionInfo(ctx.getSource(), field)
-        ).then(valueArg);
+        RequiredArgumentBuilder<FabricClientCommandSource, T> valueArg = buildValueArgument(field);
+        literal.executes(ctx -> FuzzCommandContext.showRuleInfo(ctx.getSource(), field)).then(valueArg);
+    }
+
+    private RequiredArgumentBuilder<FabricClientCommandSource, T> buildValueArgument(Field field) {
+        return ClientCommandManager.argument("value", getArgumentType()).suggests(this::getSuggestions).executes(ctx -> executeSetValue(ctx, field));
     }
 
     private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {
         T value = parseValue(ctx);
-        String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
 
-        if (isStrictMode() && !isValidOption(value.toString())) {
-            Messenger.tell(ctx.getSource(), tr.tr("is_not_valid_value").formatted(Formatting.RED));
+        if (!validateInputValue(ctx, value)) {
             return 0;
         }
 
+        T validatedValue = validateWithManager(ctx, field, value);
+        if (validatedValue == null) {
+            return 0;
+        }
+
+        Optional<T> oldValue = getOldValue(field);
+        if (!oldValue.isPresent()) {
+            return 0;
+        }
+
+        if (!setNewValue(field, validatedValue)) {
+            return 0;
+        }
+
+        sendSuccessMessage(ctx, field, validatedValue);
+        ObserverManager.notifyObservers(field, oldValue.get(), validatedValue);
+
+        return 1;
+    }
+
+    private boolean validateInputValue(CommandContext<FabricClientCommandSource> ctx, T value) {
+        if (isStrictMode() && !isValidOption(value.toString())) {
+            Messenger.tell(ctx.getSource(), tr.tr("is_not_valid_value").formatted(Formatting.RED));
+            return false;
+        }
+        return true;
+    }
+
+    private T validateWithManager(CommandContext<FabricClientCommandSource> ctx, Field field, T value) {
         T validatedValue = ValidatorManager.validateValue(field, value, ctx.getSource());
         if (validatedValue == null) {
             List<String> descriptions = ValidatorManager.getValidatorDescriptions(field);
             String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.get(0);
             Messenger.tell(ctx.getSource(), Messenger.s(errorMsg).formatted(Formatting.RED));
-            return 0;
+            return null;
         }
+        return validatedValue;
+    }
 
-        T oldValue;
+    private Optional<T> getOldValue(Field field) {
         try {
             @SuppressWarnings("unchecked")
             T currentValue = (T) field.get(null);
-            oldValue = currentValue;
+            return Optional.ofNullable(currentValue);
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Failed to get field value", e);
         }
+    }
 
+    private boolean setNewValue(Field field, T value) {
         try {
             field.set(null, value);
             FuzzConfig.saveConfig();
+            return true;
         } catch (Exception e) {
             throw new IllegalStateException("Failed to set field value", e);
         }
-
-        if (LanguageJudge.isEnglish()) {
-            Messenger.tell(ctx.getSource(), tr.tr("set_value", field.getName(), validatedValue));
-        } else {
-            Messenger.tell(ctx.getSource(), tr.tr("set_value", Messenger.tr(funcNameTrKey), field.getName(), validatedValue));
-        }
-
-        ObserverManager.notifyObservers(field, oldValue, validatedValue);
-
-        return 1;
     }
 
     protected boolean isValidOption(String value) {
         if (!isStrictMode()) {
             return true;
         }
-
         String[] options = getAnnotationOptions();
-        if (options.length == 0) {
-            return true;
-        }
-
-        return Arrays.asList(options).contains(value);
+        return options.length == 0 || Arrays.asList(options).contains(value);
     }
 
     protected boolean isStrictMode() {
-        if (this.currentField == null) {
-            return false;
-        }
-        Rule annotation = this.currentField.getAnnotation(Rule.class);
-        return annotation != null && annotation.strict();
+        return Optional.ofNullable(currentField).map(field -> field.getAnnotation(Rule.class)).map(Rule::strict).orElse(false);
     }
 
     protected String[] getAnnotationOptions() {
-        Rule annotation = this.currentField.getAnnotation(Rule.class);
-        return annotation != null ? annotation.options() : new String[0];
+        return Optional.ofNullable(currentField).map(field -> field.getAnnotation(Rule.class)).map(Rule::options).orElse(new String[0]);
     }
 
-    protected void buildCommonCommand(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field) {
-        literal.executes(ctx -> FuzzCommandContext.showFunctionInfo(ctx.getSource(), field))
-        .then(ClientCommandManager.argument("value", getArgumentType())
-        .suggests(this::getSuggestions)
-        .executes(ctx -> executeSetValue(ctx, field)));
+    private void sendSuccessMessage(CommandContext<FabricClientCommandSource> ctx, Field field, T value) {
+        String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
+        if (LanguageJudge.isEnglish()) {
+            Messenger.tell(ctx.getSource(), tr.tr("set_value", field.getName(), value));
+        } else {
+            Messenger.tell(ctx.getSource(), tr.tr("set_value", Messenger.tr(funcNameTrKey), field.getName(), value));
+        }
     }
 
     protected abstract ArgumentType<T> getArgumentType();

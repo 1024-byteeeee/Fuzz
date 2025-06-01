@@ -43,8 +43,8 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class HighLightEntityCommand {
-    protected static final Translator tr = new Translator("command.highlightEntity");
-    private static final String FUNCTION_NAME = "commandHighLightEntities";
+    private static final Translator tr = new Translator("command.highlightEntity");
+    private static final String RULE_NAME = "commandHighLightEntities";
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
@@ -54,7 +54,7 @@ public class HighLightEntityCommand {
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(SetSuggestionProvider.fromEntityRegistry())
             .executes(c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, FUNCTION_NAME,
+                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
                 () -> add(c.getSource(), StringArgumentType.getString(c, "entityId")))
             )))
 
@@ -63,7 +63,7 @@ public class HighLightEntityCommand {
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(ListSuggestionProvider.of(FuzzSettings.highlightEntityList))
             .executes(c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, FUNCTION_NAME,
+                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
                 () -> remove(c.getSource(), StringArgumentType.getString(c, "entityId")))
             )))
 
@@ -71,7 +71,7 @@ public class HighLightEntityCommand {
             .then(ClientCommandManager.literal("clear")
             .executes(
                 c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, FUNCTION_NAME,
+                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
                 () -> clear(c.getSource()))
             ))
 
@@ -79,7 +79,7 @@ public class HighLightEntityCommand {
             .then(ClientCommandManager.literal("list")
             .executes(
                 c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, FUNCTION_NAME,
+                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
                 () -> list(c.getSource()))
             ))
 
@@ -87,7 +87,7 @@ public class HighLightEntityCommand {
             .then(ClientCommandManager.literal("help")
             .executes(
                 c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, FUNCTION_NAME,
+                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
                 () -> help(c.getSource()))
             ))
         );

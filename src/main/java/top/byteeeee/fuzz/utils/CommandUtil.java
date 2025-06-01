@@ -20,14 +20,24 @@
 
 package top.byteeeee.fuzz.utils;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+
+import net.minecraft.util.Formatting;
+
+import top.byteeeee.fuzz.translations.Translator;
 
 import java.util.function.Supplier;
 
+@Environment(EnvType.CLIENT)
 public class CommandUtil {
+    private static final Translator tr = new Translator("command.util");
+
     public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
         if (!condition) {
-            source.sendError(Messenger.s("需开启: " + functionName));
+            Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).formatted(Formatting.RED));
             return 0;
         }
         return action.get();

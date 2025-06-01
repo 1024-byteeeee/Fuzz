@@ -31,6 +31,8 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.commands.fuzzCommands.context.FuzzCategoriesContext;
+import top.byteeeee.fuzz.commands.fuzzCommands.context.FuzzCommandContext;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler.ArgumentHandlerInterface;
 import top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler.ArgumentHandlerFactory;
@@ -49,18 +51,19 @@ public class FuzzCommand {
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> buildFuzzCommand(String commandName) {
         LiteralArgumentBuilder<FabricClientCommandSource> main = ClientCommandManager.literal(commandName)
-        .executes(ctx -> FuzzCommandContext.showFunctionList(ctx.getSource()));
+        .executes(ctx -> FuzzCommandContext.showRuleList(ctx.getSource()));
         LiteralArgumentBuilder<FabricClientCommandSource> listCommand = ClientCommandManager.literal("list")
-        .executes(ctx -> FuzzCommandContext.showAllFunctions(ctx.getSource()))
+        .executes(ctx -> FuzzCommandContext.showAllRules(ctx.getSource()))
         .then(ClientCommandManager.argument("category", StringArgumentType.string())
         .suggests((context, builder) -> {
-            FuzzCategories.getAllCategories().forEach(builder::suggest);
+            FuzzCategoriesContext.getAllCategories().forEach(builder::suggest);
             return CompletableFuture.completedFuture(builder.build());
         })
         .executes(ctx -> {
             String category = StringArgumentType.getString(ctx, "category");
-            return FuzzCategories.showFunctionListByCategory(ctx.getSource(), category);
+            return FuzzCategoriesContext.showFunctionListByCategory(ctx.getSource(), category);
         }));
+
         main.then(listCommand);
 
         Arrays.stream(FuzzSettings.class.getDeclaredFields())
@@ -68,8 +71,8 @@ public class FuzzCommand {
         .forEach(field -> {
             LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal(field.getName())
                 .executes(context -> {
-                    FuzzCommandContext.showFunctionList(context.getSource());
-                    FuzzCommandContext.showFunctionInfo(context.getSource(), field);
+                    FuzzCommandContext.showRuleList(context.getSource());
+                    FuzzCommandContext.showRuleInfo(context.getSource(), field);
                     return 1;
                 });
             ArgumentHandlerInterface<?> handler = ArgumentHandlerFactory.create(field.getType());
