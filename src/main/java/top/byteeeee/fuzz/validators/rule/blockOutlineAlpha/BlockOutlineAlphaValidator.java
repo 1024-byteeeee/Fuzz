@@ -18,28 +18,29 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.utils;
+package top.byteeeee.fuzz.validators.rule.blockOutlineAlpha;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import net.minecraft.util.Formatting;
-
+import top.byteeeee.fuzz.settings.Validator;
 import top.byteeeee.fuzz.translations.Translator;
 
-import java.util.function.Supplier;
+import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
-public class CommandUtil {
-    private static final Translator tr = new Translator("command.util");
+public class BlockOutlineAlphaValidator extends Validator<Integer> {
+    private static final Translator tr = new Translator("validator.blockOutlineAlpha");
 
-    public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
-        if (!condition) {
-            Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).formatted(Formatting.RED));
-            return 0;
-        }
-        return action.get();
+    @Override
+    public Integer validate(FabricClientCommandSource source, Field field, Integer value) {
+        return value >= -1 && value <= 255 ? null : value;
+    }
+
+    @Override
+    public String description() {
+        return tr.tr("value_range").getString();
     }
 }

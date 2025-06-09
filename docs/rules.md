@@ -518,4 +518,24 @@
 
 
 
-- 分类: `AMS`, `FEATURE`, `SURVIVAL`, `COMMAND`
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `COMMAND`
+
+
+
+## fuzz命令别名（fuzzCommandAlias）
+
+为fuzz命令指定一个别名。
+
+- 类型: `String`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`
+
+
+
+- 分类: `FUZZ`, `COMMAND`

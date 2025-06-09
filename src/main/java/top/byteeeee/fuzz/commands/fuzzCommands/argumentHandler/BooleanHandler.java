@@ -45,7 +45,7 @@ public class BooleanHandler extends AbstractArgumentHandler<Boolean> {
 
     @Override
     public void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field) {
-        buildCommonCommand(literal, field);
+        super.configureArgument(literal, field);
     }
 
     @Override

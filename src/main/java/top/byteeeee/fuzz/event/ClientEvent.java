@@ -27,9 +27,9 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer.GetTargetPlayer;
 import top.byteeeee.fuzz.key.KeyBindings;
 import top.byteeeee.fuzz.utils.Messenger;
+import top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer_quickDropFakePlayerAllItemStack.GetTargetPlayer;
 
 @Environment(EnvType.CLIENT)
 public class ClientEvent {

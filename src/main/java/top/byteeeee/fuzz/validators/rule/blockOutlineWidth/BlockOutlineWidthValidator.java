@@ -18,14 +18,29 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.helpers;
+package top.byteeeee.fuzz.validators.rule.blockOutlineWidth;
 
-public class HexValidator {
-    public static boolean isValidHexColor(String color) {
-        return color != null && color.startsWith("#") && color.length() == 7 && color.substring(1).matches("[0-9A-Fa-f]{6}");
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+
+import top.byteeeee.fuzz.settings.Validator;
+import top.byteeeee.fuzz.translations.Translator;
+
+import java.lang.reflect.Field;
+
+@Environment(EnvType.CLIENT)
+public class BlockOutlineWidthValidator extends Validator<Double> {
+    private static final Translator tr = new Translator("validator.blockOutlineWidth");
+
+    @Override
+    public Double validate(FabricClientCommandSource source, Field field, Double value) {
+        return value >= -1.0D && value <= 80.0D ? value : null;
     }
 
-    public static String appendSharpIfNone(String hexColorCode) {
-        return !hexColorCode.startsWith("#") ? "#" + hexColorCode : hexColorCode;
+    @Override
+    public String description() {
+        return tr.tr("value_range").getString();
     }
 }

@@ -9,7 +9,7 @@
     "rule.bedRockFlying.ClientPlayerEntityMixin",
     "rule.biomeColor.BiomeEffectsMixin",
     "rule.blockOutlineColor_Width.WorldRendererAccessor",
-    "rule.blockOutlineColor_Width.WorldRenderMixin",
+    "rule.blockOutlineColor_Width.WorldRendererMixin",
     "rule.bubbleColumnInteractDisabled.BubbleColumnBlockMixin",
     "rule.campfireSmokeParticleDisabled.CampfireBlockMixin",
     "rule.cobwebSlowDownDisabled.CobwebMixin",

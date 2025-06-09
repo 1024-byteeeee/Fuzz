@@ -18,28 +18,23 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.utils;
+package top.byteeeee.fuzz.observers.rule.fuzzCommandAlias;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-
 import net.minecraft.util.Formatting;
 
+import top.byteeeee.fuzz.settings.Observer;
 import top.byteeeee.fuzz.translations.Translator;
-
-import java.util.function.Supplier;
+import top.byteeeee.fuzz.utils.Messenger;
 
 @Environment(EnvType.CLIENT)
-public class CommandUtil {
-    private static final Translator tr = new Translator("command.util");
+public class FuzzCommandAliasObserver extends Observer<String> {
+    private static final Translator tr = new Translator("validator.fuzzCommandAlias");
 
-    public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
-        if (!condition) {
-            Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).formatted(Formatting.RED));
-            return 0;
-        }
-        return action.get();
+    @Override
+    public void onValueChange(String oldValue, String newValue) {
+        Messenger.sendMsgToPlayer(tr.tr("onValueChange").formatted(Formatting.YELLOW));
     }
 }

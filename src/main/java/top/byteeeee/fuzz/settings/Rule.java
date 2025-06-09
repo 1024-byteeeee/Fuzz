@@ -20,14 +20,25 @@
 
 package top.byteeeee.fuzz.settings;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Environment(EnvType.CLIENT)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Rule {
     String[] options() default {};
+
     String[] categories() default {};
+
+    boolean strict() default true;
+
+    Class<? extends Validator<?>>[] validators() default {};
+
+    Class<? extends Observer<?>>[] observers() default {};
 }

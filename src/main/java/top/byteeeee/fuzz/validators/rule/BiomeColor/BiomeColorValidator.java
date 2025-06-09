@@ -18,28 +18,31 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.utils;
+package top.byteeeee.fuzz.validators.rule.BiomeColor;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import net.minecraft.util.Formatting;
-
+import top.byteeeee.fuzz.settings.Validator;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.validators.HexValidator;
 
-import java.util.function.Supplier;
+import java.lang.reflect.Field;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-public class CommandUtil {
-    private static final Translator tr = new Translator("command.util");
+public class BiomeColorValidator extends Validator<String> {
+    private static final Translator tr = new Translator("validator.biomeColorValidator");
 
-    public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
-        if (!condition) {
-            Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).formatted(Formatting.RED));
-            return 0;
-        }
-        return action.get();
+    @Override
+    public String validate(FabricClientCommandSource source, Field field, String value) {
+        return HexValidator.isValidHexColor(value) || Objects.equals(value, "false") ? value : null;
+    }
+
+    @Override
+    public String description() {
+        return tr.tr("value_range").getString();
     }
 }

@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.validators.HexValidator;
 
 import java.util.Objects;
 
@@ -40,9 +40,6 @@ import java.util.Objects;
 public abstract class BiomeEffectsMixin {
     @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
     private int getSkyColor(int original) {
-        if (!Objects.equals(FuzzSettings.skyColor, "false")) {
-            FuzzSettings.skyColor = HexValidator.appendSharpIfNone(FuzzSettings.skyColor);
-        }
         if (!Objects.equals(FuzzSettings.skyColor, "false") && HexValidator.isValidHexColor(FuzzSettings.skyColor)) {
             return Integer.parseInt(FuzzSettings.skyColor.substring(1), 16);
         } else {
@@ -52,9 +49,6 @@ public abstract class BiomeEffectsMixin {
 
     @ModifyReturnValue(method = "getFogColor", at = @At("RETURN"))
     private int getFogColor(int original) {
-        if (!Objects.equals(FuzzSettings.fogColor, "false")) {
-            FuzzSettings.fogColor = HexValidator.appendSharpIfNone(FuzzSettings.fogColor);
-        }
         if (!Objects.equals(FuzzSettings.fogColor, "false") && HexValidator.isValidHexColor(FuzzSettings.fogColor)) {
             return Integer.parseInt(FuzzSettings.fogColor.substring(1), 16);
         } else {
@@ -64,9 +58,6 @@ public abstract class BiomeEffectsMixin {
 
     @ModifyReturnValue(method = "getWaterColor", at = @At("RETURN"))
     private int getWaterColor(int original) {
-        if (!Objects.equals(FuzzSettings.waterColor, "false")) {
-            FuzzSettings.waterColor = HexValidator.appendSharpIfNone(FuzzSettings.waterColor);
-        }
         if (!Objects.equals(FuzzSettings.waterColor, "false") && HexValidator.isValidHexColor(FuzzSettings.waterColor)) {
             return Integer.parseInt(FuzzSettings.waterColor.substring(1), 16);
         } else {
@@ -76,9 +67,6 @@ public abstract class BiomeEffectsMixin {
 
     @ModifyReturnValue(method = "getWaterFogColor", at = @At("RETURN"))
     private int getWaterFogColor(int original) {
-        if (!Objects.equals(FuzzSettings.waterFogColor, "false")) {
-            FuzzSettings.waterFogColor = HexValidator.appendSharpIfNone(FuzzSettings.waterFogColor);
-        }
         if (!Objects.equals(FuzzSettings.waterFogColor, "false") && HexValidator.isValidHexColor(FuzzSettings.waterColor)) {
             return Integer.parseInt(FuzzSettings.waterFogColor.substring(1), 16);
         } else {

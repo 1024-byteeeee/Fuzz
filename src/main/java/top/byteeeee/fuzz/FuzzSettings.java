@@ -24,8 +24,16 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import top.byteeeee.fuzz.config.FuzzRuleConfig;
+import top.byteeeee.fuzz.observers.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
+import top.byteeeee.fuzz.settings.ObserverManager;
+import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasValidator;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
+import top.byteeeee.fuzz.settings.ValidatorManager;
+import top.byteeeee.fuzz.validators.rule.BiomeColor.BiomeColorValidator;
+import top.byteeeee.fuzz.validators.rule.blockOutlineAlpha.BlockOutlineAlphaValidator;
+import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorValidator;
+import top.byteeeee.fuzz.validators.rule.blockOutlineWidth.BlockOutlineWidthValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,44 +64,58 @@ public class FuzzSettings {
     public static boolean bedRockFlying = false;
 
     @Rule(
+        options = {"false", "rainbow", "#FFFFFF", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "rainbow", "#FFFFFF", "#FF88C2"}
+        validators = BlockOutlineColorValidator.class,
+        strict = false
     )
     public static String blockOutlineColor = "false";
 
     @Rule(
+        options = {"-1", "0", "255"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"-1", "0", "255"}
+        validators = BlockOutlineAlphaValidator.class,
+        strict = false
     )
     public static int blockOutlineAlpha = -1;
 
     @Rule(
+        options = {"-1.0", "0.0", "10.0"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"-1.0", "0.0", "10.0"}
+        validators = BlockOutlineWidthValidator.class,
+        strict = false
     )
     public static double blockOutlineWidth = -1.0D;
 
     @Rule(
+        options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        validators = BiomeColorValidator.class,
+        strict = false
     )
     public static String skyColor = "false";
 
     @Rule(
+        options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        validators = BiomeColorValidator.class,
+        strict = false
     )
     public static String fogColor = "false";
 
     @Rule(
+        options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        validators = BiomeColorValidator.class,
+        strict = false
     )
     public static String waterColor = "false";
 
     @Rule(
+        options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        options = {"false", "#FF88C2"}
+        validators = BiomeColorValidator.class,
+        strict = false
     )
     public static String waterFogColor = "false";
 
@@ -131,13 +153,22 @@ public class FuzzSettings {
     public static boolean bubbleColumnInteractDisabled = false;
 
     @Rule(
-        categories = {FUZZ, FEATURE, CREATIVE, QOL},
-        options = {"false", "true", "sneaking"}
+        options = {"false", "true", "sneaking"},
+        categories = {FUZZ, FEATURE, CREATIVE, QOL}
     )
     public static String pickFluidBucketItemInCreative = "false";
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, COMMAND})
     public static boolean commandHighLightEntities = false;
+
+    @Rule(
+        options = "false",
+        categories = {FUZZ, COMMAND},
+        validators = FuzzCommandAliasValidator.class,
+        observers = FuzzCommandAliasObserver.class,
+        strict = false
+    )
+    public static String fuzzCommandAlias = "false";
 
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {
@@ -146,6 +177,8 @@ public class FuzzSettings {
                     field.setAccessible(true);
                     Object defaultValue = field.get(null);
                     DEFAULT_VALUES.put(field.getName(), defaultValue);
+                    ValidatorManager.init(field);
+                    ObserverManager.init(field);
                 } catch (IllegalAccessException e) {
                     FuzzModClient.LOGGER.warn(e);
                 }

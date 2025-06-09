@@ -517,3 +517,23 @@ Use /highlightEntity help command to view the user guide
 
 
 - Categroies: `AMS`, `FEATURE`, `SURVIVAL`, `COMMAND`
+
+
+
+## fuzzCommandAlias
+
+Specify an alias for the /fuzz command.
+
+- Type: `String`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`
+
+
+
+- Categroies: `FUZZ`, `COMMAND`

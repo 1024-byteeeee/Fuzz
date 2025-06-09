@@ -24,13 +24,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 //#if MC>=12105
-//$$ import com.mojang.blaze3d.vertex.VertexFormat;
-//$$ import com.mojang.blaze3d.pipeline.RenderPipeline;
+//$$ import net.minecraft.client.gl.RenderPipelines;
 //#endif
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.option.GameOptions;
@@ -47,7 +45,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.HexValidator;
+import top.byteeeee.fuzz.validators.HexValidator;
 import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;
@@ -56,7 +54,7 @@ import java.util.OptionalDouble;
 @GameVersion(version = "Minecraft >= 1.21.2")
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
-public abstract class WorldRenderMixin implements WorldRendererAccessor {
+public abstract class WorldRendererMixin implements WorldRendererAccessor {
     @WrapOperation(
         method = "renderTargetBlockOutline",
         at = @At(
@@ -72,13 +70,9 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
             int customColor;
-
-            // 检查是否为彩虹颜色模式
             if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
                 customColor = RainbowColorHelper.getRainbowColor();
             } else {
-                // 静态颜色处理
-                colorString = HexValidator.appendSharpIfNone(colorString);
                 if (HexValidator.isValidHexColor(colorString)) {
                     int red = Integer.parseInt(colorString.substring(1, 3), 16);
                     int green = Integer.parseInt(colorString.substring(3, 5), 16);
@@ -86,7 +80,6 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
                     double alpha = FuzzSettings.blockOutlineAlpha;
                     customColor = ColorHelper.getArgb((int) alpha, red, green, blue);
                 } else {
-                    // 如果颜色无效，使用原始渲染
                     original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
                     return;
                 }
@@ -109,7 +102,7 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
     private RenderLayer setBlockOutlineWidth(Operation<RenderLayer> original) {
         RenderLayer.MultiPhase multiPhase =
             //#if MC>=12105
-            //$$ RenderLayer.of("custom_block_outline", 168, false, false, original.call().getPipeline(),
+            //$$ RenderLayer.of("custom_block_outline", 168, false, false, RenderPipelines.LINES,
             //$$ RenderLayer.MultiPhaseParameters.builder()
             //$$ .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(FuzzSettings.blockOutlineWidth)))
             //$$ .target(RenderPhase.MAIN_TARGET)
