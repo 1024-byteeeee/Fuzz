@@ -50,10 +50,10 @@ import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 
 import java.util.Objects;
 
-@GameVersion(version = "Minecraft >= 1.17.1 && Minecraft < 1.21.2")
+@GameVersion(version = "Minecraft == 1.16.5")
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
-public abstract class WorldRenderMixin {
+public abstract class WorldRendererMixin {
     @WrapOperation(
         method = "render",
         at = @At(
@@ -69,6 +69,12 @@ public abstract class WorldRenderMixin {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
             float red, green, blue;
+            float alpha = (float) (FuzzSettings.blockOutlineAlpha / 255.0D);
+            float lineWidth = (float) (FuzzSettings.blockOutlineWidth != -1.0D ? FuzzSettings.blockOutlineWidth : 1.5D);
+            double X = pos.getX() - cameraX;
+            double Y = pos.getY() - cameraY;
+            double Z = pos.getZ() - cameraZ;
+            VoxelShape shape = state.getOutlineShape(((WorldRendererAccessor) this).getWorld(), pos, ShapeContext.of(entity));
             if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
                 float[] rainbowRgb = RainbowColorHelper.getRainbowColorComponents();
                 red = rainbowRgb[0];
@@ -84,12 +90,6 @@ public abstract class WorldRenderMixin {
                     return;
                 }
             }
-            float alpha = (float) (FuzzSettings.blockOutlineAlpha / 255.0D);
-            float lineWidth = (float) (FuzzSettings.blockOutlineWidth != -1.0D ? FuzzSettings.blockOutlineWidth : 1.5D);
-            double X = pos.getX() - cameraX;
-            double Y = pos.getY() - cameraY;
-            double Z = pos.getZ() - cameraZ;
-            VoxelShape shape = state.getOutlineShape(((WorldRendererAccessor) this).getWorld(), pos, ShapeContext.of(entity));
             renderCustomBlockOutline(matrices, shape, X, Y, Z, red, green, blue, alpha, lineWidth);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state);
@@ -101,14 +101,9 @@ public abstract class WorldRenderMixin {
         MatrixStack matrices, VoxelShape shape, double x, double y, double z,
         float red, float green, float blue, float alpha, float lineWidth
     ) {
-        //#if MC>=12100
-        //$$ Tessellator tessellator = Tessellator.getInstance();
-        //$$ BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-        //#else
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        //#endif
-        RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
             GlStateManager.SrcFactor.SRC_ALPHA,
@@ -120,25 +115,23 @@ public abstract class WorldRenderMixin {
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();
-
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        RenderSystem.lineWidth(lineWidth);
+        RenderSystem.lineWidth(Math.max(lineWidth, 0.168F));
+        RenderSystem.disableTexture();
+        buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 
-        //#if MC<12100
-        buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-        //#endif
         MatrixStack.Entry entry = matrices.peek();
 
         shape.forEachEdge((x1, y1, z1, x2, y2, z2) -> {
             double offset = 0.0001D;
 
-            float startX = (float)(x1 + x + offset);
-            float startY = (float)(y1 + y + offset);
-            float startZ = (float)(z1 + z + offset);
+            float startX = (float) (x1 + x + offset);
+            float startY = (float) (y1 + y + offset);
+            float startZ = (float) (z1 + z + offset);
 
-            float endX = (float)(x2 + x + offset);
-            float endY = (float)(y2 + y + offset);
-            float endZ = (float)(z2 + z + offset);
+            float endX = (float) (x2 + x + offset);
+            float endY = (float) (y2 + y + offset);
+            float endZ = (float) (z2 + z + offset);
 
             float dirX = endX - startX;
             float dirY = endY - startY;
@@ -150,28 +143,17 @@ public abstract class WorldRenderMixin {
             float normalY = length > 0.0F ? dirY / length : 1.0F;
             float normalZ = length > 0.0F ? dirZ / length : 0.0F;
 
-            //#if MC>=12100 && MC<12102
-            //$$ buffer.vertex(entry.getPositionMatrix(), startX, startY, startZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ);
-            //$$ buffer.vertex(entry.getPositionMatrix(), endX, endY, endZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ);
-            //#elseif MC>=12006
-            //$$ buffer.vertex(entry.getPositionMatrix(), startX, startY, startZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ).next();
-            //$$ buffer.vertex(entry.getPositionMatrix(), endX, endY, endZ).color(red, green, blue, alpha).normal(entry, normalX, normalY, normalZ).next();
-            //#else
             buffer.vertex(entry.getModel(), startX, startY, startZ).color(red, green, blue, alpha).normal(entry.getNormal(), normalX, normalY, normalZ).next();
             buffer.vertex(entry.getModel(), endX, endY, endZ).color(red, green, blue, alpha).normal(entry.getNormal(), normalX, normalY, normalZ).next();
-            //#endif
         });
 
-        //#if MC>=12100
-        //$$ BufferRenderer.drawWithGlobalProgram(buffer.end());
-        //#else
         tessellator.draw();
-        //#endif
 
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        RenderSystem.enableCull();
-        RenderSystem.disableBlend();
         RenderSystem.depthMask(true);
-        RenderSystem.disableDepthTest();
+        RenderSystem.enableCull();
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
     }
 }

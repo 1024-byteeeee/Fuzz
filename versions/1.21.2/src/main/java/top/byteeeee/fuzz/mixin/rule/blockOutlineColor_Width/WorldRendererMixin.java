@@ -24,13 +24,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 //#if MC>=12105
-//$$ import com.mojang.blaze3d.vertex.VertexFormat;
-//$$ import com.mojang.blaze3d.pipeline.RenderPipeline;
+//$$ import net.minecraft.client.gl.RenderPipelines;
 //#endif
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.option.GameOptions;
@@ -56,7 +54,7 @@ import java.util.OptionalDouble;
 @GameVersion(version = "Minecraft >= 1.21.2")
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
-public abstract class WorldRenderMixin implements WorldRendererAccessor {
+public abstract class WorldRendererMixin implements WorldRendererAccessor {
     @WrapOperation(
         method = "renderTargetBlockOutline",
         at = @At(
@@ -104,7 +102,7 @@ public abstract class WorldRenderMixin implements WorldRendererAccessor {
     private RenderLayer setBlockOutlineWidth(Operation<RenderLayer> original) {
         RenderLayer.MultiPhase multiPhase =
             //#if MC>=12105
-            //$$ RenderLayer.of("custom_block_outline", 168, false, false, original.call().getPipeline(),
+            //$$ RenderLayer.of("custom_block_outline", 168, false, false, RenderPipelines.LINES,
             //$$ RenderLayer.MultiPhaseParameters.builder()
             //$$ .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(FuzzSettings.blockOutlineWidth)))
             //$$ .target(RenderPhase.MAIN_TARGET)
