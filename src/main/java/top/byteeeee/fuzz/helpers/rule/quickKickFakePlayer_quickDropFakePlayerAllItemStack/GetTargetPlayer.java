@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer;
+package top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer_quickDropFakePlayerAllItemStack;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
