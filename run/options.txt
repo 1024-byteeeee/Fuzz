@@ -1,4 +1,4 @@
-version:4428
+version:4435
 ao:true
 biomeBlendRadius:2
 enableVsync:false
@@ -16,7 +16,7 @@ fullscreen:false
 gamma:0.5
 graphicsMode:0
 guiScale:0
-maxFps:120
+maxFps:260
 inactivityFpsLimit:"afk"
 mipmapLevels:4
 narrator:0
@@ -118,6 +118,7 @@ key_key.swapOffhand:key.keyboard.f
 key_key.saveToolbarActivator:key.keyboard.c
 key_key.loadToolbarActivator:key.keyboard.x
 key_key.advancements:key.keyboard.l
+key_key.quickActions:key.keyboard.g
 key_key.hotbar.1:key.keyboard.1
 key_key.hotbar.2:key.keyboard.2
 key_key.hotbar.3:key.keyboard.3
@@ -139,6 +140,7 @@ soundCategory_neutral:1.0
 soundCategory_player:1.0
 soundCategory_ambient:1.0
 soundCategory_voice:1.0
+soundCategory_ui:1.0
 modelPart_cape:true
 modelPart_jacket:true
 modelPart_left_sleeve:true
