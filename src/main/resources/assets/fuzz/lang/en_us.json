@@ -122,5 +122,9 @@
   "fuzz.settings.commandHighLightEntities.desc": "Use command to highlight one or more specified entities",
   "fuzz.settings.commandHighLightEntities.extra.0": "Use /highlightEntity help command to view the user guide",
   "fuzz.settings.fuzzCommandAlias.name": "fuzzCommandAlias",
-  "fuzz.settings.fuzzCommandAlias.desc": "Specify an alias for the /fuzz command"
+  "fuzz.settings.fuzzCommandAlias.desc": "Specify an alias for the /fuzz command",
+  "fuzz.settings.jumpDelayDisabled.name": "jumpDelayDisabled",
+  "fuzz.settings.jumpDelayDisabled.desc": "Removed jump delay after player landed",
+  "fuzz.settings.fogRenderDisabled.name": "fogRenderDisabled",
+  "fuzz.settings.fogRenderDisabled.desc": "Removes all fog"
 }

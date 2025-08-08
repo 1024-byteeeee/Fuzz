@@ -161,6 +161,9 @@ public class FuzzSettings {
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, COMMAND})
     public static boolean commandHighLightEntities = false;
 
+    @Rule(categories = {FUZZ, FEATURE, SURVIVAL, QOL})
+    public static boolean jumpDelayDisabled = false;
+
     @Rule(
         options = "false",
         categories = {FUZZ, COMMAND},
@@ -169,6 +172,9 @@ public class FuzzSettings {
         strict = false
     )
     public static String fuzzCommandAlias = "false";
+
+    @Rule(categories = {FUZZ, RENDER})
+    public static boolean fogRenderDisabled = false;
 
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {

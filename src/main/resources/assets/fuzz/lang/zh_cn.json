@@ -122,5 +122,9 @@
   "fuzz.settings.commandHighLightEntities.desc": "使用指令高亮一个或多个指定实体",
   "fuzz.settings.commandHighLightEntities.extra.0": "使用 /highlightEntity help 指令查看使用指南",
   "fuzz.settings.fuzzCommandAlias.name": "fuzz命令别名",
-  "fuzz.settings.fuzzCommandAlias.desc": "为/fuzz命令指定一个别名"
+  "fuzz.settings.fuzzCommandAlias.desc": "为/fuzz命令指定一个别名",
+  "fuzz.settings.jumpDelayDisabled.name": "跳跃延迟移除",
+  "fuzz.settings.jumpDelayDisabled.desc": "消除了玩家落地后的跳跃延迟",
+  "fuzz.settings.fogRenderDisabled.name": "禁用雾渲染",
+  "fuzz.settings.fogRenderDisabled.desc": "清除所有雾气"
 }
