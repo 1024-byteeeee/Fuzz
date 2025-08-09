@@ -20,18 +20,15 @@
 
 package top.byteeeee.fuzz.mixin.rule.fogRenderDisabled;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderTickCounter;
+
 import net.minecraft.client.render.fog.FogRenderer;
 
-import net.minecraft.client.world.ClientWorld;
-import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
@@ -40,14 +37,14 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(FogRenderer.class)
 public abstract class FogRendererMixin {
-    @WrapMethod(
-        method = "applyFog(Lnet/minecraft/client/render/Camera;IZLnet/minecraft/client/render/RenderTickCounter;FLnet/minecraft/client/world/ClientWorld;)Lorg/joml/Vector4f;"
+    @ModifyExpressionValue(
+        method = "getFogBuffer",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/render/fog/FogRenderer;fogEnabled:Z"
+        )
     )
-    private Vector4f noFog(Camera camera, int viewDistance, boolean thick, RenderTickCounter tickCounter, float skyDarkness, ClientWorld world, Operation<Vector4f> original) {
-        if (FuzzSettings.fogRenderDisabled) {
-            return original.call(camera, -1, false, tickCounter, -1.0F, world);
-        } else {
-            return original.call(camera, viewDistance, thick, tickCounter, skyDarkness, world);
-        }
+    private static boolean noFog(boolean original) {
+        return !FuzzSettings.fogRenderDisabled && original;
     }
 }
