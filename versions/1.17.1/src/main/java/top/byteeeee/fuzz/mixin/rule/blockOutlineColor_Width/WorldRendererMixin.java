@@ -62,9 +62,9 @@ public abstract class WorldRendererMixin {
         )
     )
     private void renderBlockOutlineWrapper(
-        WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity,
-        double cameraX, double cameraY, double cameraZ,
-        BlockPos pos, BlockState state, Operation<Void> original
+            WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity,
+            double cameraX, double cameraY, double cameraZ,
+            BlockPos pos, BlockState state, Operation<Void> original
     ) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
@@ -118,9 +118,10 @@ public abstract class WorldRendererMixin {
         );
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        RenderSystem.depthMask(false);
+        RenderSystem.depthMask(true);
         RenderSystem.disableCull();
-
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(-1.0f, -1.0f);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         RenderSystem.lineWidth(lineWidth);
 
@@ -130,7 +131,7 @@ public abstract class WorldRendererMixin {
         MatrixStack.Entry entry = matrices.peek();
 
         shape.forEachEdge((x1, y1, z1, x2, y2, z2) -> {
-            double offset = 0.0001D;
+            double offset = 0.00008D;
 
             float startX = (float)(x1 + x + offset);
             float startY = (float)(y1 + y + offset);
@@ -144,7 +145,7 @@ public abstract class WorldRendererMixin {
             float dirY = endY - startY;
             float dirZ = endZ - startZ;
 
-            float length = (float)Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
+            float length = (float) Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
 
             float normalX = length > 0.0F ? dirX / length : 0.0F;
             float normalY = length > 0.0F ? dirY / length : 1.0F;
@@ -168,10 +169,12 @@ public abstract class WorldRendererMixin {
         tessellator.draw();
         //#endif
 
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         RenderSystem.enableCull();
         RenderSystem.disableBlend();
-        RenderSystem.depthMask(true);
+        RenderSystem.depthMask(false);
         RenderSystem.disableDepthTest();
     }
 }
