@@ -36,7 +36,7 @@ public class BlockOutlineAlphaValidator extends Validator<Integer> {
 
     @Override
     public Integer validate(FabricClientCommandSource source, Field field, Integer value) {
-        return value >= -1 && value <= 255 ? null : value;
+        return value >= -1 && value <= 255 ? value : null;
     }
 
     @Override
