@@ -25,8 +25,22 @@ import net.fabricmc.api.ModInitializer;
 import top.byteeeee.fuzz.utils.AutoMixinAuditExecutor;
 
 public class FuzzMod implements ModInitializer {
+	private static final FuzzMod INSTANCE = new FuzzMod();
+
+	public static FuzzMod getInstance() {
+		return INSTANCE;
+	}
+
 	@Override
 	public void onInitialize() {
+		//#if MC<12106
 		AutoMixinAuditExecutor.run();
+		//#endif
+	}
+
+	public void onMinecraftClientStart() {
+		//#if MC>=12106
+		AutoMixinAuditExecutor.run();
+		//#endif
 	}
 }

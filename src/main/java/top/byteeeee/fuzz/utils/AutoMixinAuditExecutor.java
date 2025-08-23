@@ -25,7 +25,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import top.byteeeee.fuzz.FuzzModClient;
 
 public class AutoMixinAuditExecutor {
-    private static final String KEYWORD_PROPERTY = "kkk.mixin_audit";
+    private static final String KEYWORD_PROPERTY = "fuzz.mixin_audit";
     public static void run() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment() && "true".equals(System.getProperty(KEYWORD_PROPERTY))) {
             FuzzModClient.LOGGER.info("Triggered auto mixin audit");

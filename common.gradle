@@ -49,13 +49,8 @@ loom {
 
 	runs {
 		mixinAudit {
-			server()
-			vmArgs '-Dkkk.mixin_audit=true'
-			ideConfigGenerated false
-		}
-		mixinAuditClient {
 			client()
-			vmArgs '-Dkkk.mixin_audit=true'
+			vmArgs '-Dfuzz.mixin_audit=true'
 			ideConfigGenerated false
 		}
 	}

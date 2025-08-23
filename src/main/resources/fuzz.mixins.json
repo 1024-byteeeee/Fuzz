@@ -5,6 +5,7 @@
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [],
   "client": [
+    "hooks.MinecraftClientMixin",
     "rule.bedRockFlying.ClientPlayerEntityInvoker",
     "rule.bedRockFlying.ClientPlayerEntityMixin",
     "rule.biomeColor.BiomeEffectsMixin",
