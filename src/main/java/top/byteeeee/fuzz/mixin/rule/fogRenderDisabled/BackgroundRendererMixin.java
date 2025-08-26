@@ -28,11 +28,11 @@ import net.minecraft.client.render.BackgroundRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-//#if MC>=12102
-//$$ import net.minecraft.client.render.Fog;
-//$$ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//#else
+//#if MC<12102
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//#else
+//$$ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+//$$ import net.minecraft.client.render.Fog;
 //#endif
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
@@ -42,20 +42,17 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(BackgroundRenderer.class)
 public abstract class BackgroundRendererMixin {
+    //#if MC<12102
     @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
-    private static void noFog(
-        //#if MC>=12102
-        //$$ CallbackInfoReturnable<Fog> cir
-        //#else
-        CallbackInfo ci
-        //#endif
-    ) {
+    private static void noFog(CallbackInfo ci) {
         if (FuzzSettings.fogRenderDisabled) {
-            //#if MC>=12102
-            //$$ cir.cancel();
-            //#else
             ci.cancel();
-            //#endif
         }
     }
+    //#else
+    //$$ @ModifyReturnValue(method = "applyFog", at = @At("RETURN"))
+    //$$ private static Fog noFog(Fog original) {
+    //$$     return FuzzSettings.fogRenderDisabled ? Fog.DUMMY : original;
+    //$$ }
+    //#endif
 }
