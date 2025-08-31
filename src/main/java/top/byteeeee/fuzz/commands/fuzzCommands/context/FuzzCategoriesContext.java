@@ -34,7 +34,7 @@ import net.minecraft.util.Formatting;
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Rule;
-import top.byteeeee.fuzz.translations.LanguageJudge;
+import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
@@ -97,7 +97,7 @@ public class FuzzCategoriesContext {
     }
 
     private static MutableText createHoverText(String category) {
-        if (LanguageJudge.isEnglish()) {
+        if (FuzzTranslations.isEnglish()) {
             return tr.tr("click_to_view", tr.tr(category)).formatted(Formatting.YELLOW);
         }
         return tr.tr("click_to_view", tr.tr(category), category).formatted(Formatting.YELLOW);

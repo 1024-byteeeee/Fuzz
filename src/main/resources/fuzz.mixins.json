@@ -32,7 +32,8 @@
     "rule.slimeBlockBounceDisabled.SlimeBlockMixin",
     "rule.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
     "rule.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
-    "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin"
+    "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
+    "translations.TranslatableTextMixin"
   ],
   "injectors": {
     "defaultRequire": 1

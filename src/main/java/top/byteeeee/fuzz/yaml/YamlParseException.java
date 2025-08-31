@@ -18,21 +18,10 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.translations;
+package top.byteeeee.fuzz.yaml;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
-import top.byteeeee.fuzz.utils.ClientUtil;
-
-@Environment(EnvType.CLIENT)
-public class LanguageJudge {
-    public static boolean isEnglish() {
-        //#if MC>=11900
-        //$$ String languageCode = ClientUtil.getCurrentClient().getLanguageManager().getLanguage();
-        //#else
-        String languageCode = ClientUtil.getCurrentClient().getLanguageManager().getLanguage().getCode();
-        //#endif
-        return languageCode.startsWith("en");
+public class YamlParseException extends Exception {
+    public YamlParseException(String message) {
+        super(message);
     }
 }
