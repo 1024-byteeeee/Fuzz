@@ -4,6 +4,26 @@
 
 ---
 
+## language
+
+Set the language of Fuzz Mod.
+
+- Type: `String`
+
+
+
+- Default: `none`
+
+
+
+- Suggested options: `none`, `en_us`, `zh_cn`
+
+
+
+- Categroies: `FUZZ`, `QOL`
+
+
+
 ## usingItemSlowDownDisabled
 
 Disable the slow effect when using items.
@@ -537,3 +557,43 @@ Specify an alias for the /fuzz command.
 
 
 - Categroies: `FUZZ`, `COMMAND`
+
+
+
+## jumpDelayDisabled
+
+Removed jump delay after player landed.
+
+- Type: `boolean`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `true`
+
+
+
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
+
+
+
+## fogRenderDisabled
+
+Removes all fog.
+
+- Type: `boolean`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `true`
+
+
+
+- Categroies: `FUZZ`, `RENDER`

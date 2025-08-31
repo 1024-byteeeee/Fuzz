@@ -4,6 +4,26 @@
 
 ---
 
+## 语言（language）
+
+设置Fuzz Mod的语言。
+
+- 类型: `boolean`
+
+
+
+- 默认值: `none`
+
+
+
+- 参考选项: `none`, `en_us`, `zh_cn`
+
+
+
+- 分类: `FUZZ`, `QOL`
+
+
+
 ## 禁用使用物品减速（usingItemSlowDownDisabled）
 
 禁用使用物品时的减速效果。
@@ -539,3 +559,43 @@
 
 
 - 分类: `FUZZ`, `COMMAND`
+
+
+
+## 跳跃延迟移除（jumpDelayDisabled）
+
+消除了玩家落地后的跳跃延迟。
+
+- 类型: `boolean`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `true`
+
+
+
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `QOL`
+
+
+
+## 禁用雾渲染（fogRenderDisabled）
+
+清除所有雾气。
+
+- 类型: `boolean`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `true`
+
+
+
+- 分类: `FUZZ`, `RENDER`
