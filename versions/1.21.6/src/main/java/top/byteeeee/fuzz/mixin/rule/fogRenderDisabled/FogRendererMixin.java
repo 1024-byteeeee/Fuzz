@@ -44,7 +44,7 @@ public abstract class FogRendererMixin {
             target = "Lnet/minecraft/client/render/fog/FogRenderer;fogEnabled:Z"
         )
     )
-    private static boolean noFog(boolean original) {
+    private boolean noFog(boolean original) {
         return !FuzzSettings.fogRenderDisabled && original;
     }
 }
