@@ -84,7 +84,7 @@ String fullModVersion = project.mod_version + versionSuffix
 
 version = 'v' + fullModVersion
 group = project.maven_group
-archivesBaseName = project.archives_base_name + '-mc' + project.minecraft_version
+archivesBaseName = project.archives_base_name + '-mc' + project.minecraft_version + '-fabric'
 
 processResources {
 	from "fuzz.accesswidener"
