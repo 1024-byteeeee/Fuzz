@@ -48,6 +48,12 @@ public class FuzzSettings {
     public static Map<String, Object> DEFAULT_VALUES = new ConcurrentHashMap<>();
     public static List<String> highlightEntityList = new ArrayList<>();
 
+    @Rule(
+        options = {"none", "en_us", "zh_cn"},
+        categories = {FUZZ, QOL}
+    )
+    public static String language = "none";
+
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, QOL})
     public static boolean usingItemSlowDownDisabled = false;
 
