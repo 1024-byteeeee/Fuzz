@@ -31,10 +31,11 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import top.byteeeee.fuzz.FuzzMod;
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Rule;
-import top.byteeeee.fuzz.translations.LanguageJudge;
+import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
@@ -65,7 +66,7 @@ public abstract class FuzzCommandContext {
     private static List<MutableText> initializeMessageList() {
         List<MutableText> messages = new ArrayList<>();
         messages.add(tr.tr("enable_rule").formatted(Formatting.AQUA, Formatting.BOLD));
-        messages.add(tr.tr("mod_version", FuzzModClient.VERSION).formatted(Formatting.GRAY));
+        messages.add(tr.tr("mod_version", FuzzMod.getInstance().getVersion()).formatted(Formatting.GRAY));
         return messages;
     }
 
@@ -111,7 +112,7 @@ public abstract class FuzzCommandContext {
 
     public static MutableText ruleEntryText(Field field, Object value) {
         MutableText valueDisplay = optionText(field, value);
-        String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
+        String funcNameTrKey = tr.getRuleNameTrKey(field.getName());
 
         return
             Messenger.s("")
@@ -123,13 +124,13 @@ public abstract class FuzzCommandContext {
     }
 
     private static MutableText createFieldNameText(Field field) {
-        return LanguageJudge.isEnglish() ? Messenger.s(" ") : Messenger.s(" (" + field.getName() + ") ");
+        return FuzzTranslations.isEnglish() ? Messenger.s(" ") : Messenger.s(" (" + field.getName() + ") ");
     }
 
     private static HoverEvent createHoverEvent(Field field) {
         return HoverEventUtil.event(
             HoverEventUtil.SHOW_TEXT,
-            Messenger.tr(tr.getFuncDescTrKey(field.getName())).formatted(Formatting.YELLOW)
+            Messenger.tr(tr.getRuleDescTrKey(field.getName())).formatted(Formatting.YELLOW)
         );
     }
 
@@ -215,7 +216,7 @@ public abstract class FuzzCommandContext {
 
     private static void addRuleHeader(List<MutableText> messages, Field field) {
         MutableText nameLine = Messenger.s("")
-            .append(Messenger.tr(tr.getFuncNameTrKey(field.getName())))
+            .append(Messenger.tr(tr.getRuleNameTrKey(field.getName())))
             .formatted(Formatting.BOLD)
             .append(createFieldNameText(field).formatted(Formatting.BOLD));
 
@@ -223,7 +224,7 @@ public abstract class FuzzCommandContext {
     }
 
     private static void addRuleDescription(List<MutableText> messages, Field field) {
-        messages.add(Messenger.tr(tr.getFuncDescTrKey(field.getName())));
+        messages.add(Messenger.tr(tr.getRuleDescTrKey(field.getName())));
     }
 
     private static void addExtraInformation(List<MutableText> messages, Field field) {
@@ -259,7 +260,7 @@ public abstract class FuzzCommandContext {
 
     private static Text createCategoryHoverText(String category) {
         return
-            LanguageJudge.isEnglish() ?
+            FuzzTranslations.isEnglish() ?
             tr.tr("rule_info_click_to_view", FuzzCategoriesContext.tr.tr(category)).formatted(Formatting.YELLOW) :
             tr.tr("rule_info_click_to_view", FuzzCategoriesContext.tr.tr(category), category).formatted(Formatting.YELLOW);
     }

@@ -5,6 +5,7 @@
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [],
   "client": [
+    "hooks.MinecraftClientMixin",
     "rule.bedRockFlying.ClientPlayerEntityInvoker",
     "rule.bedRockFlying.ClientPlayerEntityMixin",
     "rule.biomeColor.BiomeEffectsMixin",
@@ -15,9 +16,12 @@
     "rule.cobwebSlowDownDisabled.CobwebMixin",
     "rule.commandHighLightEntites.MinecraftClientMixin",
     "rule.fluidPushDisabled.PlayerEntityMixin",
+    "rule.fogRenderDisabled.BackgroundRendererMixin",
+    "rule.fogRenderDisabled.FogRendererMixin",
     "rule.honeyBlockSlowDownDisabled.HoneyBlockMixin",
     "rule.hurtShakeDisabled.GameRendererMixin",
     "rule.iceSlipperinessDisabled.LivingEntityMixin",
+    "rule.jumpDelayDisabled.LivingEntityMixin",
     "rule.letFluidInteractLikeAir.ClientPlayerEntityMixin",
     "rule.letFluidInteractLikeAir.EntityMixin",
     "rule.letFluidInteractLikeAir.LivingEntityMixin",
@@ -28,7 +32,8 @@
     "rule.slimeBlockBounceDisabled.SlimeBlockMixin",
     "rule.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
     "rule.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
-    "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin"
+    "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
+    "translations.TranslatableTextMixin"
   ],
   "injectors": {
     "defaultRequire": 1

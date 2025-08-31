@@ -18,29 +18,33 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.validators.rule.blockOutlineAlpha;
+package top.byteeeee.fuzz.mixin.hooks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.client.MinecraftClient;
 
-import top.byteeeee.fuzz.settings.Validator;
-import top.byteeeee.fuzz.translations.Translator;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.lang.reflect.Field;
+import top.byteeeee.fuzz.FuzzMod;
 
 @Environment(EnvType.CLIENT)
-public class BlockOutlineAlphaValidator extends Validator<Integer> {
-    private static final Translator tr = new Translator("validator.blockOutlineAlpha");
-
-    @Override
-    public Integer validate(FabricClientCommandSource source, Field field, Integer value) {
-        return value >= -1 && value <= 255 ? value : null;
-    }
-
-    @Override
-    public String description() {
-        return tr.tr("value_range").getString();
+@Mixin(MinecraftClient.class)
+public abstract class MinecraftClientMixin {
+    @Inject(
+        method = "run",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/lang/Thread;currentThread()Ljava/lang/Thread;",
+            shift = At.Shift.AFTER,
+            ordinal = 0
+        )
+    )
+    private void onRun(CallbackInfo ci) {
+        FuzzMod.getInstance().onMinecraftClientStart();
     }
 }

@@ -104,6 +104,8 @@ public abstract class WorldRendererMixin {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
             GlStateManager.SrcFactor.SRC_ALPHA,
@@ -111,19 +113,19 @@ public abstract class WorldRendererMixin {
             GlStateManager.SrcFactor.ONE,
             GlStateManager.DstFactor.ZERO
         );
-        RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        RenderSystem.depthMask(false);
         RenderSystem.disableCull();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         RenderSystem.lineWidth(Math.max(lineWidth, 0.168F));
         RenderSystem.disableTexture();
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(-1.0f, -1.0f);
         buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 
         MatrixStack.Entry entry = matrices.peek();
 
         shape.forEachEdge((x1, y1, z1, x2, y2, z2) -> {
-            double offset = 0.0001D;
+            double offset = 0.00008D;
 
             float startX = (float) (x1 + x + offset);
             float startY = (float) (y1 + y + offset);
@@ -137,7 +139,7 @@ public abstract class WorldRendererMixin {
             float dirY = endY - startY;
             float dirZ = endZ - startZ;
 
-            float length = (float)Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
+            float length = (float) Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
 
             float normalX = length > 0.0F ? dirX / length : 0.0F;
             float normalY = length > 0.0F ? dirY / length : 1.0F;
@@ -149,8 +151,9 @@ public abstract class WorldRendererMixin {
 
         tessellator.draw();
 
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        RenderSystem.depthMask(true);
+        RenderSystem.depthMask(false);
         RenderSystem.enableCull();
         RenderSystem.enableDepthTest();
         RenderSystem.enableTexture();

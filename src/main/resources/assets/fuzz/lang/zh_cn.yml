@@ -1,0 +1,183 @@
+fuzz:
+  categories:
+    FUZZ: "FUZZ"
+    QOL: "QOL"
+    render: "渲染"
+    survival: "生存"
+    creative: "创造"
+    experimental: "实验性"
+    feature: "特性"
+    carpet: "carpet"
+    command: "指令"
+    list_title_for_category: 'Fuzz Mod中符合"%s"的选项:'
+    categories_list: "浏览分类："
+    click_to_view: '列出所有 "%s (%s)" 选项'
+
+  command:
+    set_value: "§b<FUZZ>§r %s (%s): %s"
+    enable_rule: "目前启用的 Fuzz Mod 选项"
+    all_rules: "Fuzz Mod 规则列表"
+    mod_version: "Fuzz Mod 版本: v%s"
+    set_to_true: "设置为true"
+    set_to_false: "设置为false"
+    use_help: "可点击对应值进行设置，或使用/fuzz <规则> <选项> 进行设置"
+    default_value: "默认值: "
+    set_to: "设置为: "
+    custom_value: "自定义值: "
+    current_value: "当前值: "
+    info_modified_value: "修改后的值"
+    info_default_value: "默认值"
+    options_option: "设置: "
+    rule_info_categories: "分类: "
+    rule_info_click_to_view: '列出所有 "%s (%s)" 选项'
+    is_not_valid_value: "不是有效的值"
+    util:
+      check:
+        need_enable_rule: "需要先启用 %s 规则"
+
+    highlightEntity:
+      already_in_list: "<Fuzz> %s 已在列表中"
+      added: "<Fuzz> 已添加高亮效果: %s"
+      not_in_list: "<Fuzz> 不在列表中: %s"
+      removed: "<Fuzz> 已清除高亮效果: %s"
+      cleared: "<Fuzz> 已清除所有高亮实体: %s"
+      list_is_empty: "<Fuzz> 当前无高亮实体"
+      list_title: "高亮实体列表 (%s):"
+      add_help: "/highLight add <实体ID> - 添加高亮实体"
+      remove_help: "/highLight remove <实体ID> - 移除高亮实体"
+      clear_help: "/highLight clear - 清除所有高亮实体"
+      list_help: "/highLight list - 列出所有高亮实体"
+
+  keyBinding:
+    category: "FUZZ"
+    quickKickFakePlayer:
+      name: "快捷踢出假人"
+    quickDropFakePlayerAllItemStack:
+      name: "快捷扔出假人背包"
+
+  validator:
+    blockOutlineColor:
+      value_range: '设定的值必须为 "rainbow" 或有效的十六进制颜色码'
+    biomeColorValidator:
+      value_range: "设定的值必须为有效的十六进制颜色码"
+    blockOutlineAlpha:
+      value_range: "设定的值必须为 0 - 255 或 -1"
+    blockOutlineWidth:
+      value_range: "设定的值必须为 0.0 - 80.0 或 -1.0"
+    fuzzCommandAlias:
+      value_range: '只能输入大写或小写字母且不为"fuzz"'
+      onValueChange: "<fuzzCommandAlias> 重启客户端后生效"
+
+  rule:
+    language:
+      name: "语言"
+      desc: "设置Fuzz Mod的语言"
+    usingItemSlowDownDisabled:
+      name: "禁用使用物品减速"
+      desc: "禁用使用物品时的减速效果"
+    sneakingSlowDownDisabled:
+      name: "禁用潜行减速效果"
+      desc: "禁用潜行时的减速效果"
+    hurtShakeDisabled:
+      name: "禁用受伤抖动效果"
+      desc: "禁用玩家受伤时第一人称视角的抖动"
+    renderHandDisabled:
+      name: "禁用手臂渲染"
+      desc: "禁用手臂的渲染"
+    bedRockFlying:
+      name: "基岩版飞行"
+      desc: "移除飞行时的漂移效果，就像基岩版一样"
+    blockOutlineColor:
+      name: "方块轮廓线颜色"
+      desc: "修改方块轮廓线颜色"
+      extra:
+        '0': "使用十六进制RGB代码"
+        '1': "[rainbow] - 动态RGB"
+    blockOutlineAlpha:
+      name: "方块轮廓线透明度"
+      desc: "修改方块轮廓线透明度"
+      extra:
+        '0': "需开启blockOutlineColor规则"
+    blockOutlineWidth:
+      name: "方块轮廓线宽度"
+      desc: "修改方块轮廓线的线宽"
+    skyColor:
+      name: "天空颜色"
+      desc: "修改天空颜色"
+      extra:
+        '0': "使用十六进制RGB代码"
+    fogColor:
+      name: "雾颜色"
+      desc: "修改雾颜色"
+      extra:
+        '0': "使用十六进制RGB代码"
+    waterColor:
+      name: "水颜色"
+      desc: "修改水颜色"
+      extra:
+        '0': "使用十六进制RGB代码"
+    waterFogColor:
+      name: "水雾颜色"
+      desc: "修改水雾颜色"
+      extra:
+        '0': "使用十六进制RGB代码"
+    campfireSmokeParticleDisabled:
+      name: "禁用篝火烟雾粒子"
+      desc: "禁用篝火的烟雾粒子"
+    quickKickFakePlayer:
+      name: "快捷踢出假人"
+      desc: "使用快捷键踢出准星指向的假人"
+      extra:
+        '0': "在游戏设置中指定快捷键"
+        '1': "需要Carpet模组"
+    quickDropFakePlayerAllItemStack:
+      name: "快捷扔出假人背包"
+      desc: "使用快捷键扔出准星指向假人的所有物品堆栈"
+      extra:
+        '0': "在游戏设置中指定快捷键"
+        '1': "需要Carpet模组"
+    letFluidInteractLikeAir:
+      name: "让流体交互像空气一样"
+      desc: "让玩家与流体的交互像空气一样"
+    fluidPushDisabled:
+      name: "禁用流体推动"
+      desc: "让流体无法推动玩家"
+    slimeBlockSlowDownDisabled:
+      name: "禁用粘液块减速"
+      desc: "让玩家不会受到来自粘液块的减速与弹跳"
+    cobwebSlowDownDisabled:
+      name: "禁用蛛网减速"
+      desc: "让玩家不会受到来自蛛网的减速"
+    iceSlipperinessDisabled:
+      name: "禁用冰块打滑"
+      desc: "让玩家不会受到来自冰块的打滑"
+    soulSandBlockSlowDownDisabled:
+      name: "禁用灵魂沙减速"
+      desc: "让玩家不会受到来自灵魂沙的减速"
+    honeyBlockSlowDownDisabled:
+      name: "禁用蜜块减速"
+      desc: "让玩家不会受到来自蜜块的减速以及跳跃衰减"
+    bubbleColumnInteractDisabled:
+      name: "禁用气泡柱交互"
+      desc: "让玩家不会受到来自气泡柱的效果"
+    pickFluidBucketItemInCreative:
+      name: "创造模式中键取得流体桶"
+      desc: "在创造模式下可以瞄准流体用鼠标中键取得对应的桶"
+      extra:
+        '0': "[false] - 禁用规则"
+        '1': "[true] - 启用规则"
+        '2': "[sneaking] - 需潜行时中键"
+    commandHighLightEntities:
+      name: "高亮实体"
+      desc: "使用指令高亮一个或多个指定实体"
+      extra:
+        '0': "使用 /highlightEntity help 指令查看使用指南"
+    fuzzCommandAlias:
+      name: "fuzz命令别名"
+      desc: "为/fuzz命令指定一个别名"
+    jumpDelayDisabled:
+      name: "跳跃延迟移除"
+      desc: "消除了玩家落地后的跳跃延迟"
+    fogRenderDisabled:
+      name: "禁用雾渲染"
+      desc: "清除所有雾气"

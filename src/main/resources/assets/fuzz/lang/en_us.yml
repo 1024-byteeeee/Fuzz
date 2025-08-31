@@ -1,0 +1,183 @@
+fuzz:
+  categories:
+    FUZZ: "FUZZ"
+    QOL: "QOL"
+    render: "render"
+    survival: "survival"
+    creative: "creative"
+    experimental: "experimental"
+    feature: "feature"
+    carpet: "carpet"
+    command: "command"
+    list_title_for_category: 'Fuzz Mod Settings matching "%s":'
+    categories_list: "Browse categories: "
+    click_to_view: 'list all "%s" settings'
+
+  command:
+    set_value: "§b<Fuzz>§r %s: %s"
+    enable_rule: "Current Fuzz Mod settings"
+    all_rules: "Fuzz Mod rule list"
+    mod_version: "Fuzz Mod version: v%s"
+    set_to_true: "Set true"
+    set_to_false: "set false"
+    use_help: "Click the corresponding value to configure, or use the command /fuzz <rule> <option> to set"
+    default_value: "Default value: "
+    set_to: "Set value: "
+    custom_value: "Custom value: "
+    current_value: "Current value: "
+    info_modified_value: "Modified value"
+    info_default_value: "Default value"
+    options_option: "Options: "
+    rule_info_categories: "Tags: "
+    rule_info_click_to_view: 'list all "%s" settings'
+    is_not_valid_value: "Is not valid value"
+    util:
+      check:
+        need_enable_rule: "Need to enable %s rule first"
+
+    highlightEntity:
+      already_in_list: "<Fuzz> %s is already in list"
+      added: "<Fuzz> Highlight effect added: %s"
+      not_in_list: "<Fuzz> Not in list: %s"
+      removed: "<Fuzz> Highlight effect cleared: %s"
+      cleared: "<Fuzz> All highlighted entities have been cleared"
+      list_is_empty: "<Fuzz> There are currently no highlighted entities"
+      list_title: "Highlight entity list (%s):"
+      add_help: "/highLight add <entityId> - Add a highlighted entity"
+      remove_help: "/highLight remove <entityId> - Remove the highlighted entity"
+      clear_help: "/highLight clear - Clears all highlighted entities"
+      list_help: "/highLight list - Lists all highlighted entities"
+
+  keyBinding:
+    category: "FUZZ"
+    quickKickFakePlayer:
+      name: "quickKickFakePlayer"
+    quickDropFakePlayerAllItemStack:
+      name: "quickDropFakePlayerAllItemStack"
+
+  validator:
+    blockOutlineColor:
+      value_range: 'The value must be "rainbow" or a valid hex color'
+    biomeColorValidator:
+      value_range: "The value must be a valid hex color"
+    blockOutlineAlpha:
+      value_range: "The value must be 0 - 255 or -1"
+    blockOutlineWidth:
+      value_range: "The value must be 0.0 - 80.0 or -1.0"
+    fuzzCommandAlias:
+      value_range: 'Only letters (A-Z/a-z) are accepted and "fuzz" is invalid'
+      onValueChange: "<fuzzCommandAlias> Requires a client restart to apply"
+
+  rule:
+    language:
+      name: "language"
+      desc: "Set the language of Fuzz Mod"
+    usingItemSlowDownDisabled:
+      name: "usingItemSlowDownDisabled"
+      desc: "Disable the slow effect when using items"
+    sneakingSlowDownDisabled:
+      name: "sneakingSlowDownDisabled"
+      desc: "Disable the slow effect while sneaking"
+    hurtShakeDisabled:
+      name: "hurtShakeDisabled"
+      desc: "Disable the jitter of the first-person view when the player is injured"
+    renderHandDisabled:
+      name: "renderHandDisabled"
+      desc: "Disable the rendering of the arm"
+    bedRockFlying:
+      name: "bedRockFlying"
+      desc: "Removed the drift effect while flying, just like Bedrock Edition"
+    blockOutlineColor:
+      name: "blockOutlineColor"
+      desc: "Modify the color of the block outline"
+      extra:
+        '0': "Use Hex RGB codes"
+        '1': "[rainbow] - Dynamic RGB"
+    blockOutlineAlpha:
+      name: "blockOutlineAlpha"
+      desc: "Modify the alpha of the block outline"
+      extra:
+        '0': "Need enable blockOutlineColor rule"
+    blockOutlineWidth:
+      name: "blockOutlineWidth"
+      desc: "Modify the line width of the block outline"
+    skyColor:
+      name: "skyColor"
+      desc: "Modify the color of the sky"
+      extra:
+        '0': "Use Hex RGB codes"
+    fogColor:
+      name: "fogColor"
+      desc: "Modify the color of the fog"
+      extra:
+        '0': "Use Hex RGB codes"
+    waterColor:
+      name: "waterColor"
+      desc: "Modify the color of the water"
+      extra:
+        '0': "Use Hex RGB codes"
+    waterFogColor:
+      name: "waterFogColor"
+      desc: "Modify the color of the water fog"
+      extra:
+        '0': "Use Hex RGB codes"
+    campfireSmokeParticleDisabled:
+      name: "campfireSmokeParticleDisabled"
+      desc: "Disable campfire smoke particles"
+    quickKickFakePlayer:
+      name: "quickKickFakePlayer"
+      desc: "Use the hotkeys to kick out the fake player pointed to by the crosshair"
+      extra:
+        '0': "Specify hotkeys in the game settings"
+        '1': "Requires carpet mod"
+    quickDropFakePlayerAllItemStack:
+      name: "quickDropFakePlayerAllItemStack"
+      desc: "Use hotkeys to throw out all item stacks of the fake player pointed by the crosshair"
+      extra:
+        '0': "Specify hotkeys in the game settings"
+        '1': "Requires carpet mod"
+    letFluidInteractLikeAir:
+      name: "letFluidInteractLikeAir"
+      desc: "Let the player interact with the fluid like air"
+    fluidPushDisabled:
+      name: "fluidPushDisabled"
+      desc: "Let fluid can't push player"
+    slimeBlockSlowDownDisabled:
+      name: "slimeBlockSlowDownDisabled"
+      desc: "Prevents the player from slowing and bouncing from slime blocks"
+    cobwebSlowDownDisabled:
+      name: "cobwebSlowDownDisabled"
+      desc: "Prevents the player from being slowed by cobwebs"
+    iceSlipperinessDisabled:
+      name: "iceSlipperinessDisabled"
+      desc: "Prevents the player from slipping from ice blocks"
+    soulSandBlockSlowDownDisabled:
+      name: "soulSandBlockSlowDownDisabled"
+      desc: "Prevents the player from slowing from soul sands"
+    honeyBlockSlowDownDisabled:
+      name: "honeyBlockSlowDownDisabled"
+      desc: "Prevents the player from slowing and jumping falloff from honey blocks"
+    bubbleColumnInteractDisabled:
+      name: "bubbleColumnInteractDisabled"
+      desc: "Prevents the player from being affected by the bubble column"
+    pickFluidBucketItemInCreative:
+      name: "pickFluidBucketItemInCreative"
+      desc: "In Creative mode, you can target a fluid and use the middle mouse button to pick up the corresponding bucket"
+      extra:
+        '0': "[false] - Disable the rule"
+        '1': "[true] - Enable the rule"
+        '2': "[sneaking] - Middle-click when sneaking is required"
+    commandHighLightEntities:
+      name: "commandHighLightEntities"
+      desc: "Use command to highlight one or more specified entities"
+      extra:
+        '0': "Use /highlightEntity help command to view the user guide"
+    fuzzCommandAlias:
+      name: "fuzzCommandAlias"
+      desc: "Specify an alias for the /fuzz command"
+    jumpDelayDisabled:
+      name: "jumpDelayDisabled"
+      desc: "Removed jump delay after player landed"
+    fogRenderDisabled:
+      name: "fogRenderDisabled"
+      desc: "Removes all fog"

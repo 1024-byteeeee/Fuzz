@@ -18,20 +18,18 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.utils;
+package top.byteeeee.fuzz.mixin.rule.fogRenderDisabled;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import top.byteeeee.fuzz.FuzzModClient;
+import org.spongepowered.asm.mixin.Mixin;
 
-public class AutoMixinAuditExecutor {
-    private static final String KEYWORD_PROPERTY = "fuzz.mixin_audit";
-    public static void run() {
-        if (FabricLoader.getInstance().isDevelopmentEnvironment() && "true".equals(System.getProperty(KEYWORD_PROPERTY))) {
-            FuzzModClient.LOGGER.info("Triggered auto mixin audit");
-            boolean ok = MixinUtil.audit(null);
-            FuzzModClient.LOGGER.info("Mixin audit result: {}", ok ? "successful" : "failed");
-            System.exit(ok ? 0 : 1);
-        }
-    }
-}
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
+import top.byteeeee.fuzz.utils.compat.DummyClass;
+
+@GameVersion(version = "Minecraft < 1.21.6")
+@Environment(EnvType.CLIENT)
+@Mixin(DummyClass.class)
+public abstract class BackgroundRendererMixin {}

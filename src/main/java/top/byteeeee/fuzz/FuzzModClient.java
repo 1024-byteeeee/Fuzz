@@ -23,7 +23,6 @@ package top.byteeeee.fuzz;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.client.MinecraftClient;
 
@@ -40,12 +39,10 @@ public class FuzzModClient implements ClientModInitializer {
     public static final String MOD_ID = "fuzz";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static MinecraftClient minecraftClient;
-    public static String VERSION;
 
     @Override
     public void onInitializeClient() {
         LOGGER.info(MOD_NAME + " " + "loaded!");
-        VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
         minecraftClient = MinecraftClient.getInstance();
         RegisterCommands.register();
         ClientEvent.register();

@@ -22,11 +22,35 @@ package top.byteeeee.fuzz;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.loader.api.FabricLoader;
+
+import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.utils.AutoMixinAuditExecutor;
 
 public class FuzzMod implements ModInitializer {
-	@Override
+    private static String version;
+	private static final FuzzMod INSTANCE = new FuzzMod();
+
+	public static FuzzMod getInstance() {
+		return INSTANCE;
+	}
+
+    public String getVersion() {
+        return version;
+    }
+
+    @Override
 	public void onInitialize() {
+		//#if MC<12106
 		AutoMixinAuditExecutor.run();
+		//#endif
+        FuzzTranslations.loadTranslations();
+	}
+
+	public void onMinecraftClientStart() {
+        version = FabricLoader.getInstance().getModContainer(FuzzModClient.MOD_ID).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
+        //#if MC>=12106
+		//$$ AutoMixinAuditExecutor.run();
+		//#endif
 	}
 }

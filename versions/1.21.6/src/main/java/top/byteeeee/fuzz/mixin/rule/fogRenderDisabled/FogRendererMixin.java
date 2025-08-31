@@ -18,21 +18,33 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.translations;
+package top.byteeeee.fuzz.mixin.rule.fogRenderDisabled;
+
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import top.byteeeee.fuzz.utils.ClientUtil;
+import net.minecraft.client.render.fog.FogRenderer;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+import top.byteeeee.fuzz.FuzzSettings;
+
+@GameVersion(version = "Minecraft >= 1.21.6")
 @Environment(EnvType.CLIENT)
-public class LanguageJudge {
-    public static boolean isEnglish() {
-        //#if MC>=11900
-        //$$ String languageCode = ClientUtil.getCurrentClient().getLanguageManager().getLanguage();
-        //#else
-        String languageCode = ClientUtil.getCurrentClient().getLanguageManager().getLanguage().getCode();
-        //#endif
-        return languageCode.startsWith("en");
+@Mixin(FogRenderer.class)
+public abstract class FogRendererMixin {
+    @ModifyExpressionValue(
+        method = "getFogBuffer",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/render/fog/FogRenderer;fogEnabled:Z"
+        )
+    )
+    private boolean noFog(boolean original) {
+        return !FuzzSettings.fogRenderDisabled && original;
     }
 }

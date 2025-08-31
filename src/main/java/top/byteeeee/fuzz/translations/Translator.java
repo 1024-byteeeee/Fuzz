@@ -37,11 +37,11 @@ public class Translator {
         return Messenger.tr(translationKey, args);
     }
 
-    public String getFuncNameTrKey(String name) {
-        return String.format("fuzz.settings.%s.name", name);
+    public String getRuleNameTrKey(String name) {
+        return String.format("fuzz.rule.%s.name", name);
     }
 
-    public String getFuncDescTrKey(String name) {
-        return String.format("fuzz.settings.%s.desc", name);
+    public String getRuleDescTrKey(String name) {
+        return String.format("fuzz.rule.%s.desc", name);
     }
 }

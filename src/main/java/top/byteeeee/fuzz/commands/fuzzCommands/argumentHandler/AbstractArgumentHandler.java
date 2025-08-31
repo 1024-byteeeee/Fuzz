@@ -25,7 +25,7 @@ import top.byteeeee.fuzz.settings.ObserverManager;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
 import top.byteeeee.fuzz.commands.fuzzCommands.context.FuzzCommandContext;
-import top.byteeeee.fuzz.translations.LanguageJudge;
+import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.Messenger;
 import top.byteeeee.fuzz.settings.ValidatorManager;
@@ -134,8 +134,8 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
     }
 
     private void sendSuccessMessage(CommandContext<FabricClientCommandSource> ctx, Field field, T value) {
-        String funcNameTrKey = tr.getFuncNameTrKey(field.getName());
-        if (LanguageJudge.isEnglish()) {
+        String funcNameTrKey = tr.getRuleNameTrKey(field.getName());
+        if (FuzzTranslations.isEnglish()) {
             Messenger.tell(ctx.getSource(), tr.tr("set_value", field.getName(), value));
         } else {
             Messenger.tell(ctx.getSource(), tr.tr("set_value", Messenger.tr(funcNameTrKey), field.getName(), value));
