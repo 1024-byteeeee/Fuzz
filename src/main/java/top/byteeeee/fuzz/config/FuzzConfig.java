@@ -20,10 +20,6 @@
 
 package top.byteeeee.fuzz.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -31,6 +27,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Rule;
+import top.byteeeee.fuzz.yaml.YamlParser;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -42,9 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Environment(EnvType.CLIENT)
 public class FuzzConfig {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("fuzz");
-    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("settings.json");
+    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("settings.yaml");
 
     public static void load() {
         try {
@@ -52,10 +48,10 @@ public class FuzzConfig {
                 saveConfig();
                 return;
             }
-            String json = new String(Files.readAllBytes(CONFIG_FILE), StandardCharsets.UTF_8);
-            Map<String, Object> configMap = GSON.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
+            String yamlContent = new String(Files.readAllBytes(CONFIG_FILE), StandardCharsets.UTF_8);
+            Map<String, Object> configMap = YamlParser.parse(yamlContent);
             loadFromMap(configMap);
-        } catch (IOException e) {
+        } catch (Exception e) {
             FuzzModClient.LOGGER.warn("Failed to load config: {}", e.getMessage());
         }
     }
@@ -63,8 +59,8 @@ public class FuzzConfig {
     public static void saveConfig() {
         try {
             Files.createDirectories(CONFIG_DIR);
-            String json = GSON.toJson(toMap());
-            Files.write(CONFIG_FILE, json.getBytes());
+            String yamlContent = YamlParser.dump(toMap());
+            Files.write(CONFIG_FILE, yamlContent.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             FuzzModClient.LOGGER.warn("Failed to save config: {}", e.getMessage());
         }
@@ -91,6 +87,8 @@ public class FuzzConfig {
             return ((Number) value).intValue();
         } else if (targetType == double.class || targetType == Double.class) {
             return ((Number) value).doubleValue();
+        } else if (targetType == boolean.class || targetType == Boolean.class) {
+            return Boolean.valueOf(value.toString());
         }
         return value;
     }
@@ -100,6 +98,7 @@ public class FuzzConfig {
         try {
             for (Field field : FuzzSettings.class.getDeclaredFields()) {
                 if (field.isAnnotationPresent(Rule.class)) {
+                    field.setAccessible(true);
                     map.put(field.getName(), field.get(null));
                 }
             }
