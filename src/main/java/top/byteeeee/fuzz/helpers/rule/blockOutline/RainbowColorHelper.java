@@ -24,7 +24,11 @@ package top.byteeeee.fuzz.helpers.rule.blockOutline;
 //$$ import top.byteeeee.fuzz.FuzzSettings;
 //#endif
 
+import top.byteeeee.fuzz.FuzzSettings;
+
 public class RainbowColorHelper {
+    private static final long startTime = System.currentTimeMillis();
+
     public static float[] hsvToRgb(float h, float s, float v) {
         float c = v * s;
         float x = c * (1 - Math.abs((h * 6) % 2 - 1));
@@ -51,9 +55,10 @@ public class RainbowColorHelper {
 
     //#if MC>=12102
     //$$public static int getRainbowColor() {
-    //$$    long time = System.currentTimeMillis();
-    //$$    float speed = 3000.0F;
-    //$$    float hue = (time % (long) speed) / speed;
+    //$$    long currentTime = System.currentTimeMillis();
+    //$$    long elapsed = currentTime - startTime;
+    //$$    float speed = (float) FuzzSettings.rainbowBlockOutlineBlinkSpeed * 0.001F;
+    //$$    float hue = 0.5F + 0.5F * (float) Math.sin(elapsed * speed);
     //$$    float[] rgb = RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
     //$$    int red = (int) (rgb[0] * 255);
     //$$    int green = (int) (rgb[1] * 255);
@@ -62,9 +67,10 @@ public class RainbowColorHelper {
     //$$}
     //#else
     public static float[] getRainbowColorComponents() {
-        long time = System.currentTimeMillis();
-        float speed = 3000.0F;
-        float hue = (time % (long) speed) / speed;
+        long currentTime = System.currentTimeMillis();
+        long elapsed = currentTime - startTime;
+        float speed = (float) FuzzSettings.rainbowBlockOutlineBlinkSpeed * 0.001F;
+        float hue = 0.5F + 0.5F * (float) Math.sin(elapsed * speed);
         return RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
     }
     //#endif

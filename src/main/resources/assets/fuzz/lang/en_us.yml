@@ -67,6 +67,8 @@ fuzz:
     fuzzCommandAlias:
       value_range: 'Only letters (A-Z/a-z) are accepted and "fuzz" is invalid'
       onValueChange: "<fuzzCommandAlias> Requires a client restart to apply"
+    rainbowBlockOutlineBlinkSpeed:
+      value_range: "The value must be 0.1 - 10.0"
 
   rule:
     language:
@@ -93,6 +95,9 @@ fuzz:
       extra:
         '0': "Use Hex RGB codes"
         '1': "[rainbow] - Dynamic RGB"
+    rainbowBlockOutlineBlinkSpeed:
+      name: "rainbowBlockOutlineBlinkSpeed"
+      desc: "Modified the flickering speed of the rainbow block outline"
     blockOutlineAlpha:
       name: "blockOutlineAlpha"
       desc: "Modify the alpha of the block outline"

@@ -67,6 +67,8 @@ fuzz:
     fuzzCommandAlias:
       value_range: '只能输入大写或小写字母且不为"fuzz"'
       onValueChange: "<fuzzCommandAlias> 重启客户端后生效"
+    rainbowBlockOutlineBlinkSpeed:
+      value_range: "设定的值必须为 0.1 - 10.0"
 
   rule:
     language:
@@ -93,6 +95,9 @@ fuzz:
       extra:
         '0': "使用十六进制RGB代码"
         '1': "[rainbow] - 动态RGB"
+    rainbowBlockOutlineBlinkSpeed:
+      name: "彩虹方块轮廓线闪烁速度"
+      desc: "修改彩虹方块轮廓线的闪烁速度"
     blockOutlineAlpha:
       name: "方块轮廓线透明度"
       desc: "修改方块轮廓线透明度"
