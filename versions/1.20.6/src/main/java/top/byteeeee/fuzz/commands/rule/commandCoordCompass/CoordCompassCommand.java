@@ -26,23 +26,24 @@ import com.mojang.brigadier.context.CommandContext;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
+//#if MC>=12100
+//$$ import net.minecraft.client.render.RenderTickCounter;
+//#endif
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.Vec3d;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.CommandUtil;
 
-import top.byteeeee.annotationtoolbox.annotation.GameVersion;
-
 import java.util.function.Supplier;
 
-@GameVersion(version = "Minecraft < 1.20.6")
+@GameVersion(version = "Minecraft >= 1.20.6")
 @Environment(EnvType.CLIENT)
 public class CoordCompassCommand {
     private static final String RULE_NAME = "commandCoordCompass";
@@ -80,7 +81,14 @@ public class CoordCompassCommand {
         return 1;
     }
 
-    private static void renderHud(MatrixStack matrixStack, float tickDelta) {
+    private static void renderHud(
+        DrawContext drawContext
+        //#if MC>=12100
+        //$$ , RenderTickCounter tickCounter
+        //#else
+        , float tickDelta
+        //#endif
+    ) {
         if (!isActive || targetCoord == null) {
             return;
         }
@@ -101,16 +109,20 @@ public class CoordCompassCommand {
         int centerY = screenHeight - 62;
 
         if (isClose) {
-            renderXMark(matrixStack, centerX, centerY);
+            renderXMark(drawContext, centerX, centerY);
         } else {
-            float playerYaw = client.player.getYaw(1);
+            //#if MC>=12100
+            //$$ float playerYaw = client.player.getYaw();
+            //#else
+            float playerYaw = client.player.getYaw(tickDelta);
+            //#endif
             double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
             double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
             double angleRad = Math.toRadians(angleDiff);
             int arrowLength = 20;
             int arrowX = centerX + (int) (Math.sin(angleRad) * arrowLength);
             int arrowY = centerY - (int) (Math.cos(angleRad) * arrowLength);
-            renderArrow(matrixStack, centerX, centerY, arrowX, arrowY);
+            renderArrow(drawContext, centerX, centerY, arrowX, arrowY);
         }
 
         String distanceText;
@@ -121,9 +133,9 @@ public class CoordCompassCommand {
             distanceText = String.format("§e%.1fm", distance);
         }
 
-        client.textRenderer.drawWithShadow(
-            matrixStack, distanceText,
-            centerX - (float) client.textRenderer.getWidth(distanceText) / 2,
+        drawContext.drawTextWithShadow(
+            client.textRenderer, distanceText,
+            centerX - client.textRenderer.getWidth(distanceText) / 2,
             centerY + 20, 0xFFFFFF00
         );
 
@@ -132,27 +144,21 @@ public class CoordCompassCommand {
             (int) targetCoord.x, (int) targetCoord.y, (int) targetCoord.z,
             (int) playerPos.x, (int) playerPos.y, (int) playerPos.z);
 
-        client.textRenderer.drawWithShadow(
-            matrixStack, coordText,
-            centerX - (float) client.textRenderer.getWidth(coordText) / 2,
+        drawContext.drawTextWithShadow(
+            client.textRenderer, coordText,
+            centerX - client.textRenderer.getWidth(coordText) / 2,
             centerY + 30, 0xFFFFFFFF
         );
-
-        client.textRenderer.drawWithShadow(
-            matrixStack, coordText,
-            centerX - (float) client.textRenderer.getWidth(coordText) / 2,
-            centerY + 30, 0xFF00FFFF
-        );
     }
 
-    private static void renderXMark(MatrixStack matrixStack, int centerX, int centerY) {
+    private static void renderXMark(DrawContext drawContext, int centerX, int centerY) {
         int size = 8;
-        drawLine(matrixStack, centerX - size, centerY - size, centerX + size, centerY + size);
-        drawLine(matrixStack, centerX - size, centerY + size, centerX + size, centerY - size);
+        drawLine(drawContext, centerX - size, centerY - size, centerX + size, centerY + size);
+        drawLine(drawContext, centerX - size, centerY + size, centerX + size, centerY - size);
     }
 
-    private static void renderArrow(MatrixStack matrixStack, int startX, int startY, int endX, int endY) {
-        drawLine(matrixStack, startX, startY, endX, endY);
+    private static void renderArrow(DrawContext drawContext, int startX, int startY, int endX, int endY) {
+        drawLine(drawContext, startX, startY, endX, endY);
 
         double angle = Math.atan2(endY - startY, endX - startX);
         int arrowSize = 5;
@@ -163,11 +169,11 @@ public class CoordCompassCommand {
         int arrow2X = endX - (int) (arrowSize * Math.cos(angle + Math.PI / 6));
         int arrow2Y = endY - (int) (arrowSize * Math.sin(angle + Math.PI / 6));
 
-        drawLine(matrixStack, endX, endY, arrow1X, arrow1Y);
-        drawLine(matrixStack, endX, endY, arrow2X, arrow2Y);
+        drawLine(drawContext, endX, endY, arrow1X, arrow1Y);
+        drawLine(drawContext, endX, endY, arrow2X, arrow2Y);
     }
 
-    private static void drawLine(MatrixStack matrixStack, int x1, int y1, int x2, int y2) {
+    private static void drawLine(DrawContext drawContext, int x1, int y1, int x2, int y2) {
         int dx = Math.abs(x2 - x1);
         int dy = Math.abs(y2 - y1);
         int sx = x1 < x2 ? 1 : -1;
@@ -178,7 +184,7 @@ public class CoordCompassCommand {
         int y = y1;
 
         while (true) {
-            fill(matrixStack, x, y, x + 1, y + 1);
+            drawContext.fill(x, y, x + 1, y + 1, -16711936);
 
             if (x == x2 && y == y2) {
                 break;
@@ -196,9 +202,5 @@ public class CoordCompassCommand {
                 y += sy;
             }
         }
-    }
-
-    private static void fill(MatrixStack matrices, int x1, int y1, int x2, int y2) {
-        DrawableHelper.fill(matrices, x1, y1, x2, y2, -16711936);
     }
 }

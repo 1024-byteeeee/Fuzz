@@ -40,6 +40,7 @@ public class CommandUtil {
             Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).formatted(Formatting.RED));
             return 0;
         }
+
         return action.get();
     }
 }

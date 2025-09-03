@@ -36,12 +36,12 @@ fuzz:
         need_enable_rule: "需要先启用 %s 规则"
 
     highlightEntity:
-      already_in_list: "<Fuzz> %s 已在列表中"
-      added: "<Fuzz> 已添加高亮效果: %s"
-      not_in_list: "<Fuzz> 不在列表中: %s"
-      removed: "<Fuzz> 已清除高亮效果: %s"
-      cleared: "<Fuzz> 已清除所有高亮实体"
-      list_is_empty: "<Fuzz> 当前无高亮实体"
+      already_in_list: "<FUZZ> %s 已在列表中"
+      added: "<FUZZ> 已添加高亮效果: %s"
+      not_in_list: "<FUZZ> 不在列表中: %s"
+      removed: "<FUZZ> 已清除高亮效果: %s"
+      cleared: "<FUZZ> 已清除所有高亮实体"
+      list_is_empty: "<FUZZ> 当前无高亮实体"
       list_title: "高亮实体列表 (%s):"
       add_help: "/highLight add <实体ID> - 添加高亮实体"
       remove_help: "/highLight remove <实体ID> - 移除高亮实体"

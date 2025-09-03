@@ -36,12 +36,12 @@ fuzz:
         need_enable_rule: "Need to enable %s rule first"
 
     highlightEntity:
-      already_in_list: "<Fuzz> %s is already in list"
-      added: "<Fuzz> Highlight effect added: %s"
-      not_in_list: "<Fuzz> Not in list: %s"
-      removed: "<Fuzz> Highlight effect cleared: %s"
-      cleared: "<Fuzz> All highlighted entities have been cleared"
-      list_is_empty: "<Fuzz> There are currently no highlighted entities"
+      already_in_list: "<FUZZ> %s is already in list"
+      added: "<FUZZ> Highlight effect added: %s"
+      not_in_list: "<FUZZ> Not in list: %s"
+      removed: "<FUZZ> Highlight effect cleared: %s"
+      cleared: "<FUZZ> All highlighted entities have been cleared"
+      list_is_empty: "<FUZZ> There are currently no highlighted entities"
       list_title: "Highlight entity list (%s):"
       add_help: "/highLight add <entityId> - Add a highlighted entity"
       remove_help: "/highLight remove <entityId> - Remove the highlighted entity"

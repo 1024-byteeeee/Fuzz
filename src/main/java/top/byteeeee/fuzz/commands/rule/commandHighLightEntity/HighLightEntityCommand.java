@@ -22,6 +22,7 @@ package top.byteeeee.fuzz.commands.rule.commandHighLightEntity;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -40,6 +41,7 @@ import top.byteeeee.fuzz.utils.CommandUtil;
 import top.byteeeee.fuzz.utils.Messenger;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class HighLightEntityCommand {
@@ -53,44 +55,34 @@ public class HighLightEntityCommand {
             .then(ClientCommandManager.literal("add")
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(SetSuggestionProvider.fromEntityRegistry())
-            .executes(c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
-                () -> add(c.getSource(), StringArgumentType.getString(c, "entityId")))
-            )))
+            .executes(c -> checkEnabled(
+                c, () -> add(c.getSource(), StringArgumentType.getString(c, "entityId"))
+            ))))
 
             // Remove entity command
             .then(ClientCommandManager.literal("remove")
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(ListSuggestionProvider.of(FuzzSettings.highlightEntityList))
-            .executes(c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
-                () -> remove(c.getSource(), StringArgumentType.getString(c, "entityId")))
-            )))
+            .executes(c -> checkEnabled(
+                c, () -> remove(c.getSource(), StringArgumentType.getString(c, "entityId"))
+            ))))
 
             // Clear all entities
             .then(ClientCommandManager.literal("clear")
-            .executes(
-                c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
-                () -> clear(c.getSource()))
-            ))
+            .executes(c -> checkEnabled(c, () -> clear(c.getSource()))))
 
             // List entities
             .then(ClientCommandManager.literal("list")
-            .executes(
-                c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
-                () -> list(c.getSource()))
-            ))
+            .executes(c -> checkEnabled(c, () -> list(c.getSource()))))
 
             // Show help
             .then(ClientCommandManager.literal("help")
-            .executes(
-                c -> CommandUtil.checkEnabled(
-                c.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME,
-                () -> help(c.getSource()))
-            ))
+            .executes(c -> checkEnabled(c, () -> help(c.getSource()))))
         );
+    }
+
+    private static int checkEnabled(CommandContext<FabricClientCommandSource> context, Supplier<Integer> action) {
+        return CommandUtil.checkEnabled(context.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME, action);
     }
 
     private static int add(FabricClientCommandSource source, String entity) {
