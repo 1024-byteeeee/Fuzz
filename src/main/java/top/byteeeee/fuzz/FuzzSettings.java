@@ -191,6 +191,9 @@ public class FuzzSettings {
     @Rule(categories = {FUZZ, RENDER})
     public static boolean fogRenderDisabled = false;
 
+    @Rule(categories = {FUZZ, SURVIVAL, COMMAND})
+    public static boolean commandCoordCompass = false;
+
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {
             if (field.isAnnotationPresent(Rule.class)) {

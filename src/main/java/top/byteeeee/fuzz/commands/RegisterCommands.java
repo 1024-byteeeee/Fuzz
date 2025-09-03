@@ -34,6 +34,7 @@ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.commands.rule.commandHighLightEntity.HighLightEntityCommand;
 import top.byteeeee.fuzz.commands.fuzzCommands.FuzzCommand;
+import top.byteeeee.fuzz.commands.rule.commandCoordCompass.CoordCompassCommand;
 
 import java.util.function.Consumer;
 
@@ -42,6 +43,7 @@ public class RegisterCommands {
     public static void register() {
         registerCommand(FuzzCommand::register);
         registerCommand(HighLightEntityCommand::register);
+        registerCommand(CoordCompassCommand::register);
     }
 
     private static void registerCommand(Consumer<CommandDispatcher<FabricClientCommandSource>> registrator) {
