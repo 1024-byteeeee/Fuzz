@@ -42,8 +42,8 @@ import java.util.function.Consumer;
 public class RegisterCommands {
     public static void register() {
         registerCommand(FuzzCommand::register);
-        registerCommand(HighLightEntityCommand::register);
-        registerCommand(CoordCompassCommand::register);
+        registerCommand(dispatcher -> HighLightEntityCommand.getInstance().register(dispatcher));
+        registerCommand(dispatcher -> CoordCompassCommand.getInstance().register(dispatcher));
     }
 
     private static void registerCommand(Consumer<CommandDispatcher<FabricClientCommandSource>> registrator) {

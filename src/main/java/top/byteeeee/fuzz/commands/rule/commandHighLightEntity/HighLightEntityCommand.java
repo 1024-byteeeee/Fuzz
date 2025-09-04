@@ -22,7 +22,6 @@ package top.byteeeee.fuzz.commands.rule.commandHighLightEntity;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,24 +32,30 @@ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.util.Formatting;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.commands.suggestionProviders.ListSuggestionProvider;
 import top.byteeeee.fuzz.commands.suggestionProviders.SetSuggestionProvider;
 import top.byteeeee.fuzz.config.rule.commandHighLightEntities.CommandHighLightEntitiesConfig;
 import top.byteeeee.fuzz.translations.Translator;
-import top.byteeeee.fuzz.utils.CommandUtil;
 import top.byteeeee.fuzz.utils.Messenger;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class HighLightEntityCommand {
+public class HighLightEntityCommand extends AbstractRuleCommand {
     private static final Translator tr = new Translator("command.highlightEntity");
+    private static final HighLightEntityCommand INSTANCE = new HighLightEntityCommand();
+    private static final String MAIN_CMD_NAME = "highlightEntity";
     private static final String RULE_NAME = "commandHighLightEntities";
 
-    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+    public static HighLightEntityCommand getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
-            ClientCommandManager.literal("highlightEntity")
+            ClientCommandManager.literal(MAIN_CMD_NAME)
             // Add entity command
             .then(ClientCommandManager.literal("add")
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
@@ -81,8 +86,14 @@ public class HighLightEntityCommand {
         );
     }
 
-    private static int checkEnabled(CommandContext<FabricClientCommandSource> context, Supplier<Integer> action) {
-        return CommandUtil.checkEnabled(context.getSource(), FuzzSettings.commandHighLightEntities, RULE_NAME, action);
+    @Override
+    protected boolean getCondition() {
+        return false;
+    }
+
+    @Override
+    protected String getRuleName() {
+        return RULE_NAME;
     }
 
     private static int add(FabricClientCommandSource source, String entity) {

@@ -28,29 +28,34 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.utils.CommandUtil;
+import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 
-import java.util.function.Supplier;
-
 @GameVersion(version = "Minecraft < 1.20.6")
 @Environment(EnvType.CLIENT)
-public class CoordCompassCommand {
+public class CoordCompassCommand extends AbstractRuleCommand {
+    private static final CoordCompassCommand INSTANCE = new CoordCompassCommand();
+    private static final String MAIN_CMD_NAME = "coordCompass";
     private static final String RULE_NAME = "commandCoordCompass";
     private static Vec3d targetCoord;
     private static boolean isActive = false;
 
-    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(ClientCommandManager.literal("coordCompass")
+    public static CoordCompassCommand getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+        dispatcher.register(ClientCommandManager.literal(MAIN_CMD_NAME)
         .then(ClientCommandManager.literal("set")
         .then(ClientCommandManager.argument("x", IntegerArgumentType.integer())
         .then(ClientCommandManager.argument("y", IntegerArgumentType.integer())
@@ -61,8 +66,14 @@ public class CoordCompassCommand {
         HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
     }
 
-    private static int checkEnabled(CommandContext<FabricClientCommandSource> context, Supplier<Integer> action) {
-        return CommandUtil.checkEnabled(context.getSource(), FuzzSettings.commandCoordCompass, RULE_NAME, action);
+    @Override
+    protected boolean getCondition() {
+        return FuzzSettings.commandCoordCompass;
+    }
+
+    @Override
+    protected String getRuleName() {
+        return RULE_NAME;
     }
 
     private static int set(CommandContext<FabricClientCommandSource> context) {

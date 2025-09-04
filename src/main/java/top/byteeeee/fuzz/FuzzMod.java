@@ -21,7 +21,6 @@
 package top.byteeeee.fuzz;
 
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.loader.api.FabricLoader;
 
 import top.byteeeee.fuzz.translations.FuzzTranslations;

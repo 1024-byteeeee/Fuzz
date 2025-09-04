@@ -28,8 +28,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 //#if MC>=12100
 //$$ import net.minecraft.client.render.RenderTickCounter;
 //#endif
@@ -39,19 +39,24 @@ import net.minecraft.util.math.Vec3d;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.utils.CommandUtil;
-
-import java.util.function.Supplier;
+import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 
 @GameVersion(version = "Minecraft >= 1.20.6")
 @Environment(EnvType.CLIENT)
-public class CoordCompassCommand {
+public class CoordCompassCommand extends AbstractRuleCommand {
+    private static final CoordCompassCommand INSTANCE = new CoordCompassCommand();
+    private static final String MAIN_CMD_NAME = "coordCompass";
     private static final String RULE_NAME = "commandCoordCompass";
     private static Vec3d targetCoord;
     private static boolean isActive = false;
 
-    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(ClientCommandManager.literal("coordCompass")
+    public static CoordCompassCommand getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+        dispatcher.register(ClientCommandManager.literal(MAIN_CMD_NAME)
         .then(ClientCommandManager.literal("set")
         .then(ClientCommandManager.argument("x", IntegerArgumentType.integer())
         .then(ClientCommandManager.argument("y", IntegerArgumentType.integer())
@@ -62,8 +67,14 @@ public class CoordCompassCommand {
         HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
     }
 
-    private static int checkEnabled(CommandContext<FabricClientCommandSource> context, Supplier<Integer> action) {
-        return CommandUtil.checkEnabled(context.getSource(), FuzzSettings.commandCoordCompass, RULE_NAME, action);
+    @Override
+    protected boolean getCondition() {
+        return FuzzSettings.commandCoordCompass;
+    }
+
+    @Override
+    protected String getRuleName() {
+        return RULE_NAME;
     }
 
     private static int set(CommandContext<FabricClientCommandSource> context) {
@@ -110,12 +121,7 @@ public class CoordCompassCommand {
 
         if (isClose) {
             renderXMark(drawContext, centerX, centerY);
-        } else {
-            //#if MC>=12100
-            //$$ float playerYaw = client.player.getYaw();
-            //#else
-            float playerYaw = client.player.getYaw(tickDelta);
-            //#endif
+            float playerYaw = client.player.getYaw();
             double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
             double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
             double angleRad = Math.toRadians(angleDiff);
