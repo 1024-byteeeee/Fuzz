@@ -48,6 +48,10 @@ fuzz:
       clear_help: "/highLight clear - 清除所有高亮实体"
       list_help: "/highLight list - 列出所有高亮实体"
 
+  rule_feedback:
+    parseCoordInMessage:
+      hover_text: "导航至: %s"
+
   keyBinding:
     category: "FUZZ"
     quickKickFakePlayer:
@@ -186,3 +190,12 @@ fuzz:
     fogRenderDisabled:
       name: "禁用雾渲染"
       desc: "清除所有雾气"
+    commandCoordCompass:
+      name: "坐标罗盘"
+      desc: "使用指令来指定一个坐标，在屏幕上会显示一个箭头指引你到目的坐标处"
+      extra:
+        '0': "使用 /coordCompass help 指令查看使用指南"
+        '1': "可以搭配\"解析消息中坐标 (parseCoordInMessage)\"规则使用"
+    parseCoordInMessage:
+      name: "解析消息中坐标"
+      desc: "解析聊天消息中的坐标，显示为绿色带下划线，且可以通过点击它来联动\"坐标罗盘 (commandCoordCompass)\"规则"

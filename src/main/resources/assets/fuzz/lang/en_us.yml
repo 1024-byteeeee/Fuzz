@@ -48,6 +48,10 @@ fuzz:
       clear_help: "/highLight clear - Clears all highlighted entities"
       list_help: "/highLight list - Lists all highlighted entities"
 
+  rule_feedback:
+    parseCoordInMessage:
+      hover_text: "Navigate to: %s"
+
   keyBinding:
     category: "FUZZ"
     quickKickFakePlayer:
@@ -186,3 +190,12 @@ fuzz:
     fogRenderDisabled:
       name: "fogRenderDisabled"
       desc: "Removes all fog"
+    commandCoordCompass:
+      name: "commandCoordCompass"
+      desc: "Use the command to specify a coordinate, and an arrow will appear on the screen to guide you to the desired coordinate"
+      extra:
+        '0': "Use the \"/coordCompass help command\" to view the usage guide"
+        '1': "It can be used with the \"parseCoordInMessage\" rule"
+    parseCoordInMessage:
+      name: "parseCoordInMessage"
+      desc: "Parse coordinates in chat messages, display them in green with underlines, and allow clicking on them to interact with the \"Coordinate Compass (commandCoordCompass)\" rule"

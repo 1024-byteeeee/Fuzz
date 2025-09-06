@@ -194,6 +194,9 @@ public class FuzzSettings {
     @Rule(categories = {FUZZ, SURVIVAL, COMMAND})
     public static boolean commandCoordCompass = false;
 
+    @Rule(categories = {FUZZ, QOL})
+    public static boolean parseCoordInMessage = false;
+
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {
             if (field.isAnnotationPresent(Rule.class)) {

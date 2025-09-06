@@ -6,6 +6,7 @@
   "mixins": [],
   "client": [
     "hooks.MinecraftClientMixin",
+    "rule.parseCoordInMessage.ChatHudMixin",
     "rule.bedRockFlying.ClientPlayerEntityInvoker",
     "rule.bedRockFlying.ClientPlayerEntityMixin",
     "rule.biomeColor.BiomeEffectsMixin",
