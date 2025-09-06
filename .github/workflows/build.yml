@@ -12,6 +12,10 @@ on:
         type: string
         required: false
         default: ''
+      mixin_audit:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   build:
@@ -66,3 +70,4 @@ jobs:
         with:
           name: build-artifacts
           path: versions/*/build/libs/
+          retention-days: 7
