@@ -54,11 +54,6 @@ jobs:
           BUILD_ID: ${{ github.run_number }}
           BUILD_RELEASE: ${{ inputs.release }}
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: versions/*/build/libs/
-
       - name: Run Mixin Audit Check
         if: ${{ inputs.mixin_audit }}
         timeout-minutes: 10
@@ -66,3 +61,8 @@ jobs:
           mkdir -p ./run
           echo eula=true > ./run/eula.txt
           ./gradlew runMixinAudit
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: versions/*/build/libs/
