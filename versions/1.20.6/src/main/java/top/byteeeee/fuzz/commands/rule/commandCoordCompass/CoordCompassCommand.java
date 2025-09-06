@@ -119,12 +119,14 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         int centerX = screenWidth / 2;
         int centerY = screenHeight - 62;
 
+        float playerYaw = client.player.getYaw();
+        double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
+        double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
+        double angleRad = Math.toRadians(angleDiff);
+
         if (isClose) {
             renderXMark(drawContext, centerX, centerY);
-            float playerYaw = client.player.getYaw();
-            double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
-            double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
-            double angleRad = Math.toRadians(angleDiff);
+        } else {
             int arrowLength = 20;
             int arrowX = centerX + (int) (Math.sin(angleRad) * arrowLength);
             int arrowY = centerY - (int) (Math.cos(angleRad) * arrowLength);
