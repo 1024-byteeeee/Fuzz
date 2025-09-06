@@ -46,7 +46,7 @@ public class FuzzMod implements ModInitializer {
         FuzzTranslations.loadTranslations();
 	}
 
-	public void onMinecraftClientStart() {
+	public void onMinecraftClientInit() {
         version = FabricLoader.getInstance().getModContainer(FuzzModClient.MOD_ID).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
         //#if MC>=12106
 		//$$ AutoMixinAuditExecutor.run();

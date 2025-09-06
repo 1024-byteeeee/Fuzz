@@ -36,15 +36,15 @@ import top.byteeeee.fuzz.FuzzMod;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
     @Inject(
-        method = "run",
+        method = "<init>",
         at = @At(
-            value = "INVOKE",
-            target = "Ljava/lang/Thread;currentThread()Ljava/lang/Thread;",
+            value = "FIELD",
+            target = "Lnet/minecraft/client/MinecraftClient;thread:Ljava/lang/Thread;",
             shift = At.Shift.AFTER,
             ordinal = 0
         )
     )
     private void onRun(CallbackInfo ci) {
-        FuzzMod.getInstance().onMinecraftClientStart();
+        FuzzMod.getInstance().onMinecraftClientInit();
     }
 }
