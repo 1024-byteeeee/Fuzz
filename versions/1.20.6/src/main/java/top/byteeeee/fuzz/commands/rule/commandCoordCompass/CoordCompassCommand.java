@@ -65,7 +65,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
     private static Vec3d targetCoord;
     private static boolean isActive = false;
 
-    private static final Identifier TARGET_ICON = IdentifierUtil.of("minecraft", "textures/item/book.png");
+    private static final Identifier TARGET_ICON = IdentifierUtil.of("fuzz", "textures/waypoint/target_point.png");
 
     public static CoordCompassCommand getInstance() {
         return INSTANCE;
