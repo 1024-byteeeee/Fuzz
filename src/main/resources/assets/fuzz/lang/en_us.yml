@@ -47,6 +47,8 @@ fuzz:
       remove_help: "/highLight remove <entityId> - Remove the highlighted entity"
       clear_help: "/highLight clear - Clears all highlighted entities"
       list_help: "/highLight list - Lists all highlighted entities"
+    coordCompass:
+      near_the_target: "§aNear the target"
 
   rule_feedback:
     parseCoordInMessage:

@@ -47,6 +47,8 @@ fuzz:
       remove_help: "/highLight remove <实体ID> - 移除高亮实体"
       clear_help: "/highLight clear - 清除所有高亮实体"
       list_help: "/highLight list - 列出所有高亮实体"
+    coordCompass:
+      near_the_target: "§a已到达目标附近"
 
   rule_feedback:
     parseCoordInMessage:
