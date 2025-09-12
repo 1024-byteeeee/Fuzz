@@ -29,17 +29,10 @@ import net.fabricmc.api.Environment;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.*;
 
-//#if MC>=12100
-//$$ import net.minecraft.client.render.RenderTickCounter;
-//#endif
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.MinecraftClient;
-//#if MC>=12102
-//$$ import net.minecraft.client.gl.ShaderProgramKeys;
-//#endif
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -55,7 +48,9 @@ import top.byteeeee.fuzz.utils.IdentifierUtil;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 
-@GameVersion(version = "Minecraft > 1.20.6 && Minecraft < 1.21.5")
+import java.util.Objects;
+
+@GameVersion(version = "Minecraft >= 1.21.5")
 @Environment(EnvType.CLIENT)
 public class CoordCompassCommand extends AbstractRuleCommand {
     private static final CoordCompassCommand INSTANCE = new CoordCompassCommand();
@@ -146,50 +141,24 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         matrixStack.multiply(new Quaternionf().rotationYXZ((float)Math.toRadians(yaw), (float)Math.toRadians(pitch), 0));
         float scale = 1.0F;
         matrixStack.scale(scale, scale, scale);
-        Tessellator tessellator = Tessellator.getInstance();
         MatrixStack.Entry entry = matrixStack.peek();
-        //#if MC>=12100
-        //$$ BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        //$$ buffer.vertex(entry.getPositionMatrix(), -1.0f, -1.0f, 0.0f).texture(0, 0);
-        //$$ buffer.vertex(entry.getPositionMatrix(), -1.0f, 1.0f, 0.0f).texture(0, 1);
-        //$$ buffer.vertex(entry.getPositionMatrix(), 1.0f, 1.0f, 0.0f).texture(1, 1);
-        //$$ buffer.vertex(entry.getPositionMatrix(), 1.0f, -1.0f, 0.0f).texture(1, 0);
+        //#if MC>=12106
+        //$$ RenderLayer renderLayer = RenderLayer.getFireScreenEffect(TARGET_ICON);
         //#else
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        buffer.vertex(entry.getPositionMatrix(), -1.0f, -1.0f, 0.0f).texture(0, 0).next();
-        buffer.vertex(entry.getPositionMatrix(), -1.0f, 1.0f, 0.0f).texture(0, 1).next();
-        buffer.vertex(entry.getPositionMatrix(), 1.0f, 1.0f, 0.0f).texture(1, 1).next();
-        buffer.vertex(entry.getPositionMatrix(), 1.0f, -1.0f, 0.0f).texture(1, 0).next();
+        RenderLayer renderLayer = RenderLayer.getGuiTexturedOverlay(TARGET_ICON);
         //#endif
-        //#if MC>=12102
-        //$$ RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX);
-        //#else
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        //#endif
-        RenderSystem.setShaderTexture(0, TARGET_ICON);
+        VertexConsumer vertexConsumer = Objects.requireNonNull(context.consumers()).getBuffer(renderLayer);
+        vertexConsumer.vertex(entry.getPositionMatrix(), -1F, -1F, 0F).texture(0F, 0F).color(-1);
+        vertexConsumer.vertex(entry.getPositionMatrix(), -1F, 1F, 0F).texture(0F, 1F).color(-1);
+        vertexConsumer.vertex(entry.getPositionMatrix(), 1F, 1F, 0F).texture(1F, 1F).color(-1);
+        vertexConsumer.vertex(entry.getPositionMatrix(), 1F, -1F, 0F).texture(1F, 0F).color(-1);
+        //#if MC<12106
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
-        //#if MC>=12100
-        //$$ BufferRenderer.drawWithGlobalProgram(buffer.end());
-        //#else
-        tessellator.draw();
         //#endif
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableBlend();
         matrixStack.pop();
     }
 
-    private static void renderHud(
-        DrawContext drawContext
-        //#if MC>=12100
-        //$$ , RenderTickCounter tickCounter
-        //#else
-        , float tickDelta
-        //#endif
-    ) {
+    private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (!isActive || targetCoord == null) {
             return;
         }
