@@ -6,7 +6,6 @@
   "mixins": [],
   "client": [
     "hooks.MinecraftClientMixin",
-    "rule.parseCoordInMessage.ChatHudMixin",
     "rule.bedRockFlying.ClientPlayerEntityInvoker",
     "rule.bedRockFlying.ClientPlayerEntityMixin",
     "rule.biomeColor.BiomeEffectsMixin",
@@ -27,6 +26,7 @@
     "rule.letFluidInteractLikeAir.EntityMixin",
     "rule.letFluidInteractLikeAir.LivingEntityMixin",
     "rule.letFluidInteractLikeAir.PlayerEntityMixin",
+    "rule.parseCoordInMessage.ChatHudMixin",
     "rule.pickFluidBucketItemInCreative.MinecraftClientMixin",
     "rule.renderHandDisabled.GameRendererMixin",
     "rule.slimeBlockBounceDisabled.LivingEntityMixin",

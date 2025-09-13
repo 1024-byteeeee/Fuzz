@@ -60,6 +60,10 @@ public abstract class ChatHudMixin {
         argsOnly = true
     )
     private Text parseCoordInMessage(Text original) {
+        if (!FuzzSettings.parseCoordInMessage) {
+            return original;
+        }
+
         String content = original.getString();
         Matcher matcher = COORD_PATTERN.matcher(content);
 
@@ -67,14 +71,47 @@ public abstract class ChatHudMixin {
             return original;
         }
 
-        matcher.reset();
+        return processTextForCoordinates(original);
+    }
 
-        BaseText result = Messenger.s("");
+    @Unique
+    private Text processTextForCoordinates(Text text) {
+        MutableText result = Messenger.s("").setStyle(text.getStyle());
+
+        String content = text.getString();
+        if (!content.isEmpty()) {
+            result.append(processSimpleText(Messenger.s(content).setStyle(text.getStyle())));
+        }
+
+        for (Text sibling : text.getSiblings()) {
+            String siblingContent = sibling.getString();
+            Matcher matcher = COORD_PATTERN.matcher(siblingContent);
+            if (matcher.find()) {
+                result.append(processSimpleText(sibling));
+            } else {
+                result.append(sibling);
+            }
+        }
+
+        return result;
+    }
+
+    @Unique
+    private Text processSimpleText(Text text) {
+        String content = text.getString();
+        Matcher matcher = COORD_PATTERN.matcher(content);
+
+        if (!matcher.find()) {
+            return text;
+        }
+
+        matcher.reset();
+        MutableText result = Messenger.s("").setStyle(text.getStyle());
         int lastEnd = 0;
 
         while (matcher.find()) {
             if (matcher.start() > lastEnd) {
-                result.append(Messenger.s(content.substring(lastEnd, matcher.start())));
+                result.append(Messenger.s(content.substring(lastEnd, matcher.start())).setStyle(text.getStyle()));
             }
 
             String x = matcher.group(1);
@@ -82,23 +119,18 @@ public abstract class ChatHudMixin {
             String z = matcher.group(5);
             String coords = x + " " + y + " " + z;
 
-            BaseText coordText = Messenger.s(matcher.group());
-            coordText.setStyle(Style.EMPTY.withColor(Formatting.GREEN).withUnderline(true).withClickEvent(
-                ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, "/coordCompass set " + x + " " + y + " " + z)
-            ));
-
-            coordText.setStyle(coordText.getStyle().withHoverEvent(
-                HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, tr.tr("hover_text", coords).formatted(Formatting.YELLOW))
-            ));
+            MutableText coordText = Messenger.s(matcher.group());
+            coordText.setStyle(text.getStyle()
+                .withColor(Formatting.GREEN)
+                .withUnderline(true)
+                .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, "/coordCompass set " + x + " " + y + " " + z))
+                .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT,
+                tr.tr("hover_text", coords).formatted(Formatting.YELLOW))));
 
             result.append(coordText);
             lastEnd = matcher.end();
         }
 
-        if (lastEnd < content.length()) {
-            result.append(Messenger.s(content.substring(lastEnd)));
-        }
-
-        return FuzzSettings.parseCoordInMessage ? result : original;
+        return result;
     }
 }
