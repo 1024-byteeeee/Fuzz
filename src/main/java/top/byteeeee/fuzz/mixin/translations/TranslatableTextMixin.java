@@ -20,6 +20,9 @@
 
 package top.byteeeee.fuzz.mixin.translations;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.minecraft.text.TranslatableText;
 
 import org.spongepowered.asm.mixin.Final;
@@ -27,8 +30,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 
+@Environment(EnvType.CLIENT)
 @Mixin(TranslatableText.class)
 public abstract class TranslatableTextMixin {
     @Shadow
@@ -48,7 +53,7 @@ public abstract class TranslatableTextMixin {
     )
     private String applyModTranslation(String vanillaTranslatedFormattingString) {
         if (this.key.startsWith("fuzz.") && vanillaTranslatedFormattingString.equals(this.key)) {
-            String modTranslated = FuzzTranslations.translateKeyToFormattedString(FuzzTranslations.getServerLanguage(), this.key);
+            String modTranslated = FuzzTranslations.translateKeyToFormattedString(FuzzTranslations.getLanguage(), this.key);
             if (modTranslated != null) {
                 return modTranslated;
             }

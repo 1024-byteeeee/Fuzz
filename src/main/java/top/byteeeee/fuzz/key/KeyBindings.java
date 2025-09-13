@@ -39,17 +39,30 @@ public class KeyBindings {
 
     public static KeyBinding quickKickFakePlayer;
     public static KeyBinding quickDropFakePlayerAllItemStack;
+    public static KeyBinding clearCoordCompass;
 
     public static void register() {
-        quickKickFakePlayer = registerKeyBinding(generalKeyBinding(tr.tr("quickKickFakePlayer.name")));
-        quickDropFakePlayerAllItemStack = registerKeyBinding(generalKeyBinding(tr.tr("quickDropFakePlayerAllItemStack.name")));
+        quickKickFakePlayer = registerKeyBinding("quickKickFakePlayer.name");
+        quickDropFakePlayerAllItemStack = registerKeyBinding("quickDropFakePlayerAllItemStack.name");
+        clearCoordCompass = registerKeyBinding("clearCoordCompass.name");
     }
 
-    private static KeyBinding generalKeyBinding(BaseText translationKey) {
-        return new KeyBinding(translationKey.getString(), InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, CATEGORY.getString());
+    private static KeyBinding registerKeyBinding(String translationKey) {
+        FuzzKeyBinding fuzzKeyBinding = new FuzzKeyBinding(translationKey);
+        return KeyBindingHelper.registerKeyBinding(fuzzKeyBinding);
     }
 
-    private static KeyBinding registerKeyBinding(KeyBinding binding) {
-        return KeyBindingHelper.registerKeyBinding(binding);
+    private static class FuzzKeyBinding extends KeyBinding {
+        private final String translationKey;
+
+        public FuzzKeyBinding(String translationKey) {
+            super(tr.tr(translationKey).getString(), InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, CATEGORY.getString());
+            this.translationKey = translationKey;
+        }
+
+        @Override
+        public String getTranslationKey() {
+            return tr.tr(translationKey).getString();
+        }
     }
 }

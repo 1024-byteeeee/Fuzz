@@ -92,7 +92,7 @@ public class FuzzTranslations {
         });
     }
 
-    public static String getServerLanguage() {
+    public static String getLanguage() {
         String configLanguage = FuzzSettings.language;
         return configLanguage.equalsIgnoreCase("none") ? DEFAULT_LANGUAGE : configLanguage;
     }

@@ -36,6 +36,7 @@ public class ClientEvent {
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(ClientEventHandler::quickKickFakePlayer);
         ClientTickEvents.END_CLIENT_TICK.register(ClientEventHandler::quickDropFakePlayerAllItemStack);
+        ClientTickEvents.END_CLIENT_TICK.register(ClientEventHandler::clearCoordCompass);
     }
 
     private static class ClientEventHandler {
@@ -51,12 +52,20 @@ public class ClientEvent {
         }
 
         private static void quickDropFakePlayerAllItemStack(MinecraftClient client) {
-            while(FuzzSettings.quickDropFakePlayerAllItemStack && KeyBindings.quickDropFakePlayerAllItemStack.wasPressed()) {
+            while (FuzzSettings.quickDropFakePlayerAllItemStack && KeyBindings.quickDropFakePlayerAllItemStack.wasPressed()) {
                 if (client.player != null) {
                     String name = GetTargetPlayer.getName();
                     if (name != null && !name.isEmpty()) {
                         Messenger.sendChatCommand(String.format("/player %s dropStack all", name));
                     }
+                }
+            }
+        }
+
+        private static void clearCoordCompass(MinecraftClient client) {
+            while (FuzzSettings.commandCoordCompass && KeyBindings.clearCoordCompass.wasPressed()) {
+                if (client.player != null) {
+                    Messenger.sendChatCommand("/coordCompass clear");
                 }
             }
         }
