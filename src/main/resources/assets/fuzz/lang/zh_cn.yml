@@ -36,17 +36,27 @@ fuzz:
         need_enable_rule: "需要先启用 %s 规则"
 
     highlightEntity:
-      already_in_list: "<Fuzz> %s 已在列表中"
-      added: "<Fuzz> 已添加高亮效果: %s"
-      not_in_list: "<Fuzz> 不在列表中: %s"
-      removed: "<Fuzz> 已清除高亮效果: %s"
-      cleared: "<Fuzz> 已清除所有高亮实体: %s"
-      list_is_empty: "<Fuzz> 当前无高亮实体"
+      already_in_list: "<FUZZ> %s 已在列表中"
+      added: "<FUZZ> 已添加高亮效果: %s"
+      not_in_list: "<FUZZ> 不在列表中: %s"
+      removed: "<FUZZ> 已清除高亮效果: %s"
+      cleared: "<FUZZ> 已清除所有高亮实体"
+      list_is_empty: "<FUZZ> 当前无高亮实体"
       list_title: "高亮实体列表 (%s):"
       add_help: "/highLight add <实体ID> - 添加高亮实体"
       remove_help: "/highLight remove <实体ID> - 移除高亮实体"
       clear_help: "/highLight clear - 清除所有高亮实体"
       list_help: "/highLight list - 列出所有高亮实体"
+    coordCompass:
+      near_the_target: "§a已到达目标附近"
+      help:
+        set: "/coordCompass set <x> <y> <z> - 设置目标坐标"
+        clear: "/coordCompass clear - 清除目标坐标"
+        help: "/coordCompass help - 显示帮助信息"
+
+  rule_feedback:
+    parseCoordInMessage:
+      hover_text: "导航至: %s"
 
   keyBinding:
     category: "FUZZ"
@@ -54,6 +64,8 @@ fuzz:
       name: "快捷踢出假人"
     quickDropFakePlayerAllItemStack:
       name: "快捷扔出假人背包"
+    clearCoordCompass:
+      name: "清除坐标罗盘"
 
   validator:
     blockOutlineColor:
@@ -67,6 +79,8 @@ fuzz:
     fuzzCommandAlias:
       value_range: '只能输入大写或小写字母且不为"fuzz"'
       onValueChange: "<fuzzCommandAlias> 重启客户端后生效"
+    rainbowBlockOutlineBlinkSpeed:
+      value_range: "设定的值必须为 0.1 - 10.0"
 
   rule:
     language:
@@ -93,6 +107,11 @@ fuzz:
       extra:
         '0': "使用十六进制RGB代码"
         '1': "[rainbow] - 动态RGB"
+    rainbowBlockOutlineBlinkSpeed:
+      name: "彩虹方块轮廓线闪烁速度"
+      desc: "修改彩虹方块轮廓线的闪烁速度"
+      extra:
+        '0': "需开启blockOutlineColor规则"
     blockOutlineAlpha:
       name: "方块轮廓线透明度"
       desc: "修改方块轮廓线透明度"
@@ -181,3 +200,15 @@ fuzz:
     fogRenderDisabled:
       name: "禁用雾渲染"
       desc: "清除所有雾气"
+    commandCoordCompass:
+      name: "坐标罗盘"
+      desc: "使用指令来指定一个坐标，在屏幕上会显示一个箭头指引你到目的坐标处"
+      extra:
+        '0': "使用 /coordCompass help 指令查看使用指南"
+        '1': "可以搭配\"解析消息中坐标 (parseCoordInMessage)\"规则使用"
+    parseCoordInMessage:
+      name: "解析消息中坐标"
+      desc: "解析聊天消息中的坐标，显示为绿色带下划线，且可以通过点击它来联动\"坐标罗盘 (commandCoordCompass)\"规则"
+      extra:
+        '0': "[fuzz] - 使用\"坐标罗盘 (commandCoordCompass)\"规则的坐标高亮"
+        '1': "[carpetorgaddition] - 使用Carpet Org Addition模组的坐标高亮 (Minecraft >= 1.21.3)"

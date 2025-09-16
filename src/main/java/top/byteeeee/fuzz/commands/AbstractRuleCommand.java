@@ -18,33 +18,26 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.hooks;
+package top.byteeeee.fuzz.commands;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import net.minecraft.client.MinecraftClient;
+import top.byteeeee.fuzz.utils.CommandUtil;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import top.byteeeee.fuzz.FuzzMod;
+import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-@Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin {
-    @Inject(
-        method = "<init>",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/client/MinecraftClient;thread:Ljava/lang/Thread;",
-            shift = At.Shift.AFTER,
-            ordinal = 0
-        )
-    )
-    private void onRun(CallbackInfo ci) {
-        FuzzMod.getInstance().onMinecraftClientInit();
+public abstract class AbstractRuleCommand {
+    protected abstract boolean getCondition();
+    protected abstract String getRuleName();
+    protected abstract void register(CommandDispatcher<FabricClientCommandSource> dispatcher);
+
+    protected final int checkEnabled(CommandContext<FabricClientCommandSource> context, Supplier<Integer> action) {
+        return CommandUtil.checkEnabled(context.getSource(), getCondition(), getRuleName(), action);
     }
 }

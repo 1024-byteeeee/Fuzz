@@ -26,6 +26,7 @@
     "rule.letFluidInteractLikeAir.EntityMixin",
     "rule.letFluidInteractLikeAir.LivingEntityMixin",
     "rule.letFluidInteractLikeAir.PlayerEntityMixin",
+    "rule.parseCoordInMessage.ChatHudMixin",
     "rule.pickFluidBucketItemInCreative.MinecraftClientMixin",
     "rule.renderHandDisabled.GameRendererMixin",
     "rule.slimeBlockBounceDisabled.LivingEntityMixin",

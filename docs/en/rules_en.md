@@ -142,9 +142,28 @@ Modify the color of the block outline, Use Hex RGB codes.
 
 
 
+## rainbowBlockOutlineBlinkSpeed
+
+Modified the flickering speed of the rainbow block outline, Need enable `blockOutlineColor` rule.
+
+- Type: `Double`
+
+
+
+- Default: `1.024`
+
+
+
+- Suggested options: `0.1024`, `1.024`, `5.20`, `10.0`
+
+
+
+- Categroies: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
+
+
 ## blockOutlineAlpha
 
-Modify the alpha of the block outline, Need enable `blockOutlineColor` function.
+Modify the alpha of the block outline, Need enable `blockOutlineColor` rule.
 
 - Type: `int`
 
@@ -597,3 +616,51 @@ Removes all fog.
 
 
 - Categroies: `FUZZ`, `RENDER`
+
+
+
+## commandCoordCompass
+
+Use the command to specify a coordinate, and an arrow will appear on the screen to guide you to the desired coordinate.
+
+Use the "/coordCompass help command" to view the usage guide.
+
+It can be used with the "parseCoordInMessage" rule.
+
+- Type: `boolean`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `true`
+
+
+
+- Categroies: `FUZZ`, `SURVIVAL`, `COMMAND`
+
+
+
+## parseCoordInMessage
+
+Parse coordinates in chat messages, display them in green with underlines, and allow clicking on them to interact with the "commandCoordCompass" rule.
+
+[fuzz] - Coordinate highlighting using the "commandCoordCompass" rule.
+
+[carpetorgaddition] - Coordinate highlighting using the Carpet Org Addition mod (Minecraft >= 1.21.3).
+
+- Type: `String`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `fuzz`, `carpetorgaddition`
+
+
+
+- Categroies: `FUZZ`, `QOL`

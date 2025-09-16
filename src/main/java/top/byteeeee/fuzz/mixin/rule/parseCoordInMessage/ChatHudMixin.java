@@ -18,33 +18,36 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.hooks;
+package top.byteeeee.fuzz.mixin.rule.parseCoordInMessage;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.text.*;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import top.byteeeee.fuzz.FuzzMod;
+import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.helpers.rule.parseCoordInMessage.TextProcessor;
+
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-@Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin {
-    @Inject(
-        method = "<init>",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/client/MinecraftClient;thread:Ljava/lang/Thread;",
-            shift = At.Shift.AFTER,
-            ordinal = 0
-        )
+@Mixin(value = ChatHud.class, priority = 1688)
+public abstract class ChatHudMixin {
+    @ModifyVariable(
+        //#if MC>=11900
+        //$$ method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V",
+        //#else
+        method = "addMessage(Lnet/minecraft/text/Text;)V",
+        //#endif
+        at = @At("HEAD"),
+        argsOnly = true
     )
-    private void onRun(CallbackInfo ci) {
-        FuzzMod.getInstance().onMinecraftClientInit();
+    private Text parseCoordInMessage(Text original) {
+        return !Objects.equals(FuzzSettings.parseCoordInMessage, "false") ? TextProcessor.processTextForCoordinates(original) : original;
     }
 }

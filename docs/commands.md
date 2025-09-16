@@ -22,18 +22,36 @@
 
 ## 高亮实体（commandHighLightEntities）
 
-- /highLight add <实体ID> 
+- /highlightEntity add <实体ID> 
 
   添加高亮实体。
 
-- /highLight remove <实体ID> 
+- /highlightEntity remove <实体ID> 
 
   移除高亮实体。
 
-- /highLight clear 
+- /highlightEntity clear 
 
   清除所有高亮实体。
 
-- /highLight list 
+- /highlightEntity list 
 
   列出所有高亮实体。
+
+- /highlightEntity help
+
+  显示帮助信息。
+
+## 坐标罗盘（commandCoordCompass）
+
+- /coordCompass set &lt;x&gt; &lt;y&gt; &lt;z&gt;
+
+  设置目标坐标。
+
+- /coordCompass clear
+
+  清除目标坐标。
+
+- /highLight help
+
+  显示帮助信息。

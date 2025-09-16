@@ -249,7 +249,9 @@ public class YamlParser {
         // 处理带引号的字符串
         Matcher quotedMatcher = QUOTED_STRING_PATTERN.matcher(trimmedValue);
         if (quotedMatcher.matches()) {
-            return quotedMatcher.group(1);
+            String quotedContent = quotedMatcher.group(1);
+            // 处理转义序列
+            return unescapeString(quotedContent);
         }
 
         // 处理布尔值
@@ -275,6 +277,21 @@ public class YamlParser {
 
         // 默认返回字符串
         return trimmedValue;
+    }
+
+    /**
+     * 处理字符串中的转义序列
+     *
+     * @param str 包含转义序列的字符串
+     * @return 处理后的字符串
+     */
+    private static String unescapeString(String str) {
+        return
+            str.replace("\\\"", "\"")
+            .replace("\\\\", "\\")
+            .replace("\\n", "\n")
+            .replace("\\r", "\r")
+            .replace("\\t", "\t");
     }
 
     /**
@@ -390,7 +407,6 @@ public class YamlParser {
      * @param value 要写入的值
      * @param builder 目标StringBuilder
      */
-    @SuppressWarnings("PatternVariableCanBeUsed")
     private static void writeScalar(Object value, StringBuilder builder) {
         if (value == null) {
             builder.append("null");
@@ -502,7 +518,6 @@ public class YamlParser {
      * @param path 点符号路径
      * @return 字符串列表，如果不存在返回空列表
      */
-    @SuppressWarnings("PatternVariableCanBeUsed")
     @NotNull
     public static List<String> getNestedStringList(Map<String, Object> map, String path) {
         Object value = getNestedValue(map, path);

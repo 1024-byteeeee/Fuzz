@@ -217,7 +217,7 @@ public abstract class FuzzCommandContext {
     private static void addRuleHeader(List<MutableText> messages, Field field) {
         MutableText nameLine = Messenger.s("")
             .append(Messenger.tr(tr.getRuleNameTrKey(field.getName())))
-            .formatted(Formatting.BOLD)
+            .formatted(Formatting.GOLD, Formatting.BOLD)
             .append(createFieldNameText(field).formatted(Formatting.BOLD));
 
         messages.add(nameLine);
@@ -230,7 +230,7 @@ public abstract class FuzzCommandContext {
     private static void addExtraInformation(List<MutableText> messages, Field field) {
         int i = 0;
         while (true) {
-            String extraKey = "fuzz.settings." + field.getName() + ".extra." + i;
+            String extraKey = "fuzz.rule." + field.getName() + ".extra." + i;
             String extraText = Messenger.tr(extraKey).getString();
             if (extraKey.equals(extraText)) {
                 break;

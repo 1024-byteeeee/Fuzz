@@ -31,7 +31,7 @@ import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
 public class CommandHighLightEntitiesConfig extends AbstractListJsonConfig<String> {
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("KKK").resolve("commandHighLightEntities").resolve("entities.json");
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("fuzz").resolve("commandHighLightEntities").resolve("entities.json");
 
     private static final CommandHighLightEntitiesConfig INSTANCE = new CommandHighLightEntitiesConfig();
 

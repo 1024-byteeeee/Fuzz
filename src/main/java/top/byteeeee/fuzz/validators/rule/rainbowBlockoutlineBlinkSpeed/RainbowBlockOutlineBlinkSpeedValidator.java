@@ -18,33 +18,28 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.hooks;
+package top.byteeeee.fuzz.validators.rule.rainbowBlockoutlineBlinkSpeed;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-import net.minecraft.client.MinecraftClient;
+import top.byteeeee.fuzz.settings.Validator;
+import top.byteeeee.fuzz.translations.Translator;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import top.byteeeee.fuzz.FuzzMod;
+import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
-@Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin {
-    @Inject(
-        method = "<init>",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/client/MinecraftClient;thread:Ljava/lang/Thread;",
-            shift = At.Shift.AFTER,
-            ordinal = 0
-        )
-    )
-    private void onRun(CallbackInfo ci) {
-        FuzzMod.getInstance().onMinecraftClientInit();
+public class RainbowBlockOutlineBlinkSpeedValidator extends Validator<Double> {
+    private static final Translator tr = new Translator("validator.rainbowBlockOutlineBlinkSpeed");
+
+    @Override
+    public Double validate(FabricClientCommandSource source, Field field, Double value) {
+        return value >= 0.1D && value <= 10.0D ? value : null;
+    }
+
+    @Override
+    public String description() {
+        return tr.tr("value_range").getString();
     }
 }

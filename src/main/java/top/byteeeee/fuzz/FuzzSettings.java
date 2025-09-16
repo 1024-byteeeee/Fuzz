@@ -34,6 +34,7 @@ import top.byteeeee.fuzz.validators.rule.BiomeColor.BiomeColorValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineAlpha.BlockOutlineAlphaValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineWidth.BlockOutlineWidthValidator;
+import top.byteeeee.fuzz.validators.rule.rainbowBlockoutlineBlinkSpeed.RainbowBlockOutlineBlinkSpeedValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,14 @@ public class FuzzSettings {
         strict = false
     )
     public static String blockOutlineColor = "false";
+
+    @Rule(
+        options = {"0.1024", "1.024", "5.20", "10.0"},
+        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+        validators = RainbowBlockOutlineBlinkSpeedValidator.class,
+        strict = false
+    )
+    public static double rainbowBlockOutlineBlinkSpeed = 1.024D;
 
     @Rule(
         options = {"-1", "0", "255"},
@@ -181,6 +190,20 @@ public class FuzzSettings {
 
     @Rule(categories = {FUZZ, RENDER})
     public static boolean fogRenderDisabled = false;
+
+    @Rule(categories = {FUZZ, SURVIVAL, COMMAND})
+    public static boolean commandCoordCompass = false;
+
+    @Rule(
+        options = {
+            "false", "fuzz"
+            //#if MC>=12103
+            //$$ ,"carpetorgaddition"
+            //#endif
+        },
+        categories = {FUZZ, QOL}
+    )
+    public static String parseCoordInMessage = "false";
 
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {
