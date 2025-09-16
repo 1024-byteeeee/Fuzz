@@ -49,6 +49,10 @@ fuzz:
       list_help: "/highLight list - 列出所有高亮实体"
     coordCompass:
       near_the_target: "§a已到达目标附近"
+      help:
+        set: "/coordCompass set <x> <y> <z> - 设置目标坐标"
+        clear: "/coordCompass clear - 清除目标坐标"
+        help: "/coordCompass help - 显示帮助信息"
 
   rule_feedback:
     parseCoordInMessage:
@@ -106,6 +110,8 @@ fuzz:
     rainbowBlockOutlineBlinkSpeed:
       name: "彩虹方块轮廓线闪烁速度"
       desc: "修改彩虹方块轮廓线的闪烁速度"
+      extra:
+        '0': "需开启blockOutlineColor规则"
     blockOutlineAlpha:
       name: "方块轮廓线透明度"
       desc: "修改方块轮廓线透明度"
@@ -203,3 +209,6 @@ fuzz:
     parseCoordInMessage:
       name: "解析消息中坐标"
       desc: "解析聊天消息中的坐标，显示为绿色带下划线，且可以通过点击它来联动\"坐标罗盘 (commandCoordCompass)\"规则"
+      extra:
+        '0': "[fuzz] - 使用\"坐标罗盘 (commandCoordCompass)\"规则的坐标高亮"
+        '1': "[carpetorgaddition] - 使用Carpet Org Addition模组的坐标高亮 (Minecraft >= 1.21.3)"

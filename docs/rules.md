@@ -144,9 +144,29 @@
 
 
 
+## 彩虹方块轮廓线闪烁速度（rainbowBlockOutlineBlinkSpeed）
+
+修改彩虹方块轮廓线的闪烁速度，需开启`blockOutlineColor`规则。
+
+- 类型: `Double`
+
+
+
+- 默认值: `1.024`
+
+
+
+- 参考选项: `0.1024`, `1.024`, `5.20`, `10.0`
+
+
+
+- 分类: `FUZZ`, `FEATURE`, `SURVIVAL`, `RENDER`
+
+
+
 ## 方块轮廓线透明度（blockOutlineAlpha）
 
-修改方块轮廓线透明度，需开启`blockOutlineColor`功能。
+修改方块轮廓线透明度，需开启`blockOutlineColor`规则。
 
 - 类型: `int`
 
@@ -599,3 +619,51 @@
 
 
 - 分类: `FUZZ`, `RENDER`
+
+
+
+## 坐标罗盘（commandCoordCompass）
+
+使用指令来指定一个坐标，在屏幕上会显示一个箭头指引你到目的坐标处。 
+
+使用 /coordCompass help 指令查看使用指南。
+
+可以搭配"解析消息中坐标 (parseCoordInMessage)"规则使用。
+
+- 类型: `boolean`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `true`
+
+
+
+- 分类: `FUZZ`, `SURVIVAL`, `COMMAND`
+
+
+
+## 解析消息中坐标（parseCoordInMessage）
+
+解析聊天消息中的坐标，显示为绿色带下划线，且可以通过点击它来联动"坐标罗盘 (commandCoordCompass)"规则。
+
+[fuzz] - 使用\"坐标罗盘 (commandCoordCompass)\"规则的坐标高亮。
+
+[carpetorgaddition] - 使用Carpet Org Addition模组的坐标高亮 (Minecraft >= 1.21.3)。
+
+- 类型: `String`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `fuzz`, `carpetorgaddition`
+
+
+
+- 分类: `FUZZ`, `QOL`

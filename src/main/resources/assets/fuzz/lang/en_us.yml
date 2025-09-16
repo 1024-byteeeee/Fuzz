@@ -49,6 +49,10 @@ fuzz:
       list_help: "/highLight list - Lists all highlighted entities"
     coordCompass:
       near_the_target: "§aNear the target"
+      help:
+        set: "/coordCompass set <x> <y> <z> - Set the target coordinates"
+        clear: "/coordCompass clear - Clear the target coordinates"
+        help: "/coordCompass help - Show help information"
 
   rule_feedback:
     parseCoordInMessage:
@@ -106,6 +110,8 @@ fuzz:
     rainbowBlockOutlineBlinkSpeed:
       name: "rainbowBlockOutlineBlinkSpeed"
       desc: "Modified the flickering speed of the rainbow block outline"
+      extra:
+        '0': "Need enable blockOutlineColor rule"
     blockOutlineAlpha:
       name: "blockOutlineAlpha"
       desc: "Modify the alpha of the block outline"
@@ -202,4 +208,7 @@ fuzz:
         '1': "It can be used with the \"parseCoordInMessage\" rule"
     parseCoordInMessage:
       name: "parseCoordInMessage"
-      desc: "Parse coordinates in chat messages, display them in green with underlines, and allow clicking on them to interact with the \"Coordinate Compass (commandCoordCompass)\" rule"
+      desc: "Parse coordinates in chat messages, display them in green with underlines, and allow clicking on them to interact with the \"commandCoordCompass\" rule"
+      extra:
+        '0': "[fuzz] - Coordinate highlighting using the \"commandCoordCompass\" rule"
+        '1': "[carpetorgaddition] - Coordinate highlighting using the Carpet Org Addition mod (Minecraft >= 1.21.3)"

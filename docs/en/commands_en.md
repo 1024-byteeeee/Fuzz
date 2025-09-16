@@ -22,18 +22,36 @@
 
 ## commandHighLightEntities
 
-- /highLight add &lt;entityId&gt; 
+- /highlightEntity add &lt;entityId&gt; 
 
   Add a highlighted entity.
 
-- /highLight remove &lt;entityId&gt; 
+- /highlightEntity remove &lt;entityId&gt; 
 
   Remove the highlighted entity.
 
-- /highLight clear 
+- /highlightEntity clear 
 
   Clears all highlighted entities.
 
-- /highLight list 
+- /highlightEntity list 
 
   Lists all highlighted entities.
+
+- /highlightEntity help
+
+  Show help information.
+
+## commandCoordCompass
+
+- /coordCompass set &lt;x&gt; &lt;y&gt; &lt;z&gt;
+
+  Set the target coordinates.
+
+- /coordCompass clear
+
+  Clear the target coordinates.
+
+- /highLight help
+
+  Show help information.
