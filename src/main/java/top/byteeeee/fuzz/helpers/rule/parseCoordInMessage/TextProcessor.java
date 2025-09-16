@@ -26,6 +26,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
@@ -33,6 +34,7 @@ import top.byteeeee.fuzz.utils.Messenger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,11 +89,13 @@ public class TextProcessor {
                 int ovLocalStart = ovStart - segStart;
                 int ovLocalEnd = ovEnd - segStart;
                 String matchedPiece = segStr.substring(ovLocalStart, ovLocalEnd);
-
+                String fuzzCommand = "/coordCompass set " + mi.x + " " + mi.y + " " + mi.z;
+                String orgCommand = "/highlight " + mi.x + " " + mi.y + " " + mi.z + " continue";
+                String runCommand = Objects.equals(FuzzSettings.parseCoordInMessage, "fuzz") ? fuzzCommand : orgCommand;
                 MutableText clickable = Messenger.s(matchedPiece);
                 clickable.setStyle(
                     segNode.getStyle().withColor(Formatting.GREEN).withUnderline(true)
-                    .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, "/coordCompass set " + mi.x + " " + mi.y + " " + mi.z))
+                    .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, runCommand))
                     .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, tr.tr("hover_text", mi.x + " " + mi.y + " " + mi.z).formatted(Formatting.YELLOW)))
                 );
 

@@ -31,6 +31,8 @@ import top.byteeeee.fuzz.key.KeyBindings;
 import top.byteeeee.fuzz.utils.Messenger;
 import top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer_quickDropFakePlayerAllItemStack.GetTargetPlayer;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 public class ClientEvent {
     public static void register() {
@@ -65,7 +67,10 @@ public class ClientEvent {
         private static void clearCoordCompass(MinecraftClient client) {
             while (FuzzSettings.commandCoordCompass && KeyBindings.clearCoordCompass.wasPressed()) {
                 if (client.player != null) {
-                    Messenger.sendChatCommand("/coordCompass clear");
+                    String fuzzCommand = "/coordCompass clear";
+                    String orgCommand = "/highlight clear";
+                    String runCommand = Objects.equals(FuzzSettings.parseCoordInMessage, "fuzz") ? fuzzCommand : orgCommand;
+                    Messenger.sendChatCommand(runCommand);
                 }
             }
         }

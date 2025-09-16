@@ -33,6 +33,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.helpers.rule.parseCoordInMessage.TextProcessor;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 @Mixin(value = ChatHud.class, priority = 1688)
 public abstract class ChatHudMixin {
@@ -46,6 +48,6 @@ public abstract class ChatHudMixin {
         argsOnly = true
     )
     private Text parseCoordInMessage(Text original) {
-        return FuzzSettings.parseCoordInMessage ? TextProcessor.processTextForCoordinates(original) : original;
+        return !Objects.equals(FuzzSettings.parseCoordInMessage, "false") ? TextProcessor.processTextForCoordinates(original) : original;
     }
 }

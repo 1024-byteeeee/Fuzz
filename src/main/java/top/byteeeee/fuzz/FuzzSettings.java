@@ -194,8 +194,16 @@ public class FuzzSettings {
     @Rule(categories = {FUZZ, SURVIVAL, COMMAND})
     public static boolean commandCoordCompass = false;
 
-    @Rule(categories = {FUZZ, QOL})
-    public static boolean parseCoordInMessage = false;
+    @Rule(
+        options = {
+            "false", "fuzz"
+            //#if MC>=12103
+            //$$ ,"carpetorgaddition"
+            //#endif
+        },
+        categories = {FUZZ, QOL}
+    )
+    public static String parseCoordInMessage = "false";
 
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {
