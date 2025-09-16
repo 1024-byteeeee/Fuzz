@@ -52,6 +52,6 @@
 
   清除目标坐标。
 
-- /highLight help
+- /coordCompass help
 
   显示帮助信息。

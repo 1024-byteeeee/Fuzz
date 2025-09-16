@@ -52,6 +52,6 @@
 
   Clear the target coordinates.
 
-- /highLight help
+- /coordCompass help
 
   Show help information.
