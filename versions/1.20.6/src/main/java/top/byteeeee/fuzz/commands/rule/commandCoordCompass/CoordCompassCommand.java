@@ -24,6 +24,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -43,6 +44,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -54,6 +56,7 @@ import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+import top.byteeeee.fuzz.utils.Messenger;
 
 @GameVersion(version = "Minecraft > 1.20.6 && Minecraft < 1.21.5")
 @Environment(EnvType.CLIENT)
@@ -80,7 +83,8 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         .then(ClientCommandManager.argument("z", DoubleArgumentType.doubleArg())
         .executes(c -> checkEnabled(c, () -> set(c)))))))
         .then(ClientCommandManager.literal("clear")
-        .executes(c -> checkEnabled(c, CoordCompassCommand::clear))));
+        .executes(c -> checkEnabled(c, CoordCompassCommand::clear)))
+        .then(ClientCommandManager.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
         HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
         WorldRenderEvents.AFTER_TRANSLUCENT.register(CoordCompassCommand::renderWaypoint);
     }
@@ -107,6 +111,13 @@ public class CoordCompassCommand extends AbstractRuleCommand {
     private static int clear() {
         targetCoord = null;
         isActive = false;
+        return 1;
+    }
+
+    private static int help(CommandContext<FabricClientCommandSource> ctx) {
+        Messenger.tell(ctx.getSource(), tr.tr("help.set").formatted(Formatting.GRAY));
+        Messenger.tell(ctx.getSource(), tr.tr("help.clear").formatted(Formatting.GRAY));
+        Messenger.tell(ctx.getSource(), tr.tr("help.help").formatted(Formatting.GRAY));
         return 1;
     }
 
