@@ -53,6 +53,7 @@ import org.joml.Quaternionf;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.ClientUtil;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
@@ -205,7 +206,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
             return;
         }
 
-        MinecraftClient client = MinecraftClient.getInstance();
+        MinecraftClient client = ClientUtil.getCurrentClient();
         if (client.player == null) {
             return;
         }
