@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 import top.byteeeee.fuzz.commands.RegisterCommands;
 import top.byteeeee.fuzz.event.ClientEvent;
 import top.byteeeee.fuzz.key.KeyBindings;
+import top.byteeeee.fuzz.translations.FuzzTranslations;
 
 @Environment(EnvType.CLIENT)
 public class FuzzModClient implements ClientModInitializer {
@@ -47,5 +48,6 @@ public class FuzzModClient implements ClientModInitializer {
         RegisterCommands.register();
         ClientEvent.register();
         KeyBindings.register();
+        FuzzTranslations.loadTranslations();
     }
 }
