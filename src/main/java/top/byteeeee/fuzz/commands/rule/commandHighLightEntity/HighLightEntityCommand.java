@@ -88,7 +88,7 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
 
     @Override
     protected boolean getCondition() {
-        return false;
+        return FuzzSettings.commandHighLightEntities;
     }
 
     @Override

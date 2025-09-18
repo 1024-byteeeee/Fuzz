@@ -30,8 +30,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import top.byteeeee.fuzz.commands.RegisterCommands;
+import top.byteeeee.fuzz.commands.rule.commandCoordCompass.CoordCompassRenderer;
 import top.byteeeee.fuzz.event.ClientEvent;
 import top.byteeeee.fuzz.key.KeyBindings;
+import top.byteeeee.fuzz.translations.FuzzTranslations;
 
 @Environment(EnvType.CLIENT)
 public class FuzzModClient implements ClientModInitializer {
@@ -47,5 +49,11 @@ public class FuzzModClient implements ClientModInitializer {
         RegisterCommands.register();
         ClientEvent.register();
         KeyBindings.register();
+        this.RegisterRender();
+        FuzzTranslations.loadTranslations();
+    }
+
+    private void RegisterRender() {
+        CoordCompassRenderer.register();
     }
 }

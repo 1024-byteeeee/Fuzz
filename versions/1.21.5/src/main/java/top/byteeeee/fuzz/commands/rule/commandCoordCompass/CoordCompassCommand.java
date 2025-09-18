@@ -20,10 +20,13 @@
 
 package top.byteeeee.fuzz.commands.rule.commandCoordCompass;
 
+//#if MC<12106
 import com.mojang.blaze3d.systems.RenderSystem;
+//#endif
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -36,6 +39,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -44,9 +48,11 @@ import org.joml.Quaternionf;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.ClientUtil;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+import top.byteeeee.fuzz.utils.Messenger;
 
 import java.util.Objects;
 
@@ -75,9 +81,8 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         .then(ClientCommandManager.argument("z", DoubleArgumentType.doubleArg())
         .executes(c -> checkEnabled(c, () -> set(c)))))))
         .then(ClientCommandManager.literal("clear")
-        .executes(c -> checkEnabled(c, CoordCompassCommand::clear))));
-        HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(CoordCompassCommand::renderWaypoint);
+        .executes(c -> checkEnabled(c, CoordCompassCommand::clear)))
+        .then(ClientCommandManager.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
     }
 
     @Override
@@ -105,7 +110,14 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         return 1;
     }
 
-    private static void renderWaypoint(WorldRenderContext context) {
+    private static int help(CommandContext<FabricClientCommandSource> ctx) {
+        Messenger.tell(ctx.getSource(), tr.tr("help.set").formatted(Formatting.GRAY));
+        Messenger.tell(ctx.getSource(), tr.tr("help.clear").formatted(Formatting.GRAY));
+        Messenger.tell(ctx.getSource(), tr.tr("help.help").formatted(Formatting.GRAY));
+        return 1;
+    }
+
+    protected static void renderWorld(WorldRenderContext context) {
         if (!isActive || targetCoord == null || !FuzzSettings.commandCoordCompass) {
             return;
         }
@@ -124,7 +136,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         matrixStack.push();
         Vec3d cameraPos = context.camera().getPos();
         Vec3d offset = targetCoord.subtract(cameraPos);
-        int renderDistance = client.options.getViewDistance().getValue() * 16;
+        int renderDistance = 30;
         Vec3d renderOffset = offset;
         boolean isFar = offset.length() > renderDistance * 0.9;
         if (isFar) {
@@ -158,12 +170,12 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         matrixStack.pop();
     }
 
-    private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+    protected static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (!isActive || targetCoord == null) {
             return;
         }
 
-        MinecraftClient client = MinecraftClient.getInstance();
+        MinecraftClient client = ClientUtil.getCurrentClient();
         if (client.player == null) {
             return;
         }
@@ -187,7 +199,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         } else if (isHorizontalClose) {
             renderCircle(drawContext, centerX, centerY);
         } else {
-            float playerYaw = client.player.getYaw(1);
+            float playerYaw = client.player.getYaw(renderTickCounter.getTickProgress(true));
             double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
             double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
             double angleRad = Math.toRadians(angleDiff);

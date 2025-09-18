@@ -23,13 +23,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
@@ -49,6 +50,7 @@ import org.lwjgl.opengl.GL11;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.ClientUtil;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
@@ -81,8 +83,6 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         .then(ClientCommandManager.literal("clear")
         .executes(c -> checkEnabled(c, CoordCompassCommand::clear)))
         .then(ClientCommandManager.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
-        HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
-        WorldRenderEvents.END.register(CoordCompassCommand::renderWorld);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         return 1;
     }
 
-    private static void renderWorld(WorldRenderContext context) {
+    protected static void renderWorld(WorldRenderContext context) {
         if (!isActive || targetCoord == null || !FuzzSettings.commandCoordCompass) {
             return;
         }
@@ -130,11 +130,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         MatrixStack matrixStack = context.matrixStack();
         Vec3d cameraPos = context.camera().getPos();
         Vec3d offset = targetCoord.subtract(cameraPos);
-        //#if MC>=11900
-        //$$ int renderDistance = client.options.getViewDistance().getValue() * 16;
-        //#else
-        int renderDistance = client.options.viewDistance * 16;
-        //#endif
+        int renderDistance = 30;
         Vec3d correctedOffset = offset;
 
         if (offset.length() > renderDistance) {
@@ -186,12 +182,12 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         matrixStack.pop();
     }
 
-    private static void renderHud(MatrixStack matrixStack, float tickDelta) {
+    protected static void renderHud(MatrixStack matrixStack, float tickDelta) {
         if (!isActive || targetCoord == null) {
             return;
         }
 
-        MinecraftClient client = MinecraftClient.getInstance();
+        MinecraftClient client = ClientUtil.getCurrentClient();
         if (client.player == null) {
             return;
         }
@@ -215,7 +211,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         } else if (isHorizontalClose) {
             renderCircle(matrixStack, centerX, centerY);
         } else {
-            float playerYaw = client.player.getYaw(1);
+            float playerYaw = client.player.getYaw(tickDelta);
             double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
             double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
             double angleRad = Math.toRadians(angleDiff);
