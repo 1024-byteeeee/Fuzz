@@ -33,9 +33,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
-//#if MC>=12108
-//$$ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-//#endif
 
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.MinecraftClient;
@@ -86,12 +83,6 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         .then(ClientCommandManager.literal("clear")
         .executes(c -> checkEnabled(c, CoordCompassCommand::clear)))
         .then(ClientCommandManager.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
-        //#if MC>=12108
-        //$$ HudElementRegistry.addLast(IdentifierUtil.of("fuzz", "coord_compass_hud"), CoordCompassCommand::renderHud);
-        //#else
-        HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
-        //#endif
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(CoordCompassCommand::renderWaypoint);
     }
 
     @Override
@@ -126,7 +117,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         return 1;
     }
 
-    private static void renderWaypoint(WorldRenderContext context) {
+    protected static void renderWorld(WorldRenderContext context) {
         if (!isActive || targetCoord == null || !FuzzSettings.commandCoordCompass) {
             return;
         }
@@ -145,7 +136,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         matrixStack.push();
         Vec3d cameraPos = context.camera().getPos();
         Vec3d offset = targetCoord.subtract(cameraPos);
-        int renderDistance = client.options.getViewDistance().getValue() * 16;
+        int renderDistance = 30;
         Vec3d renderOffset = offset;
         boolean isFar = offset.length() > renderDistance * 0.9;
         if (isFar) {
@@ -179,7 +170,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         matrixStack.pop();
     }
 
-    private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+    protected static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (!isActive || targetCoord == null) {
             return;
         }
