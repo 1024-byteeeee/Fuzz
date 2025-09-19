@@ -537,7 +537,7 @@ In Creative mode, you can target a fluid and use the middle mouse button to pick
 
 
 
-## commandHighLightEntities
+## commandHighlightEntities
 
 Use command to highlight one or more specified entities.
 

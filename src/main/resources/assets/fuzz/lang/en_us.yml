@@ -186,8 +186,8 @@ fuzz:
         '0': "[false] - Disable the rule"
         '1': "[true] - Enable the rule"
         '2': "[sneaking] - Middle-click when sneaking is required"
-    commandHighLightEntities:
-      name: "commandHighLightEntities"
+    commandHighlightEntities:
+      name: "commandHighlightEntities"
       desc: "Use command to highlight one or more specified entities"
       extra:
         '0': "Use /highlightEntity help command to view the user guide"

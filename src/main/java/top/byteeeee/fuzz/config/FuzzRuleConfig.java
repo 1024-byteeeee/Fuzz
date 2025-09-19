@@ -24,11 +24,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.config.rule.commandHighLightEntities.CommandHighLightEntitiesConfig;
+import top.byteeeee.fuzz.config.rule.commandHighlightEntities.CommandHighlightEntitiesConfig;
 
 @Environment(EnvType.CLIENT)
 public class FuzzRuleConfig {
     public static void load() {
-        CommandHighLightEntitiesConfig.getInstance().loadFromJson(FuzzSettings.highlightEntityList);
+        CommandHighlightEntitiesConfig.getInstance().loadFromJson(FuzzSettings.highlightEntityList);
     }
 }

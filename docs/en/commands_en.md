@@ -20,7 +20,7 @@
 
 ---
 
-## commandHighLightEntities
+## commandHighlightEntities
 
 - /highlightEntity add &lt;entityId&gt; 
 

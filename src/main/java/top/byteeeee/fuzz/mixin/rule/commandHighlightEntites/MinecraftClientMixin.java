@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.commandHighLightEntites;
+package top.byteeeee.fuzz.mixin.rule.commandHighlightEntites;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
@@ -39,7 +39,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 public abstract class MinecraftClientMixin {
     @ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
     private boolean clairvoyance(boolean original, Entity entity) {
-        if (FuzzSettings.commandHighLightEntities && FuzzSettings.highlightEntityList.contains(EntityType.getId(entity.getType()).toString())) {
+        if (FuzzSettings.commandHighlightEntities && FuzzSettings.highlightEntityList.contains(EntityType.getId(entity.getType()).toString())) {
             return true;
         } else {
             return original;

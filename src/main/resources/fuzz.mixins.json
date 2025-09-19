@@ -14,7 +14,7 @@
     "rule.bubbleColumnInteractDisabled.BubbleColumnBlockMixin",
     "rule.campfireSmokeParticleDisabled.CampfireBlockMixin",
     "rule.cobwebSlowDownDisabled.CobwebMixin",
-    "rule.commandHighLightEntites.MinecraftClientMixin",
+    "rule.commandHighlightEntites.MinecraftClientMixin",
     "rule.fluidPushDisabled.PlayerEntityMixin",
     "rule.fogRenderDisabled.BackgroundRendererMixin",
     "rule.fogRenderDisabled.FogRendererMixin",
