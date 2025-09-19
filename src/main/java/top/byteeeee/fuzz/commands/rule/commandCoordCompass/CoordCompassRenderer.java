@@ -39,6 +39,6 @@ public class CoordCompassRenderer {
         //#else
         HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
         //#endif
-        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(CoordCompassCommand::renderWorld);
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(CoordCompassCommand::renderWorld);
     }
 }
