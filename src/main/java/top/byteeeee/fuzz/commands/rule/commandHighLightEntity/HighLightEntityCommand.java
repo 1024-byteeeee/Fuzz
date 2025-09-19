@@ -35,7 +35,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.commands.suggestionProviders.ListSuggestionProvider;
 import top.byteeeee.fuzz.commands.suggestionProviders.SetSuggestionProvider;
-import top.byteeeee.fuzz.config.rule.commandHighLightEntities.CommandHighLightEntitiesConfig;
+import top.byteeeee.fuzz.config.rule.commandHighlightEntities.CommandHighlightEntitiesConfig;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.Messenger;
 
@@ -46,7 +46,7 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
     private static final Translator tr = new Translator("command.highlightEntity");
     private static final HighLightEntityCommand INSTANCE = new HighLightEntityCommand();
     private static final String MAIN_CMD_NAME = "highlightEntity";
-    private static final String RULE_NAME = "commandHighLightEntities";
+    private static final String RULE_NAME = "commandHighlightEntities";
 
     public static HighLightEntityCommand getInstance() {
         return INSTANCE;
@@ -88,7 +88,7 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
 
     @Override
     protected boolean getCondition() {
-        return FuzzSettings.commandHighLightEntities;
+        return FuzzSettings.commandHighlightEntities;
     }
 
     @Override
@@ -150,6 +150,6 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
     }
 
     private static void saveToJson() {
-        CommandHighLightEntitiesConfig.getInstance().saveToJson(FuzzSettings.highlightEntityList);
+        CommandHighlightEntitiesConfig.getInstance().saveToJson(FuzzSettings.highlightEntityList);
     }
 }

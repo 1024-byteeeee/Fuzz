@@ -218,7 +218,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         int screenWidth = client.getWindow().getScaledWidth();
         int screenHeight = client.getWindow().getScaledHeight();
         int centerX = screenWidth / 2;
-        int centerY = screenHeight - 62;
+        int centerY = getArrowHudYPosition(screenHeight);
 
         if (isClose) {
             renderCircle(drawContext, centerX, centerY);
@@ -271,6 +271,20 @@ public class CoordCompassCommand extends AbstractRuleCommand {
             centerX - client.textRenderer.getWidth(coordText) / 2,
             centerY + 30, 0xFF00FFFF
         );
+    }
+
+    private static int getArrowHudYPosition(int screenHeight) {
+        int centerY;
+
+        if (ClientUtil.getCurrentPlayer().isCreative() || ClientUtil.getCurrentPlayer().isSpectator()) {
+            centerY = screenHeight - 62;
+        } else if(ClientUtil.getCurrentPlayer().getArmor() <= 0) {
+            centerY = screenHeight - 79;
+        } else {
+            centerY = screenHeight - 90;
+        }
+
+        return centerY;
     }
 
     private static void renderXMark(DrawContext drawContext, int centerX, int centerY) {

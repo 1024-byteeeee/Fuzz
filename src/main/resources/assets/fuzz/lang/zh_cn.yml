@@ -186,7 +186,7 @@ fuzz:
         '0': "[false] - 禁用规则"
         '1': "[true] - 启用规则"
         '2': "[sneaking] - 需潜行时中键"
-    commandHighLightEntities:
+    commandHighlightEntities:
       name: "高亮实体"
       desc: "使用指令高亮一个或多个指定实体"
       extra:

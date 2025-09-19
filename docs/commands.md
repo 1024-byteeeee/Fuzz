@@ -20,7 +20,7 @@
 
 ---
 
-## 高亮实体（commandHighLightEntities）
+## 高亮实体（commandHighlightEntities）
 
 - /highlightEntity add <实体ID> 
 

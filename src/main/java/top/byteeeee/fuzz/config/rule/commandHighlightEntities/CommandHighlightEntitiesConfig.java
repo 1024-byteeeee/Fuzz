@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.config.rule.commandHighLightEntities;
+package top.byteeeee.fuzz.config.rule.commandHighlightEntities;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,16 +30,16 @@ import top.byteeeee.fuzz.config.template.AbstractListJsonConfig;
 import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
-public class CommandHighLightEntitiesConfig extends AbstractListJsonConfig<String> {
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("fuzz").resolve("commandHighLightEntities").resolve("entities.json");
+public class CommandHighlightEntitiesConfig extends AbstractListJsonConfig<String> {
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("fuzz").resolve("commandHighlightEntities").resolve("entities.json");
 
-    private static final CommandHighLightEntitiesConfig INSTANCE = new CommandHighLightEntitiesConfig();
+    private static final CommandHighlightEntitiesConfig INSTANCE = new CommandHighlightEntitiesConfig();
 
-    private CommandHighLightEntitiesConfig() {
+    private CommandHighlightEntitiesConfig() {
         super(CONFIG_PATH);
     }
 
-    public static CommandHighLightEntitiesConfig getInstance() {
+    public static CommandHighlightEntitiesConfig getInstance() {
         return INSTANCE;
     }
 

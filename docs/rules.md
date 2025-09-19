@@ -540,7 +540,7 @@
 
 
 
-## 高亮实体（commandHighLightEntities）
+## 高亮实体（commandHighlightEntities）
 
 使用指令高亮一个或多个指定实体。
 

@@ -174,7 +174,7 @@ public class FuzzSettings {
     public static String pickFluidBucketItemInCreative = "false";
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, COMMAND})
-    public static boolean commandHighLightEntities = false;
+    public static boolean commandHighlightEntities = false;
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, QOL})
     public static boolean jumpDelayDisabled = false;
