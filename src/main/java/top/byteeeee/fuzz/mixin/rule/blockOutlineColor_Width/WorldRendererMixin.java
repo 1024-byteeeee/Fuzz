@@ -105,7 +105,6 @@ public abstract class WorldRendererMixin {
         BufferBuilder buffer = tessellator.getBuffer();
 
         RenderSystem.enableDepthTest();
-        RenderSystem.depthMask(true);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
             GlStateManager.SrcFactor.SRC_ALPHA,
@@ -125,7 +124,7 @@ public abstract class WorldRendererMixin {
         MatrixStack.Entry entry = matrices.peek();
 
         shape.forEachEdge((x1, y1, z1, x2, y2, z2) -> {
-            double offset = 0.00008D;
+            double offset = 0.00003D;
 
             float startX = (float) (x1 + x + offset);
             float startY = (float) (y1 + y + offset);
@@ -153,9 +152,8 @@ public abstract class WorldRendererMixin {
 
         GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        RenderSystem.depthMask(false);
         RenderSystem.enableCull();
-        RenderSystem.enableDepthTest();
+        RenderSystem.disableDepthTest();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
