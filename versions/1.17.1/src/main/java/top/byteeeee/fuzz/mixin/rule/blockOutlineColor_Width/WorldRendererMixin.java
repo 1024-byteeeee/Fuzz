@@ -118,7 +118,6 @@ public abstract class WorldRendererMixin {
         );
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        RenderSystem.depthMask(true);
         RenderSystem.disableCull();
         GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
         GL11.glPolygonOffset(-1.0f, -1.0f);
@@ -174,7 +173,6 @@ public abstract class WorldRendererMixin {
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         RenderSystem.enableCull();
         RenderSystem.disableBlend();
-        RenderSystem.depthMask(false);
         RenderSystem.disableDepthTest();
     }
 }
