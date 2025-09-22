@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.fogRenderDisabled;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -27,9 +29,10 @@ import net.minecraft.client.render.BackgroundRenderer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 //#if MC<12102
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 //#else
 //$$ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 //$$ import net.minecraft.client.render.Fog;
@@ -42,14 +45,34 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(BackgroundRenderer.class)
 public abstract class BackgroundRendererMixin {
+    //#if MC<11700
+    @ModifyExpressionValue(
+        method = "applyFog",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/fluid/FluidState;isIn(Lnet/minecraft/tag/Tag;)Z"
+        )
+    )
+    private static boolean setFogState(boolean original) {
+        return FuzzSettings.fogRenderDisabled || original;
+    }
+    //#endif
+
     //#if MC<12102
-    @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
-    private static void noFog(CallbackInfo ci) {
+    @Inject(method = "applyFog", at = @At("TAIL"))
+    private static void setFogDensity(CallbackInfo ci) {
         if (FuzzSettings.fogRenderDisabled) {
-            ci.cancel();
+            //#if MC<11700
+            RenderSystem.fogDensity(0.0F);
+            //#else
+            //$$ RenderSystem.setShaderFogStart(Float.MAX_VALUE);
+            //$$ RenderSystem.setShaderFogEnd(Float.MAX_VALUE);
+            //#endif
         }
     }
-    //#else
+    //#endif
+
+    //#if MC>12102 && MC<12106
     //$$ @ModifyReturnValue(method = "applyFog", at = @At("RETURN"))
     //$$ private static Fog noFog(Fog original) {
     //$$     return FuzzSettings.fogRenderDisabled ? Fog.DUMMY : original;
