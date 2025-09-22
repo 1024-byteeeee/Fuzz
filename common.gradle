@@ -20,8 +20,7 @@ repositories {
 		url = 'https://www.cursemaven.com'
 	}
     maven {
-        url = "http://nas.1024byteeeee.top:16999/releases"
-        allowInsecureProtocol = true
+        url = "https://nas.1024byteeeee.top:16999/releases"
     }
 	maven {
 		url = 'https://jitpack.io'
