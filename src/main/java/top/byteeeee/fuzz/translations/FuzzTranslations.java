@@ -22,11 +22,12 @@ package top.byteeeee.fuzz.translations;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.FileUtil;
-import top.byteeeee.fuzz.yaml.YamlParseException;
-import top.byteeeee.fuzz.yaml.YamlParser;
+import top.byteeeee.yaml.TinyYamlParser;
+import top.byteeeee.yaml.exception.YamlParseException;
 
 import java.io.IOException;
 import java.util.*;
@@ -57,11 +58,11 @@ public class FuzzTranslations {
 
     private static List<String> getAvailableLanguages() throws IOException, YamlParseException {
         String yamlData = FileUtil.readFile(LANG_DIR + "/meta/languages.yml");
-        Map<String, Object> yamlMap = YamlParser.parse(yamlData);
+        Map<String, Object> yamlMap = TinyYamlParser.parse(yamlData);
         Object languagesObj = yamlMap.getOrDefault("languages", new ArrayList<>());
 
         if (languagesObj instanceof List) {
-            return YamlParser.getNestedStringList(yamlMap, "languages");
+            return TinyYamlParser.getNestedStringList(yamlMap, "languages");
         }
 
         return new ArrayList<>();
@@ -70,7 +71,7 @@ public class FuzzTranslations {
     private static Map<String, String> loadTranslationForLanguage(String language) throws IOException, YamlParseException {
         String path = LANG_DIR + "/" + language + ".yml";
         String data = FileUtil.readFile(path);
-        Map<String, Object> yaml = YamlParser.parse(data);
+        Map<String, Object> yaml = TinyYamlParser.parse(data);
         Map<String, String> translation = new LinkedHashMap<>();
         buildTranslationMap(translation, yaml, "");
         return translation;
