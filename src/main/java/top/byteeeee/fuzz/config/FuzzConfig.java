@@ -27,7 +27,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Rule;
-import top.byteeeee.fuzz.yaml.YamlParser;
+import top.byteeeee.yaml.TinyYamlParser;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -49,7 +49,7 @@ public class FuzzConfig {
                 return;
             }
             String yamlContent = new String(Files.readAllBytes(CONFIG_FILE), StandardCharsets.UTF_8);
-            Map<String, Object> configMap = YamlParser.parse(yamlContent);
+            Map<String, Object> configMap = TinyYamlParser.parse(yamlContent);
             loadFromMap(configMap);
         } catch (Exception e) {
             FuzzModClient.LOGGER.warn("Failed to load config: {}", e.getMessage());
@@ -59,7 +59,7 @@ public class FuzzConfig {
     public static void saveConfig() {
         try {
             Files.createDirectories(CONFIG_DIR);
-            String yamlContent = YamlParser.dump(toMap());
+            String yamlContent = TinyYamlParser.dump(toMap());
             Files.write(CONFIG_FILE, yamlContent.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             FuzzModClient.LOGGER.warn("Failed to save config: {}", e.getMessage());
