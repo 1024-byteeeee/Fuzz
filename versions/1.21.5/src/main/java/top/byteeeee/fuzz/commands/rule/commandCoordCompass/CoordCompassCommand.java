@@ -32,7 +32,6 @@ import net.fabricmc.api.Environment;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.rendering.v1.*;
 
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.MinecraftClient;
@@ -49,10 +48,16 @@ import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.ClientUtil;
+import top.byteeeee.fuzz.utils.EntityUtil;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
+import top.byteeeee.fuzz.utils.Messenger;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
-import top.byteeeee.fuzz.utils.Messenger;
+//#if MC>=12109
+//$$ import top.byteeeee.fuzz.fabricapi.WorldRenderContext;
+//#else
+import net.fabricmc.fabric.api.client.rendering.v1.*;
+//#endif
 
 import java.util.Objects;
 
@@ -180,7 +185,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
             return;
         }
 
-        Vec3d playerPos = client.player.getPos();
+        Vec3d playerPos = EntityUtil.getEntityPos(ClientUtil.getCurrentPlayer());
         Vec3d direction = targetCoord.subtract(playerPos);
         double distance = playerPos.distanceTo(targetCoord);
         double horizontalDistance = Math.sqrt(direction.x * direction.x + direction.z * direction.z);
@@ -217,7 +222,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
             if (!isVerticalClose) {
                 verticalIndicator = direction.y > 0 ? "↑" : "↓";
             }
-            distanceText = String.format("%s §e%.1fm %s", verticalIndicator, distance, verticalIndicator);
+            distanceText = String.format("§e%s %.1fm %s", verticalIndicator, distance, verticalIndicator);
         }
 
         drawContext.drawTextWithShadow(

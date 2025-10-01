@@ -47,6 +47,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.ClientUtil;
+import top.byteeeee.fuzz.utils.EntityUtil;
 
 import java.util.Objects;
 
@@ -59,7 +60,7 @@ public abstract class MinecraftClientMixin {
             boolean needSneaking = Objects.equals(FuzzSettings.pickFluidBucketItemInCreative, "sneaking");
             MinecraftClient client = ClientUtil.getCurrentClient();
             PlayerEntity player = ClientUtil.getCurrentPlayer();
-            World world = ClientUtil.getCurrentPlayer().getEntityWorld();
+            World world = EntityUtil.getEntityWorld(ClientUtil.getCurrentPlayer());
             Entity cameraEntity = ClientUtil.getCurrentClient().getCameraEntity();
             HitResult crosshairTargetFluid = null;
 

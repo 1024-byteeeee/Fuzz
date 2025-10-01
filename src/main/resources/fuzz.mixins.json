@@ -3,9 +3,12 @@
   "minVersion": "0.8.5",
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
-  "mixins": [],
+  "mixins": [
+  ],
   "client": [
     "hooks.MinecraftClientMixin",
+    "hooks.fabricapi.WorldRendererMixin",
+    "key.KeyBinding_CategoryMixin",
     "rule.bedRockFlying.ClientPlayerEntityInvoker",
     "rule.bedRockFlying.ClientPlayerEntityMixin",
     "rule.biomeColor.BiomeEffectsMixin",

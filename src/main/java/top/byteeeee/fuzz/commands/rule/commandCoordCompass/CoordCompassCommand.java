@@ -51,6 +51,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.translations.Translator;
 import top.byteeeee.fuzz.utils.ClientUtil;
+import top.byteeeee.fuzz.utils.EntityUtil;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
@@ -192,7 +193,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
             return;
         }
 
-        Vec3d playerPos = client.player.getPos();
+        Vec3d playerPos = EntityUtil.getEntityPos(ClientUtil.getCurrentPlayer());
         Vec3d direction = targetCoord.subtract(playerPos);
         double distance = playerPos.distanceTo(targetCoord);
         double horizontalDistance = Math.sqrt(direction.x * direction.x + direction.z * direction.z);
@@ -229,7 +230,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
             if (!isVerticalClose) {
                 verticalIndicator = direction.y > 0 ? "↑" : "↓";
             }
-            distanceText = String.format("%s §e%.1fm %s", verticalIndicator, distance, verticalIndicator);
+            distanceText = String.format("§e%s %.1fm %s", verticalIndicator, distance, verticalIndicator);
         }
 
         client.textRenderer.drawWithShadow(
@@ -245,8 +246,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         String playerY = formatCoord(playerPos.y);
         String playerZ = formatCoord(playerPos.z);
 
-        String coordText = String.format("§b[ %s, %s, %s ]§f §r§a[ %s, %s, %s ]",
-                targetX, targetY, targetZ, playerX, playerY, playerZ);
+        String coordText = String.format("§b[ %s, %s, %s ]§f §r§a[ %s, %s, %s ]", targetX, targetY, targetZ, playerX, playerY, playerZ);
 
         client.textRenderer.drawWithShadow(
             matrixStack, coordText,
