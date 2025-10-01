@@ -18,10 +18,14 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.yaml;
+package top.byteeeee.fuzz.mixin.key;
 
-public class YamlParseException extends Exception {
-    public YamlParseException(String message) {
-        super(message);
-    }
-}
+import org.spongepowered.asm.mixin.Mixin;
+
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
+import top.byteeeee.fuzz.utils.compat.DummyClass;
+
+@GameVersion(version = "Minecraft >= 1.21.9")
+@Mixin(DummyClass.class)
+public abstract class KeyBinding_CategoryMixin {}

@@ -26,25 +26,32 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.BaseText;
+import net.minecraft.text.MutableText;
 
 import org.lwjgl.glfw.GLFW;
 
+//#if MC>=12109
+//$$ import top.byteeeee.fuzz.FuzzModClient;
+//$$ import top.byteeeee.fuzz.utils.IdentifierUtil;
+//#endif
 import top.byteeeee.fuzz.translations.Translator;
 
 @Environment(EnvType.CLIENT)
 public class KeyBindings {
-    private static final Translator tr = new Translator("keyBinding");
-    private static final BaseText CATEGORY = tr.tr("category");
+    private static final Translator tr = new Translator("key");
+    //#if MC>=12109
+    //$$ private static final KeyBinding.Category FUZZ_CATEGORY = KeyBinding.Category.create(IdentifierUtil.of("fuzz", "fuzz"));
+    //#endif
+    private static final MutableText CATEGORY = tr.tr("category.fuzz");
 
     public static KeyBinding quickKickFakePlayer;
     public static KeyBinding quickDropFakePlayerAllItemStack;
     public static KeyBinding clearCoordCompass;
 
     public static void register() {
-        quickKickFakePlayer = registerKeyBinding("quickKickFakePlayer.name");
-        quickDropFakePlayerAllItemStack = registerKeyBinding("quickDropFakePlayerAllItemStack.name");
-        clearCoordCompass = registerKeyBinding("clearCoordCompass.name");
+        quickKickFakePlayer = registerKeyBinding("quickKickFakePlayer");
+        quickDropFakePlayerAllItemStack = registerKeyBinding("quickDropFakePlayerAllItemStack");
+        clearCoordCompass = registerKeyBinding("clearCoordCompass");
     }
 
     private static KeyBinding registerKeyBinding(String translationKey) {
@@ -56,7 +63,14 @@ public class KeyBindings {
         private final String translationKey;
 
         public FuzzKeyBinding(String translationKey) {
-            super(tr.tr(translationKey).getString(), InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, CATEGORY.getString());
+            super(
+                tr.tr(translationKey).getString(), InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
+                //#if MC>=12109
+                //$$ FUZZ_CATEGORY
+                //#else
+                CATEGORY.getString()
+                //#endif
+            );
             this.translationKey = translationKey;
         }
 

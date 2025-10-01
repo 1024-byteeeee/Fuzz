@@ -18,32 +18,14 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.commands.rule.commandCoordCompass;
+package top.byteeeee.fuzz.fabricapi;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-//#if MC>=12108
-//$$ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-//$$ import top.byteeeee.fuzz.utils.IdentifierUtil;
-//#else
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 
-//#endif
-//#if MC>=12109
-//$$ import top.byteeeee.fuzz.fabricapi.WorldRenderEvents;
-//#else
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-//#endif
-
+@GameVersion(version = "Minecraft >= 1.21.9")
+@SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
-public class CoordCompassRenderer {
-    public static void register() {
-        //#if MC>=12108
-        //$$ HudElementRegistry.addLast(IdentifierUtil.of("fuzz", "coord_compass_hud"), CoordCompassCommand::renderHud);
-        //#else
-        HudRenderCallback.EVENT.register(CoordCompassCommand::renderHud);
-        //#endif
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(CoordCompassCommand::renderWorld);
-    }
-}
+public class WorldRenderContext {}

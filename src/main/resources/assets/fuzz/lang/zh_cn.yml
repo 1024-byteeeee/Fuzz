@@ -58,14 +58,12 @@ fuzz:
     parseCoordInMessage:
       hover_text: "导航至: %s"
 
-  keyBinding:
-    category: "FUZZ"
-    quickKickFakePlayer:
-      name: "快捷踢出假人"
-    quickDropFakePlayerAllItemStack:
-      name: "快捷扔出假人背包"
-    clearCoordCompass:
-      name: "清除坐标罗盘"
+  key:
+    category:
+      fuzz: "Fuzz Mod"
+    quickKickFakePlayer: "快捷踢出假人"
+    quickDropFakePlayerAllItemStack: "快捷扔出假人背包"
+    clearCoordCompass: "清除坐标罗盘"
 
   validator:
     blockOutlineColor:

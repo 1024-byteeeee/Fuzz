@@ -58,14 +58,12 @@ fuzz:
     parseCoordInMessage:
       hover_text: "Navigate to: %s"
 
-  keyBinding:
-    category: "FUZZ"
-    quickKickFakePlayer:
-      name: "quickKickFakePlayer"
-    quickDropFakePlayerAllItemStack:
-      name: "quickDropFakePlayerAllItemStack"
-    clearCoordCompass:
-      name: "Clear Coordinate Compass"
+  key:
+    category:
+      fuzz: "Fuzz Mod"
+    quickKickFakePlayer: "quickKickFakePlayer"
+    quickDropFakePlayerAllItemStack: "quickDropFakePlayerAllItemStack"
+    clearCoordCompass: "Clear Coordinate Compass"
 
   validator:
     blockOutlineColor:
