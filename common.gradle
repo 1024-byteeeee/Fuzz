@@ -22,6 +22,9 @@ repositories {
     maven {
         url = 'https://maven.1024byteeeee.top:1024/releases'
     }
+	maven {
+		url = 'https://maven.1024byteeeee.top:1024/snapshots'
+	}
 }
 
 // https://github.com/FabricMC/fabric-loader/issues/783
@@ -38,6 +41,7 @@ dependencies {
 	include(modImplementation("com.github.1024-byteeeee:AnnotationToolBox:${project.annotationtoolbox_version}"))
 	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
     include(implementation("top.1024byteeeee:tiny_yaml:${project.tiny_yaml_version}"))
+	modRuntimeOnly("top.1024byteeeee:carpet-ams-addition:${project.carpetamsaddition_version}")
 }
 
 loom {

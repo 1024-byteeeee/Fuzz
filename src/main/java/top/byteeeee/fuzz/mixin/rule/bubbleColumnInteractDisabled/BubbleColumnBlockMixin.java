@@ -50,6 +50,9 @@ public abstract class BubbleColumnBlockMixin {
         //#if MC>=12105
         //$$ EntityCollisionHandler handler,
         //#endif
+        //#if MC>=12110
+        //$$ boolean bl,
+        //#endif
         Operation<Void> original
     ) {
         if (FuzzSettings.bubbleColumnInteractDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
@@ -59,6 +62,9 @@ public abstract class BubbleColumnBlockMixin {
                 state, world, pos, entity
                 //#if MC>=12105
                 //$$ ,handler
+                //#endif
+                //#if MC>=12110
+                //$$ ,bl
                 //#endif
             );
         }
