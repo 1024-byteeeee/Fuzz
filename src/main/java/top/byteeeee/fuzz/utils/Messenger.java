@@ -60,7 +60,7 @@ public class Messenger {
             //$$ if (text.startsWith("/")) {
             //$$     text = text.substring(1);
             //$$ }
-            //$$ ClientUtil.getCurrentPlayer().networkHandler.sendCommand(text);
+            //$$ ClientUtil.getCurrentPlayer().networkHandler.sendChatCommand(text);
             //#endif
         }
     }

@@ -105,15 +105,4 @@ public class WorldRendererMixin {
         this.framebufferSet.mainFramebuffer = pass.transfer(this.framebufferSet.mainFramebuffer);
         pass.setRenderer(() -> WorldRenderEvents.AFTER_TRANSLUCENT.invoker().render(this.context));
     }
-
-    @Inject(
-        method = "method_62214",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/render/debug/DebugRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/Frustum;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;DDDZ)V"
-        )
-    )
-    private void onDebug(CallbackInfo ci) {
-        WorldRenderEvents.BEFORE_DEBUG_RENDER.invoker().render(this.context);
-    }
 }

@@ -102,6 +102,7 @@ public class FuzzSettings {
     )
     public static double blockOutlineWidth = -1.0D;
 
+    //#if MC<12111
     @Rule(
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
@@ -133,6 +134,7 @@ public class FuzzSettings {
         strict = false
     )
     public static String waterFogColor = "false";
+    //#endif
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, QOL})
     public static boolean campfireSmokeParticleDisabled = false;

@@ -26,6 +26,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+//#if MC>=12111
+//$$ import net.minecraft.fluid.FluidState;
+//#endif
 import net.minecraft.entity.LivingEntity;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,14 +44,29 @@ public abstract class LivingEntityMixin {
         method = "travel",
         at = @At(
             value = "INVOKE",
+            //#if MC>=12111
+            //$$ target = "Lnet/minecraft/entity/LivingEntity;isTravellingInFluid(Lnet/minecraft/fluid/FluidState;)Z"
+            //#else
             target = "Lnet/minecraft/entity/LivingEntity;isInLava()Z"
+            //#endif
         )
     )
-    private boolean travel(LivingEntity entity, Operation<Boolean> original) {
+    private boolean travel(
+        LivingEntity entity,
+        //#if MC>=12111
+        //$$ FluidState fluidState,
+        //#endif
+        Operation<Boolean> original
+    ) {
         if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && entity.isInLava()) {
             return false;
         } else {
-            return original.call(entity);
+            return original.call(
+                entity
+                //#if MC>=12111
+                //$$ ,fluidState
+                //#endif
+            );
         }
     }
 }

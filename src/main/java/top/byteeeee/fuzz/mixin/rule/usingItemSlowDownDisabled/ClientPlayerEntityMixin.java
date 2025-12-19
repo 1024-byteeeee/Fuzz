@@ -48,7 +48,11 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
     @ModifyExpressionValue(
+        //#if MC>=12111
+        //$$ method = "applyMovementSpeedFactors",
+        //#else
         method = "tickMovement",
+        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"

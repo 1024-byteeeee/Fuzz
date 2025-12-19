@@ -139,7 +139,11 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         }
 
         matrixStack.push();
+        //#if MC>=12111
+        //$$ Vec3d cameraPos = context.camera().getCameraPos();
+        //#else
         Vec3d cameraPos = context.camera().getPos();
+        //#endif
         Vec3d offset = targetCoord.subtract(cameraPos);
         int renderDistance = 30;
         Vec3d renderOffset = offset;
@@ -159,7 +163,9 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         float scale = 1.0F;
         matrixStack.scale(scale, scale, scale);
         MatrixStack.Entry entry = matrixStack.peek();
-        //#if MC>=12106
+        //#if MC>=12111
+        //$$ RenderLayer renderLayer = RenderLayers.fireScreenEffect(TARGET_ICON);
+        //#elseif MC>=12106
         //$$ RenderLayer renderLayer = RenderLayer.getFireScreenEffect(TARGET_ICON);
         //#else
         RenderLayer renderLayer = RenderLayer.getGuiTexturedOverlay(TARGET_ICON);
