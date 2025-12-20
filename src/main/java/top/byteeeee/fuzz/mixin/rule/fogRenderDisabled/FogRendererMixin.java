@@ -20,15 +20,31 @@
 
 package top.byteeeee.fuzz.mixin.rule.fogRenderDisabled;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.minecraft.client.renderer.fog.FogRenderer;
+
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
-import top.byteeeee.annotationtoolbox.annotation.GameVersion;
-import top.byteeeee.fuzz.utils.compat.DummyClass;
+import top.byteeeee.fuzz.FuzzSettings;
 
-@GameVersion(version = "Minecraft >= 1.21.6")
 @Environment(EnvType.CLIENT)
-@Mixin(DummyClass.class)
-public abstract class FogRendererMixin {}
+@Mixin(FogRenderer.class)
+public abstract class FogRendererMixin {
+    @ModifyExpressionValue(
+        method = "getBuffer",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/renderer/fog/FogRenderer;fogEnabled:Z",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private boolean noFog(boolean original) {
+        return !FuzzSettings.fogRenderDisabled && original;
+    }
+}

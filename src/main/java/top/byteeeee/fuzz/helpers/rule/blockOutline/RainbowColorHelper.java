@@ -20,10 +20,6 @@
 
 package top.byteeeee.fuzz.helpers.rule.blockOutline;
 
-//#if MC>=12102
-//$$ import top.byteeeee.fuzz.FuzzSettings;
-//#endif
-
 import top.byteeeee.fuzz.FuzzSettings;
 
 public class RainbowColorHelper {
@@ -53,31 +49,19 @@ public class RainbowColorHelper {
         return new float[] { r + m, g + m, b + m };
     }
 
-    //#if MC>=12102
-    //$$public static int getRainbowColor() {
-    //$$    long currentTime = System.currentTimeMillis();
-    //$$    long elapsed = currentTime - startTime;
-    //$$    float speed = (float) FuzzSettings.rainbowBlockOutlineBlinkSpeed * 0.001F;
-    //$$    float hue = 0.5F + 0.5F * (float) Math.sin(elapsed * speed);
-    //$$    float[] rgb = RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
-    //$$    int red = (int) (rgb[0] * 255);
-    //$$    int green = (int) (rgb[1] * 255);
-    //$$    int blue = (int) (rgb[2] * 255);
-    //$$    return getArgb(FuzzSettings.blockOutlineAlpha, red, green, blue);
-    //$$}
-    //#else
-    public static float[] getRainbowColorComponents() {
-        long currentTime = System.currentTimeMillis();
-        long elapsed = currentTime - startTime;
-        float speed = (float) FuzzSettings.rainbowBlockOutlineBlinkSpeed * 0.001F;
-        float hue = 0.5F + 0.5F * (float) Math.sin(elapsed * speed);
-        return RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
+    public static int getRainbowColor() {
+       long currentTime = System.currentTimeMillis();
+       long elapsed = currentTime - startTime;
+       float speed = (float) FuzzSettings.rainbowBlockOutlineBlinkSpeed * 0.001F;
+       float hue = 0.5F + 0.5F * (float) Math.sin(elapsed * speed);
+       float[] rgb = RainbowColorHelper.hsvToRgb(hue, 1.0F, 1.0F);
+       int red = (int) (rgb[0] * 255);
+       int green = (int) (rgb[1] * 255);
+       int blue = (int) (rgb[2] * 255);
+       return getArgb(FuzzSettings.blockOutlineAlpha, red, green, blue);
     }
-    //#endif
 
-    //#if MC>=12102
-    //$$ public static int getArgb(int alpha, int red, int green, int blue) {
-    //$$     return alpha << 24 | red << 16 | green << 8 | blue;
-    //$$ }
-    //#endif
+    public static int getArgb(int alpha, int red, int green, int blue) {
+        return alpha << 24 | red << 16 | green << 8 | blue;
+    }
 }

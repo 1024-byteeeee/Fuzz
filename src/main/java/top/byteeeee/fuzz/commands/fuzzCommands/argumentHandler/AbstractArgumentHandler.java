@@ -16,10 +16,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.settings.ObserverManager;
 import top.byteeeee.fuzz.settings.Rule;
@@ -64,7 +64,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         }
 
         Optional<T> oldValue = getOldValue(field);
-        if (!oldValue.isPresent()) {
+        if (oldValue.isEmpty()) {
             return 0;
         }
 
@@ -80,7 +80,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
 
     private boolean validateInputValue(CommandContext<FabricClientCommandSource> ctx, T value) {
         if (isStrictMode() && !isValidOption(value.toString())) {
-            Messenger.tell(ctx.getSource(), tr.tr("is_not_valid_value").formatted(Formatting.RED));
+            Messenger.tell(ctx.getSource(), tr.tr("is_not_valid_value").withStyle(ChatFormatting.RED));
             return false;
         }
         return true;
@@ -90,8 +90,8 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         T validatedValue = ValidatorManager.validateValue(field, value, ctx.getSource());
         if (validatedValue == null) {
             List<String> descriptions = ValidatorManager.getValidatorDescriptions(field);
-            String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.get(0);
-            Messenger.tell(ctx.getSource(), Messenger.s(errorMsg).formatted(Formatting.RED));
+            String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.getFirst();
+            Messenger.tell(ctx.getSource(), Messenger.s(errorMsg).withStyle(ChatFormatting.RED));
             return null;
         }
         return validatedValue;

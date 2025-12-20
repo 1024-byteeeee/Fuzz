@@ -22,9 +22,9 @@ package top.byteeeee.fuzz.helpers.rule.parseCoordInMessage;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.translations.Translator;
@@ -43,8 +43,8 @@ public class TextProcessor {
     private static final Pattern COORD_PATTERN = Pattern.compile("(?<=^|\\s|[\\[({])\\s*(-?\\d+(?:\\.\\d+)?)\\s*[,\\s~]+\\s*(-?\\d+(?:\\.\\d+)?)\\s*[,\\s~]+\\s*(-?\\d+(?:\\.\\d+)?)\\s*(?=$|\\s|[])}])");
     private static final Translator tr = new Translator("rule_feedback.parseCoordInMessage");
 
-    public static Text processTextForCoordinates(Text original) {
-        List<Text> nodes = new ArrayList<>();
+    public static Component processTextForCoordinates(Component original) {
+        List<Component> nodes = new ArrayList<>();
         List<String> parts = new ArrayList<>();
         collectSegments(original, nodes, parts);
 
@@ -61,13 +61,13 @@ public class TextProcessor {
             matches.add(new MatchInfo(m.start(), m.end(), m.group(1), m.group(2), m.group(3)));
         }
 
-        MutableText out = Messenger.s("").setStyle(original.getStyle());
+        MutableComponent out = Messenger.s("").setStyle(original.getStyle());
         int cursor = 0;
         int matchIdx = 0;
 
         for (int i = 0; i < parts.size(); ++i) {
             String segStr = parts.get(i);
-            Text segNode = nodes.get(i);
+            Component segNode = nodes.get(i);
             int segStart = cursor;
             int segEnd = cursor + segStr.length();
 
@@ -92,11 +92,11 @@ public class TextProcessor {
                 String fuzzCommand = "/coordCompass set " + mi.x + " " + mi.y + " " + mi.z;
                 String orgCommand = "/highlight " + mi.x + " " + mi.y + " " + mi.z + " continue";
                 String runCommand = Objects.equals(FuzzSettings.parseCoordInMessage, "fuzz") ? fuzzCommand : orgCommand;
-                MutableText clickable = Messenger.s(matchedPiece);
+                MutableComponent clickable = Messenger.s(matchedPiece);
                 clickable.setStyle(
-                    segNode.getStyle().withColor(Formatting.GREEN).withUnderline(true)
+                    segNode.getStyle().withColor(ChatFormatting.GREEN).withUnderlined(true)
                     .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, runCommand))
-                    .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, tr.tr("hover_text", mi.x + " " + mi.y + " " + mi.z).formatted(Formatting.YELLOW)))
+                    .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, tr.tr("hover_text", mi.x + " " + mi.y + " " + mi.z).withStyle(ChatFormatting.YELLOW)))
                 );
 
                 out.append(clickable);
@@ -119,11 +119,11 @@ public class TextProcessor {
         return out;
     }
 
-    private static void collectSegments(Text node, List<Text> nodes, List<String> parts) {
+    private static void collectSegments(Component node, List<Component> nodes, List<String> parts) {
         String full = node.getString();
         int childrenLen = 0;
 
-        for (Text child : node.getSiblings()) {
+        for (Component child : node.getSiblings()) {
             childrenLen += child.getString().length();
         }
 
@@ -135,7 +135,7 @@ public class TextProcessor {
             parts.add(ownStr);
         }
 
-        for (Text child : node.getSiblings()) {
+        for (Component child : node.getSiblings()) {
             collectSegments(child, nodes, parts);
         }
     }

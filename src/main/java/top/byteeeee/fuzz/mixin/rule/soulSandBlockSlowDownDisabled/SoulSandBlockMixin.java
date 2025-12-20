@@ -22,9 +22,9 @@ package top.byteeeee.fuzz.mixin.rule.soulSandBlockSlowDownDisabled;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoulSandBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoulSandBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -33,12 +33,12 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(SoulSandBlock.class)
 public abstract class SoulSandBlockMixin extends Block {
-    public SoulSandBlockMixin(Settings settings) {
+    public SoulSandBlockMixin(Properties settings) {
         super(settings);
     }
 
     @Override
-    public float getVelocityMultiplier() {
-        return FuzzSettings.soulSandBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getVelocityMultiplier() : super.getVelocityMultiplier();
+    public float getSpeedFactor() {
+        return FuzzSettings.soulSandBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getSpeedFactor() : super.getSpeedFactor();
     }
 }

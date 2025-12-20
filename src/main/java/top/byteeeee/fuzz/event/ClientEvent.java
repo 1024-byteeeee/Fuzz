@@ -24,7 +24,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.key.KeyBindings;
@@ -42,8 +42,8 @@ public class ClientEvent {
     }
 
     private static class ClientEventHandler {
-        private static void quickKickFakePlayer(MinecraftClient client) {
-            while (FuzzSettings.quickKickFakePlayer && KeyBindings.quickKickFakePlayer.wasPressed()) {
+        private static void quickKickFakePlayer(Minecraft client) {
+            while (FuzzSettings.quickKickFakePlayer && KeyBindings.quickKickFakePlayer.consumeClick()) {
                 if (client.player != null) {
                     String name = GetTargetPlayer.getName();
                     if (name != null && !name.isEmpty()) {
@@ -53,8 +53,8 @@ public class ClientEvent {
             }
         }
 
-        private static void quickDropFakePlayerAllItemStack(MinecraftClient client) {
-            while (FuzzSettings.quickDropFakePlayerAllItemStack && KeyBindings.quickDropFakePlayerAllItemStack.wasPressed()) {
+        private static void quickDropFakePlayerAllItemStack(Minecraft client) {
+            while (FuzzSettings.quickDropFakePlayerAllItemStack && KeyBindings.quickDropFakePlayerAllItemStack.consumeClick()) {
                 if (client.player != null) {
                     String name = GetTargetPlayer.getName();
                     if (name != null && !name.isEmpty()) {
@@ -64,8 +64,8 @@ public class ClientEvent {
             }
         }
 
-        private static void clearCoordCompass(MinecraftClient client) {
-            while (FuzzSettings.commandCoordCompass && KeyBindings.clearCoordCompass.wasPressed()) {
+        private static void clearCoordCompass(Minecraft client) {
+            while (FuzzSettings.commandCoordCompass && KeyBindings.clearCoordCompass.consumeClick()) {
                 if (client.player != null) {
                     String fuzzCommand = "/coordCompass clear";
                     String orgCommand = "/highlight clear";

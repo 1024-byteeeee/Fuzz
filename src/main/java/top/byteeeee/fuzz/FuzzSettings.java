@@ -30,7 +30,6 @@ import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasValida
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.config.FuzzConfig;
 import top.byteeeee.fuzz.settings.ValidatorManager;
-import top.byteeeee.fuzz.validators.rule.BiomeColor.BiomeColorValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineAlpha.BlockOutlineAlphaValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineWidth.BlockOutlineWidthValidator;
@@ -103,37 +102,37 @@ public class FuzzSettings {
     public static double blockOutlineWidth = -1.0D;
 
     //#if MC<12111
-    @Rule(
-        options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        validators = BiomeColorValidator.class,
-        strict = false
-    )
-    public static String skyColor = "false";
-
-    @Rule(
-        options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        validators = BiomeColorValidator.class,
-        strict = false
-    )
-    public static String fogColor = "false";
-
-    @Rule(
-        options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        validators = BiomeColorValidator.class,
-        strict = false
-    )
-    public static String waterColor = "false";
-
-    @Rule(
-        options = {"false", "#FF88C2"},
-        categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
-        validators = BiomeColorValidator.class,
-        strict = false
-    )
-    public static String waterFogColor = "false";
+    //$$ @Rule(
+    //$$     options = {"false", "#FF88C2"},
+    //$$     categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+    //$$     validators = BiomeColorValidator.class,
+    //$$     strict = false
+    //$$ )
+    //$$ public static String skyColor = "false";
+    //$$
+    //$$ @Rule(
+    //$$     options = {"false", "#FF88C2"},
+    //$$     categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+    //$$     validators = BiomeColorValidator.class,
+    //$$     strict = false
+    //$$ )
+    //$$ public static String fogColor = "false";
+    //$$
+    //$$ @Rule(
+    //$$     options = {"false", "#FF88C2"},
+    //$$     categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+    //$$     validators = BiomeColorValidator.class,
+    //$$     strict = false
+    //$$ )
+    //$$ public static String waterColor = "false";
+    //$$
+    //$$ @Rule(
+    //$$     options = {"false", "#FF88C2"},
+    //$$     categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
+    //$$     validators = BiomeColorValidator.class,
+    //$$     strict = false
+    //$$ )
+    //$$ public static String waterFogColor = "false";
     //#endif
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, QOL})
@@ -197,12 +196,7 @@ public class FuzzSettings {
     public static boolean commandCoordCompass = false;
 
     @Rule(
-        options = {
-            "false", "fuzz"
-            //#if MC>=12103
-            //$$ ,"carpetorgaddition"
-            //#endif
-        },
+        options = {"false", "fuzz","carpetorgaddition"},
         categories = {FUZZ, QOL}
     )
     public static String parseCoordInMessage = "false";

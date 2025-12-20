@@ -20,9 +20,9 @@
 
 package top.byteeeee.fuzz.utils;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.text.BaseText;
+import net.minecraft.network.chat.MutableComponent;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -32,7 +32,7 @@ import top.byteeeee.fuzz.FuzzModClient;
 public class MixinUtil {
     public static boolean audit(@Nullable FabricClientCommandSource source) {
         boolean ok;
-        BaseText response;
+        MutableComponent response;
         try {
             MixinEnvironment.getCurrentEnvironment().audit();
             response = Messenger.s("Mixin environment audited successfully");

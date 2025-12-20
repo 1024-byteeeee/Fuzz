@@ -23,8 +23,8 @@ package top.byteeeee.fuzz.mixin.rule.slimeBlockBounceDisabled;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
-import net.minecraft.block.SlimeBlock;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.level.block.SlimeBlock;
+import net.minecraft.world.entity.Entity;
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -34,7 +34,7 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Mixin(SlimeBlock.class)
 public abstract class SlimeBlockMixin {
-    @WrapMethod(method = "bounce")
+    @WrapMethod(method = "bounceUp")
     private void slimeBlockBounceDisabled(Entity entity, Operation<Void> original) {
         if (FuzzSettings.slimeBlockSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
             Noop.noop();

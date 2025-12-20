@@ -23,9 +23,9 @@ package top.byteeeee.fuzz.mixin.rule.honeyBlockSlowDownDisabled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HoneyBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HoneyBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -34,17 +34,17 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(HoneyBlock.class)
 public abstract class HoneyBlockMixin extends Block {
-    public HoneyBlockMixin(Settings settings) {
+    public HoneyBlockMixin(Properties settings) {
         super(settings);
     }
 
     @Override
-    public float getVelocityMultiplier() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getVelocityMultiplier() : super.getVelocityMultiplier();
+    public float getSpeedFactor() {
+        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getSpeedFactor() : super.getSpeedFactor();
     }
 
     @Override
-    public float getJumpVelocityMultiplier() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getJumpVelocityMultiplier() : super.getJumpVelocityMultiplier();
+    public float getJumpFactor() {
+        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getJumpFactor() : super.getJumpFactor();
     }
 }

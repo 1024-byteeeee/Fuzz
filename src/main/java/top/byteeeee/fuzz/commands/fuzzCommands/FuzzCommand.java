@@ -27,8 +27,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.fuzzCommands.context.FuzzCategoriesContext;

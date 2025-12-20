@@ -20,8 +20,8 @@
 
 package top.byteeeee.fuzz.helpers.rule.iceSlipperinessDisabled;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.HashSet;
 

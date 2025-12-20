@@ -23,7 +23,7 @@ package top.byteeeee.fuzz.mixin.rule.jumpDelayDisabled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,14 +39,14 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 public abstract class LivingEntityMixin {
 
     @Shadow
-    private int jumpingCooldown;
+    private int noJumpDelay;
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void removeJumpDelay1(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
             if (entity.equals(ClientUtil.getCurrentPlayer())) {
-                this.jumpingCooldown = 0;
+                this.noJumpDelay = 0;
             }
         }
     }
@@ -56,27 +56,27 @@ public abstract class LivingEntityMixin {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
             if (entity.equals(ClientUtil.getCurrentPlayer())) {
-                this.jumpingCooldown = 0;
+                this.noJumpDelay = 0;
             }
         }
     }
 
-    @Inject(method = "tickMovement", at = @At("HEAD"))
+    @Inject(method = "aiStep", at = @At("HEAD"))
     private void removeJumpDelay3(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
             if (entity.equals(ClientUtil.getCurrentPlayer())) {
-                this.jumpingCooldown = 0;
+                this.noJumpDelay = 0;
             }
         }
     }
 
-    @Inject(method = "tickMovement", at = @At("TAIL"))
+    @Inject(method = "aiStep", at = @At("TAIL"))
     private void removeJumpDelay4(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
             if (entity.equals(ClientUtil.getCurrentPlayer())) {
-                this.jumpingCooldown = 0;
+                this.noJumpDelay = 0;
             }
         }
     }

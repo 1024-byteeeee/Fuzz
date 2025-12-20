@@ -23,23 +23,15 @@ package top.byteeeee.fuzz.utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class IdentifierUtil {
     public static Identifier of(String namespace, String path) {
-        //#if MC>=12100
-        //$$ return Identifier.of(namespace, path);
-        //#else
-        return new Identifier(namespace, path);
-        //#endif
+        return Identifier.fromNamespaceAndPath(namespace, path);
     }
 
     public static Identifier ofId(String id) {
-        //#if MC>=12100
-        //$$ return Identifier.of(id);
-        //#else
-        return new Identifier(id);
-        //#endif
+        return Identifier.parse(id);
     }
 }

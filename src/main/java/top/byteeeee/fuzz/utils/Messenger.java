@@ -20,56 +20,45 @@
 
 package top.byteeeee.fuzz.utils;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.text.BaseText;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 
 import top.byteeeee.fuzz.utils.compat.MessengerCompatFactory;
 
 public class Messenger {
-    public static BaseText s(Object text) {
+    public static MutableComponent s(Object text) {
         return MessengerCompatFactory.LiteralText(text.toString());
     }
 
-    public static BaseText tr(String key, Object... args) {
+    public static MutableComponent tr(String key, Object... args) {
         return MessengerCompatFactory.TranslatableText(key, args);
     }
 
     @SuppressWarnings("unused")
-    public static Text endl() {
+    public static Component endl() {
         return Messenger.s("\n");
     }
 
-    public static void tell(FabricClientCommandSource source, BaseText text) {
+    public static void tell(FabricClientCommandSource source, MutableComponent text) {
         MessengerCompatFactory.sendFeedBack(source, text);
     }
 
-    //#if MC<11900
-    public static void tell(FabricClientCommandSource source, MutableText text) {
-        MessengerCompatFactory.sendFeedBack(source, (BaseText) text);
-    }
-    //#endif
-
     public static void sendChatCommand(String text) {
         if (ClientUtil.getCurrentClient().player != null) {
-            //#if MC<11900
-            ClientUtil.getCurrentPlayer().sendChatMessage(text);
-            //#else
-            //$$ if (text.startsWith("/")) {
-            //$$     text = text.substring(1);
-            //$$ }
-            //$$ ClientUtil.getCurrentPlayer().networkHandler.sendChatCommand(text);
-            //#endif
+            if (text.startsWith("/")) {
+                text = text.substring(1);
+            }
+            ClientUtil.getCurrentPlayer().connection.sendCommand(text);
         }
     }
 
-    public static void sendMsgToPlayer(MutableText text) {
-        ClientUtil.getCurrentPlayer().sendMessage(text, false);
+    public static void sendMsgToPlayer(MutableComponent text) {
+        ClientUtil.getCurrentPlayer().displayClientMessage(text, false);
     }
 
-    public static void sendMsgToPlayer(MutableText text, boolean actionBar) {
-        ClientUtil.getCurrentPlayer().sendMessage(text, actionBar);
+    public static void sendMsgToPlayer(MutableComponent text, boolean actionBar) {
+        ClientUtil.getCurrentPlayer().displayClientMessage(text, actionBar);
     }
 }

@@ -26,9 +26,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -38,8 +38,8 @@ import top.byteeeee.fuzz.helpers.Noop;
 @Environment(EnvType.CLIENT)
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin {
-    @WrapMethod(method = "spawnSmokeParticle")
-    private static void noSpawnParticle(World world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke, Operation<Void> original) {
+    @WrapMethod(method = "makeParticles")
+    private static void noSpawnParticle(Level world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke, Operation<Void> original) {
         if (FuzzSettings.campfireSmokeParticleDisabled) {
             Noop.noop();
         } else {

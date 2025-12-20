@@ -28,10 +28,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -56,7 +56,7 @@ public class ListSuggestionProvider<E> implements SuggestionProvider<FabricClien
 
     public static ListSuggestionProvider<String> fromEntityRegistry() {
         List<String> ids = new ArrayList<>();
-        for (Identifier id : Registry.ENTITY_TYPE.getIds()) {
+        for (Identifier id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
             ids.add(id.toString());
         }
         return new ListSuggestionProvider<>(ids);

@@ -24,15 +24,15 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import top.byteeeee.fuzz.commands.RegisterCommands;
-import top.byteeeee.fuzz.commands.rule.commandCoordCompass.CoordCompassRenderer;
 import top.byteeeee.fuzz.event.ClientEvent;
 import top.byteeeee.fuzz.key.KeyBindings;
+import top.byteeeee.fuzz.renderer.rule.commandCoordCompass.CoordCompassRenderer;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 
 @Environment(EnvType.CLIENT)
@@ -40,20 +40,20 @@ public class FuzzModClient implements ClientModInitializer {
     public static final String MOD_NAME = "Fuzz";
     public static final String MOD_ID = "fuzz";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static MinecraftClient minecraftClient;
+    public static Minecraft minecraftClient;
 
     @Override
     public void onInitializeClient() {
         LOGGER.info(MOD_NAME + " " + "loaded!");
-        minecraftClient = MinecraftClient.getInstance();
+        minecraftClient = Minecraft.getInstance();
         RegisterCommands.register();
         ClientEvent.register();
         KeyBindings.register();
-        this.RegisterRender();
+        this.RegisterRenderer();
         FuzzTranslations.loadTranslations();
     }
 
-    private void RegisterRender() {
+    private void RegisterRenderer() {
         CoordCompassRenderer.register();
     }
 }

@@ -20,7 +20,7 @@
 
 package top.byteeeee.fuzz.translations;
 
-import net.minecraft.text.BaseText;
+import net.minecraft.network.chat.MutableComponent;
 
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.utils.Messenger;
@@ -32,7 +32,7 @@ public class Translator {
         this.translationPath = translationPath;
     }
 
-    public BaseText tr(String key, Object... args) {
+    public MutableComponent tr(String key, Object... args) {
         String translationKey = FuzzModClient.MOD_ID + "." + this.translationPath + "." + key;
         return Messenger.tr(translationKey, args);
     }

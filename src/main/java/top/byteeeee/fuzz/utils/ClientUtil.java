@@ -23,18 +23,18 @@ package top.byteeeee.fuzz.utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 
 import top.byteeeee.fuzz.FuzzModClient;
 
 @Environment(EnvType.CLIENT)
 public class ClientUtil {
-    public static ClientPlayerEntity getCurrentPlayer() {
+    public static LocalPlayer getCurrentPlayer() {
         return FuzzModClient.minecraftClient.player;
     }
 
-    public static MinecraftClient getCurrentClient() {
+    public static Minecraft getCurrentClient() {
         return FuzzModClient.minecraftClient;
     }
 }

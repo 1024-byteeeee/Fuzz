@@ -20,26 +20,18 @@
 
 package top.byteeeee.fuzz.utils;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import org.jetbrains.annotations.NotNull;
 
 public class EntityUtil {
-    public static World getEntityWorld(@NotNull Entity entity) {
-        //#if MC>=12106 && MC<12109
-        //$$ return entity.getWorld();
-        //#else
-        return entity.getEntityWorld();
-        //#endif
+    public static Level getEntityWorld(@NotNull Entity entity) {
+        return entity.level();
     }
 
-    public static Vec3d getEntityPos(@NotNull Entity entity) {
-        //#if MC>=12109
-        //$$ return entity.getEntityPos();
-        //#else
-        return entity.getPos();
-        //#endif
+    public static Vec3 getEntityPos(@NotNull Entity entity) {
+        return entity.position();
     }
 }

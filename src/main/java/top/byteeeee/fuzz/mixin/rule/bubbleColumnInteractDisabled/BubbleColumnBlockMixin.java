@@ -26,14 +26,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BubbleColumnBlock;
-import net.minecraft.entity.Entity;
-//#if MC>=12105
-//$$ import net.minecraft.entity.EntityCollisionHandler;
-//#endif
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BubbleColumnBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -44,29 +42,12 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Environment(EnvType.CLIENT)
 @Mixin(BubbleColumnBlock.class)
 public abstract class BubbleColumnBlockMixin {
-    @WrapMethod(method = "onEntityCollision")
-    private void onEntityCollision(
-        BlockState state, World world, BlockPos pos, Entity entity,
-        //#if MC>=12105
-        //$$ EntityCollisionHandler handler,
-        //#endif
-        //#if MC>=12110
-        //$$ boolean bl,
-        //#endif
-        Operation<Void> original
-    ) {
+    @WrapMethod(method = "entityInside")
+    private void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier handler, boolean bl, Operation<Void> original) {
         if (FuzzSettings.bubbleColumnInteractDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
             Noop.noop();
         } else {
-            original.call(
-                state, world, pos, entity
-                //#if MC>=12105
-                //$$ ,handler
-                //#endif
-                //#if MC>=12110
-                //$$ ,bl
-                //#endif
-            );
+            original.call(state, world, pos, entity,handler,bl);
         }
     }
 }

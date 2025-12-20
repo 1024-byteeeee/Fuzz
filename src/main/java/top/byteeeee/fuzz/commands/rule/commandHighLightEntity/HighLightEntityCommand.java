@@ -26,10 +26,10 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
@@ -98,29 +98,29 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
 
     private static int add(FabricClientCommandSource source, String entity) {
         if (FuzzSettings.highlightEntityList.contains(entity)) {
-            Messenger.tell(source, tr.tr("already_in_list", entity).formatted(Formatting.RED));
+            Messenger.tell(source, tr.tr("already_in_list", entity).withStyle(ChatFormatting.RED));
             return 0;
         }
         FuzzSettings.highlightEntityList.add(entity);
         saveToJson();
-        Messenger.tell(source, tr.tr("added", entity).formatted(Formatting.GREEN));
+        Messenger.tell(source, tr.tr("added", entity).withStyle(ChatFormatting.GREEN));
         return 1;
     }
 
     private static int remove(FabricClientCommandSource source, String entity) {
         if (!FuzzSettings.highlightEntityList.remove(entity)) {
-            Messenger.tell(source, tr.tr("not_in_list", entity).formatted(Formatting.RED));
+            Messenger.tell(source, tr.tr("not_in_list", entity).withStyle(ChatFormatting.RED));
             return 0;
         }
         saveToJson();
-        Messenger.tell(source, tr.tr("removed", entity).formatted(Formatting.AQUA));
+        Messenger.tell(source, tr.tr("removed", entity).withStyle(ChatFormatting.AQUA));
         return 1;
     }
 
     private static int clear(FabricClientCommandSource source) {
         FuzzSettings.highlightEntityList.clear();
         saveToJson();
-        Messenger.tell(source, tr.tr("cleared").formatted(Formatting.GREEN));
+        Messenger.tell(source, tr.tr("cleared").withStyle(ChatFormatting.GREEN));
         return 1;
     }
 
@@ -128,24 +128,24 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
         List<String> entities = FuzzSettings.highlightEntityList;
 
         if (entities.isEmpty()) {
-            Messenger.tell(source, tr.tr("list_is_empty").formatted(Formatting.YELLOW));
+            Messenger.tell(source, tr.tr("list_is_empty").withStyle(ChatFormatting.YELLOW));
             return 0;
         }
 
-        Messenger.tell(source, tr.tr("list_title", entities.size()).formatted(Formatting.AQUA, Formatting.BOLD));
+        Messenger.tell(source, tr.tr("list_title", entities.size()).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
 
         for (String entity : entities) {
-            Messenger.tell(source, Messenger.s("- " + entity).formatted(Formatting.WHITE));
+            Messenger.tell(source, Messenger.s("- " + entity).withStyle(ChatFormatting.WHITE));
         }
 
         return 1;
     }
 
     private static int help(FabricClientCommandSource source) {
-        Messenger.tell(source, tr.tr("add_help").formatted(Formatting.GRAY));
-        Messenger.tell(source, tr.tr("remove_help").formatted(Formatting.GRAY));
-        Messenger.tell(source, tr.tr("clear_help").formatted(Formatting.GRAY));
-        Messenger.tell(source, tr.tr("list_help").formatted(Formatting.GRAY));
+        Messenger.tell(source, tr.tr("add_help").withStyle(ChatFormatting.GRAY));
+        Messenger.tell(source, tr.tr("remove_help").withStyle(ChatFormatting.GRAY));
+        Messenger.tell(source, tr.tr("clear_help").withStyle(ChatFormatting.GRAY));
+        Messenger.tell(source, tr.tr("list_help").withStyle(ChatFormatting.GRAY));
         return 1;
     }
 

@@ -26,9 +26,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.LivingEntity;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,20 +40,16 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
     @WrapOperation(
-        //#if MC>=12102
-        //$$ method = "travelMidAir",
-        //#else
-        method = "travel",
-        //#endif
+        method = "travelInAir",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/Block;getSlipperiness()F"
+            target = "Lnet/minecraft/world/level/block/Block;getFriction()F"
         )
     )
     private float slimeSlipperinessDisabled(Block block, Operation<Float> original) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (FuzzSettings.slimeBlockSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer()) && block.equals(Blocks.SLIME_BLOCK)) {
-            return Blocks.GRAY_CONCRETE.getSlipperiness();
+            return Blocks.GRAY_CONCRETE.getFriction();
         } else {
             return original.call(block);
         }

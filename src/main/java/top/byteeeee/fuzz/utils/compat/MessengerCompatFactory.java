@@ -20,30 +20,21 @@
 
 package top.byteeeee.fuzz.utils.compat;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.text.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class MessengerCompatFactory {
-    //#if MC<11900
-    public static LiteralText LiteralText(String text) {
-        return new LiteralText(text);
-    }
-    //#else
-    //$$ public static MutableText LiteralText(String text) {
-    //$$     return Text.literal(text);
-    //$$ }
-    //#endif
-
-    public static BaseText TranslatableText(String key, Object... args) {
-        //#if MC>=11900
-        //$$ return Text.translatable(key, args);
-        //#else
-        return new TranslatableText(key, args);
-        //#endif
+    public static MutableComponent LiteralText(String text) {
+        return Component.literal(text);
     }
 
-    public static void sendFeedBack(FabricClientCommandSource source, BaseText text) {
+    public static MutableComponent TranslatableText(String key, Object... args) {
+        return Component.translatable(key, args);
+    }
+
+    public static void sendFeedBack(FabricClientCommandSource source, MutableComponent text) {
         source.sendFeedback(text);
     }
 }

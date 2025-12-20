@@ -23,7 +23,7 @@ package top.byteeeee.fuzz.mixin.translations;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.text.TranslatableText;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,21 +34,17 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 
 @Environment(EnvType.CLIENT)
-@Mixin(TranslatableText.class)
+@Mixin(TranslatableContents.class)
 public abstract class TranslatableTextMixin {
     @Shadow
     @Final
     private String key;
 
     @ModifyArg(
-        method = "updateTranslations",
+        method = "decompose",
         at = @At(
             value = "INVOKE",
-            //#if MC<11800
-            target = "Lnet/minecraft/text/TranslatableText;setTranslation(Ljava/lang/String;)V"
-            //#else
-            //$$ target = "Lnet/minecraft/text/TranslatableText;forEachPart(Ljava/lang/String;Ljava/util/function/Consumer;)V"
-            //#endif
+            target = "Lnet/minecraft/network/chat/contents/TranslatableContents;decomposeTemplate(Ljava/lang/String;Ljava/util/function/Consumer;)V"
         )
     )
     private String applyModTranslation(String vanillaTranslatedFormattingString) {
@@ -58,6 +54,7 @@ public abstract class TranslatableTextMixin {
                 return modTranslated;
             }
         }
+
         return vanillaTranslatedFormattingString;
     }
 }

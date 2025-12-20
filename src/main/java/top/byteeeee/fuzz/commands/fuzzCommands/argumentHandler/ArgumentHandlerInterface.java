@@ -28,7 +28,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;

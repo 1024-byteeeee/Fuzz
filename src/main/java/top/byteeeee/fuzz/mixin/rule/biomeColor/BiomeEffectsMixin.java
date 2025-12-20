@@ -20,57 +20,9 @@
 
 package top.byteeeee.fuzz.mixin.rule.biomeColor;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
-import net.minecraft.world.biome.BiomeEffects;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
 
-import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.validators.HexValidator;
+import top.byteeeee.fuzz.utils.compat.DummyClass;
 
-import java.util.Objects;
-
-@Environment(EnvType.CLIENT)
-@Mixin(BiomeEffects.class)
-public abstract class BiomeEffectsMixin {
-    @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
-    private int getSkyColor(int original) {
-        if (!Objects.equals(FuzzSettings.skyColor, "false") && HexValidator.isValidHexColor(FuzzSettings.skyColor)) {
-            return Integer.parseInt(FuzzSettings.skyColor.substring(1), 16);
-        } else {
-            return original;
-        }
-    }
-
-    @ModifyReturnValue(method = "getFogColor", at = @At("RETURN"))
-    private int getFogColor(int original) {
-        if (!Objects.equals(FuzzSettings.fogColor, "false") && HexValidator.isValidHexColor(FuzzSettings.fogColor)) {
-            return Integer.parseInt(FuzzSettings.fogColor.substring(1), 16);
-        } else {
-            return original;
-        }
-    }
-
-    @ModifyReturnValue(method = "getWaterColor", at = @At("RETURN"))
-    private int getWaterColor(int original) {
-        if (!Objects.equals(FuzzSettings.waterColor, "false") && HexValidator.isValidHexColor(FuzzSettings.waterColor)) {
-            return Integer.parseInt(FuzzSettings.waterColor.substring(1), 16);
-        } else {
-            return original;
-        }
-    }
-
-    @ModifyReturnValue(method = "getWaterFogColor", at = @At("RETURN"))
-    private int getWaterFogColor(int original) {
-        if (!Objects.equals(FuzzSettings.waterFogColor, "false") && HexValidator.isValidHexColor(FuzzSettings.waterColor)) {
-            return Integer.parseInt(FuzzSettings.waterFogColor.substring(1), 16);
-        } else {
-            return original;
-        }
-    }
-}
+@Mixin(DummyClass.class)
+public abstract class BiomeEffectsMixin {}

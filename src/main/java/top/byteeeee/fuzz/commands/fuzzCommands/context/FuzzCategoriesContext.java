@@ -23,13 +23,12 @@ package top.byteeeee.fuzz.commands.fuzzCommands.context;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.text.BaseText;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.util.Formatting;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
@@ -48,7 +47,7 @@ import java.util.stream.Collectors;
 public class FuzzCategoriesContext {
     protected static final Translator tr = new Translator("categories");
 
-    protected static MutableText showCategories() {
+    protected static MutableComponent showCategories() {
         Set<String> categories = getAllCategories();
         return createCategoryButtons(categories);
     }
@@ -63,27 +62,27 @@ public class FuzzCategoriesContext {
     }
 
     public static int showFunctionListByCategory(FabricClientCommandSource source, String category) {
-        List<MutableText> messages = new ArrayList<>();
+        List<MutableComponent> messages = new ArrayList<>();
         addCategoryTitle(messages, category);
         addCategoryFunctions(messages, category);
         messages.forEach(message -> Messenger.tell(source, message));
         return 1;
     }
 
-    private static BaseText createCategoryButtons(Set<String> categories) {
-        BaseText categoryButtons = Messenger.s("");
+    private static MutableComponent createCategoryButtons(Set<String> categories) {
+        MutableComponent categoryButtons = Messenger.s("");
         categories.forEach(category -> {
-            MutableText buttonText = createCategoryButton(category);
+            MutableComponent buttonText = createCategoryButton(category);
             categoryButtons.append(buttonText).append(" ");
         });
         return categoryButtons;
     }
 
-    private static MutableText createCategoryButton(String category) {
+    private static MutableComponent createCategoryButton(String category) {
         return
             Messenger.s(String.format("[%s]", tr.tr(category).getString()))
-            .styled(style -> style
-            .withColor(Formatting.AQUA)
+            .withStyle(style -> style
+            .withColor(ChatFormatting.AQUA)
             .withClickEvent(createClickEvent(category))
             .withHoverEvent(createHoverEvent(category)));
     }
@@ -96,18 +95,18 @@ public class FuzzCategoriesContext {
         return HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, createHoverText(category));
     }
 
-    private static MutableText createHoverText(String category) {
+    private static MutableComponent createHoverText(String category) {
         if (FuzzTranslations.isEnglish()) {
-            return tr.tr("click_to_view", tr.tr(category)).formatted(Formatting.YELLOW);
+            return tr.tr("click_to_view", tr.tr(category)).withStyle(ChatFormatting.YELLOW);
         }
-        return tr.tr("click_to_view", tr.tr(category), category).formatted(Formatting.YELLOW);
+        return tr.tr("click_to_view", tr.tr(category), category).withStyle(ChatFormatting.YELLOW);
     }
 
-    private static void addCategoryTitle(List<MutableText> messages, String category) {
-        messages.add(tr.tr("list_title_for_category", tr.tr(category)).formatted(Formatting.AQUA, Formatting.BOLD));
+    private static void addCategoryTitle(List<MutableComponent> messages, String category) {
+        messages.add(tr.tr("list_title_for_category", tr.tr(category)).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
     }
 
-    private static void addCategoryFunctions(List<MutableText> messages, String category) {
+    private static void addCategoryFunctions(List<MutableComponent> messages, String category) {
         getRuleFieldsForCategory(category).forEach(field -> addFunctionEntry(messages, field));
     }
 
@@ -119,7 +118,7 @@ public class FuzzCategoriesContext {
             .collect(Collectors.toList());
     }
 
-    private static void addFunctionEntry(List<MutableText> messages, Field field) {
+    private static void addFunctionEntry(List<MutableComponent> messages, Field field) {
         try {
             field.setAccessible(true);
             Object value = field.get(null);

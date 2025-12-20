@@ -23,34 +23,33 @@ package top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer_quickDropFakePlayerAl
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
 public class GetTargetPlayer {
     public static String getName() {
-        MinecraftClient client = ClientUtil.getCurrentClient();
-        ClientPlayerEntity player = ClientUtil.getCurrentPlayer();
+        Minecraft client = ClientUtil.getCurrentClient();
+        LocalPlayer player = ClientUtil.getCurrentPlayer();
         if (player == null) {
             return null;
         }
 
-        HitResult hit = client.crosshairTarget;
+        HitResult hit = client.hitResult;
         if (hit == null || hit.getType() != HitResult.Type.ENTITY) {
             return null;
         }
 
         EntityHitResult entityHit = (EntityHitResult) hit;
         Entity target = entityHit.getEntity();
-        if (target instanceof PlayerEntity) {
-            PlayerEntity targetPlayer = (PlayerEntity) target;
-            return targetPlayer.getGameProfile().getName();
+        if (target instanceof Player targetPlayer) {
+            return targetPlayer.getGameProfile().name();
         }
 
         return null;

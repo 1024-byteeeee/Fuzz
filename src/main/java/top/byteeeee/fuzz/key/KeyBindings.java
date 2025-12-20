@@ -24,29 +24,24 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.MutableText;
+import net.minecraft.client.KeyMapping;
 
+import com.mojang.blaze3d.platform.InputConstants;
+
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
-//#if MC>=12109
-//$$ import top.byteeeee.fuzz.FuzzModClient;
-//$$ import top.byteeeee.fuzz.utils.IdentifierUtil;
-//#endif
+import top.byteeeee.fuzz.utils.IdentifierUtil;
 import top.byteeeee.fuzz.translations.Translator;
 
 @Environment(EnvType.CLIENT)
 public class KeyBindings {
     private static final Translator tr = new Translator("key");
-    //#if MC>=12109
-    //$$ private static final KeyBinding.Category FUZZ_CATEGORY = KeyBinding.Category.create(IdentifierUtil.of("fuzz", "fuzz"));
-    //#endif
-    private static final MutableText CATEGORY = tr.tr("category.fuzz");
+    private static final KeyMapping.Category FUZZ_CATEGORY = KeyMapping.Category.register(IdentifierUtil.of("fuzz", "fuzz"));
 
-    public static KeyBinding quickKickFakePlayer;
-    public static KeyBinding quickDropFakePlayerAllItemStack;
-    public static KeyBinding clearCoordCompass;
+    public static KeyMapping quickKickFakePlayer;
+    public static KeyMapping quickDropFakePlayerAllItemStack;
+    public static KeyMapping clearCoordCompass;
 
     public static void register() {
         quickKickFakePlayer = registerKeyBinding("quickKickFakePlayer");
@@ -54,28 +49,21 @@ public class KeyBindings {
         clearCoordCompass = registerKeyBinding("clearCoordCompass");
     }
 
-    private static KeyBinding registerKeyBinding(String translationKey) {
+    private static KeyMapping registerKeyBinding(String translationKey) {
         FuzzKeyBinding fuzzKeyBinding = new FuzzKeyBinding(translationKey);
         return KeyBindingHelper.registerKeyBinding(fuzzKeyBinding);
     }
 
-    private static class FuzzKeyBinding extends KeyBinding {
+    private static class FuzzKeyBinding extends KeyMapping {
         private final String translationKey;
 
         public FuzzKeyBinding(String translationKey) {
-            super(
-                tr.tr(translationKey).getString(), InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
-                //#if MC>=12109
-                //$$ FUZZ_CATEGORY
-                //#else
-                CATEGORY.getString()
-                //#endif
-            );
+            super(tr.tr(translationKey).getString(), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, FUZZ_CATEGORY);
             this.translationKey = translationKey;
         }
 
         @Override
-        public String getTranslationKey() {
+        public @NonNull String getName() {
             return tr.tr(translationKey).getString();
         }
     }

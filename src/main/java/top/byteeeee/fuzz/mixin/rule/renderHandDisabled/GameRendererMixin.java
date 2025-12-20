@@ -23,7 +23,7 @@ package top.byteeeee.fuzz.mixin.rule.renderHandDisabled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.renderer.GameRenderer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,7 +35,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
     private void renderHandDisabled(CallbackInfo ci) {
         if (FuzzSettings.renderHandDisabled) {
             ci.cancel();

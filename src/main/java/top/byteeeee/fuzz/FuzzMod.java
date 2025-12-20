@@ -38,16 +38,10 @@ public class FuzzMod implements ModInitializer {
     }
 
     @Override
-	public void onInitialize() {
-		//#if MC<12106
-		AutoMixinAuditExecutor.run();
-		//#endif
-	}
+	public void onInitialize() {}
 
 	public void onMinecraftClientInit() {
         version = FabricLoader.getInstance().getModContainer(FuzzModClient.MOD_ID).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
-        //#if MC>=12106
-		//$$ AutoMixinAuditExecutor.run();
-		//#endif
+		AutoMixinAuditExecutor.run();
 	}
 }

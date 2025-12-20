@@ -165,9 +165,9 @@ key_key.debug.dumpVersion:key.keyboard.v
 key_key.debug.profilingChart:key.keyboard.1
 key_key.debug.fpsCharts:key.keyboard.2
 key_key.debug.networkCharts:key.keyboard.3
-key_快捷踢出假人:key.keyboard.unknown
-key_快捷扔出假人背包:key.keyboard.unknown
-key_清除坐标罗盘:key.keyboard.keypad.6
+key_quickKickFakePlayer:key.keyboard.unknown
+key_quickDropFakePlayerAllItemStack:key.keyboard.unknown
+key_Clear Coordinate Compass:key.keyboard.keypad.6
 soundCategory_master:0.24668874
 soundCategory_music:0.0
 soundCategory_record:1.0

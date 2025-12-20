@@ -28,7 +28,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,7 +39,7 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Environment(EnvType.CLIENT)
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-    @ModifyReturnValue(method = "updateMovementInFluid", at = @At("RETURN"))
+    @ModifyReturnValue(method = "updateFluidHeightAndDoFluidPushing", at = @At("RETURN"))
     private boolean noUpdate(boolean original) {
         Entity entity = (Entity) (Object) this;
         if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
@@ -50,10 +50,10 @@ public abstract class EntityMixin {
     }
 
     @WrapOperation(
-        method = "updateMovementInFluid",
+        method = "updateFluidHeightAndDoFluidPushing",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;isPushedByFluids()Z"
+            target = "Lnet/minecraft/world/entity/Entity;isPushedByFluid()Z"
         )
     )
     private boolean noPush(Entity entity, Operation<Boolean> original) {
@@ -68,7 +68,7 @@ public abstract class EntityMixin {
         method = "setSwimming",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;setFlag(IZ)V"
+            target = "Lnet/minecraft/world/entity/Entity;setSharedFlag(IZ)V"
         )
     )
     private boolean setSwimming(Entity entity, int index, boolean value) {

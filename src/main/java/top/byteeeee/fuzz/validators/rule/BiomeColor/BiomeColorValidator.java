@@ -23,7 +23,7 @@ package top.byteeeee.fuzz.validators.rule.BiomeColor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.settings.Validator;
 import top.byteeeee.fuzz.translations.Translator;

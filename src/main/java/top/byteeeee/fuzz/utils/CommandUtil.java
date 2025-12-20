@@ -23,9 +23,9 @@ package top.byteeeee.fuzz.utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.translations.Translator;
 
@@ -37,7 +37,7 @@ public class CommandUtil {
 
     public static int checkEnabled(FabricClientCommandSource source, boolean condition, String functionName, Supplier<Integer> action) {
         if (!condition) {
-            Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).formatted(Formatting.RED));
+            Messenger.tell(source, tr.tr("check.need_enable_rule", functionName).withStyle(ChatFormatting.RED));
             return 0;
         }
 
