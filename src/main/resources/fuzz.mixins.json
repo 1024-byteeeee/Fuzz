@@ -19,6 +19,7 @@
     "rule.cobwebSlowDownDisabled.CobwebMixin",
     "rule.commandHighlightEntites.MinecraftClientMixin",
     "rule.fluidPushDisabled.PlayerEntityMixin",
+    "rule.fogColor.FogRendererMixin",
     "rule.fogRenderDisabled.BackgroundRendererMixin",
     "rule.fogRenderDisabled.FogRendererMixin",
     "rule.honeyBlockSlowDownDisabled.HoneyBlockMixin",
@@ -32,11 +33,14 @@
     "rule.parseCoordInMessage.ChatHudMixin",
     "rule.pickFluidBucketItemInCreative.MinecraftClientMixin",
     "rule.renderHandDisabled.GameRendererMixin",
+    "rule.skyColor.SkyRenderStateMixin",
     "rule.slimeBlockBounceDisabled.LivingEntityMixin",
     "rule.slimeBlockBounceDisabled.SlimeBlockMixin",
     "rule.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
     "rule.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
     "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
+    "rule.waterColor.WaterRendererMixin",
+    "rule.waterFogColor.FogRendererMixin",
     "translations.TranslatableTextMixin"
   ],
   "injectors": {
