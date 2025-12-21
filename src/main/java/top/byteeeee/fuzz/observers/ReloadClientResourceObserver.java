@@ -18,11 +18,20 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.biomeColor;
+package top.byteeeee.fuzz.observers;
 
-import org.spongepowered.asm.mixin.Mixin;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import top.byteeeee.fuzz.utils.compat.DummyClass;
+import top.byteeeee.fuzz.settings.Observer;
+import top.byteeeee.fuzz.utils.ClientUtil;
 
-@Mixin(DummyClass.class)
-public abstract class BiomeEffectsMixin {}
+@Environment(EnvType.CLIENT)
+public class ReloadClientResourceObserver extends Observer<Object> {
+    @Override
+    public void onValueChange(Object oldValue, Object newValue) {
+        if (oldValue != newValue) {
+            ClientUtil.getCurrentClient().reloadResourcePacks();
+        }
+    }
+}
