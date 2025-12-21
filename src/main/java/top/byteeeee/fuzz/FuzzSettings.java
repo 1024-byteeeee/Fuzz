@@ -24,6 +24,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import top.byteeeee.fuzz.config.FuzzRuleConfig;
+import top.byteeeee.fuzz.observers.ReloadClientResourceObserver;
 import top.byteeeee.fuzz.observers.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
 import top.byteeeee.fuzz.settings.ObserverManager;
 import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasValidator;
@@ -102,11 +103,11 @@ public class FuzzSettings {
     )
     public static double blockOutlineWidth = -1.0D;
 
-    //#if MC<12111
     @Rule(
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
         validators = BiomeColorValidator.class,
+        observers = ReloadClientResourceObserver.class,
         strict = false
     )
     public static String skyColor = "false";
@@ -115,6 +116,7 @@ public class FuzzSettings {
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
         validators = BiomeColorValidator.class,
+        observers = ReloadClientResourceObserver.class,
         strict = false
     )
     public static String fogColor = "false";
@@ -123,6 +125,7 @@ public class FuzzSettings {
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
         validators = BiomeColorValidator.class,
+        observers = ReloadClientResourceObserver.class,
         strict = false
     )
     public static String waterColor = "false";
@@ -131,10 +134,10 @@ public class FuzzSettings {
         options = {"false", "#FF88C2"},
         categories = {FUZZ, FEATURE, SURVIVAL, RENDER},
         validators = BiomeColorValidator.class,
+        observers = ReloadClientResourceObserver.class,
         strict = false
     )
     public static String waterFogColor = "false";
-    //#endif
 
     @Rule(categories = {FUZZ, FEATURE, SURVIVAL, QOL})
     public static boolean campfireSmokeParticleDisabled = false;

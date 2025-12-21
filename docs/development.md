@@ -8,6 +8,7 @@
 
 |         游戏版本         | 开发状态 | 最后支持版本 |
 |:--------------------:|:----:|:------:|
+|       1.21.11        |  ✔   |  ---   |
 |       1.21.10        |  ✔   |  ---   |
 |        1.21.9        |  ✔   |  ---   |
 |        1.21.8        |  ✔   |  ---   |
@@ -28,7 +29,7 @@
 ## 依赖
 |         依赖          |                        链接                         | 要求 |
 |:-------------------:|:-------------------------------------------------:|:--:|
-|     Fabric API      |        https://github.com/FabricMC/fabric         | 必须 |
+|     Fabric API      |        https://github.com/FabricMC/fabric         | 必要 |
 |     Carpet Mod      |     https://github.com/gnembon/fabric-carpet      | 可选 |
 | Carpet Org Addition | https://github.com/fcsailboat/Carpet-Org-Addition | 可选 |
 
