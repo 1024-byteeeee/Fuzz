@@ -4,7 +4,6 @@
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [
-    "rule.waterColor.WaterRendererMixin"
   ],
   "client": [
     "hooks.MinecraftMixin",
@@ -37,6 +36,7 @@
     "rule.sneakingSlowDownDisabled.LocalPlayerMixin",
     "rule.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
     "rule.usingItemSlowDownDisabled.LocalPlayerMixin",
+    "rule.waterColor.WaterRendererMixin",
     "rule.waterFogColor.FogRendererMixin",
     "translations.TranslatableTextMixin"
   ],
