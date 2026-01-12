@@ -30,13 +30,13 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.phys.Vec3;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
 import top.byteeeee.fuzz.renderer.rule.commandCoordCompass.CoordCompassRenderer;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.Messenger;
 
 @Environment(EnvType.CLIENT)
@@ -73,10 +73,10 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         return RULE_NAME;
     }
 
-    private static int set(CommandContext<FabricClientCommandSource> context) {
-        double x = DoubleArgumentType.getDouble(context, "x");
-        double y = DoubleArgumentType.getDouble(context, "y");
-        double z = DoubleArgumentType.getDouble(context, "z");
+    private static int set(CommandContext<FabricClientCommandSource> ctx) {
+        double x = DoubleArgumentType.getDouble(ctx, "x");
+        double y = DoubleArgumentType.getDouble(ctx, "y");
+        double z = DoubleArgumentType.getDouble(ctx, "z");
         CoordCompassRenderer.targetCoord = new Vec3(x, y, z);
         CoordCompassRenderer.isActive = true;
         return 1;
@@ -89,9 +89,12 @@ public class CoordCompassCommand extends AbstractRuleCommand {
     }
 
     private static int help(CommandContext<FabricClientCommandSource> ctx) {
-        Messenger.tell(ctx.getSource(), tr.tr("help.set").withStyle(ChatFormatting.GRAY));
-        Messenger.tell(ctx.getSource(), tr.tr("help.clear").withStyle(ChatFormatting.GRAY));
-        Messenger.tell(ctx.getSource(), tr.tr("help.help").withStyle(ChatFormatting.GRAY));
+        Messenger.tell(ctx.getSource(), Messenger.f(Messenger.c(
+            tr.tr("help.set"), Messenger.endl(),
+            tr.tr("help.clear"), Messenger.endl(),
+            tr.tr("help.help"), Messenger.endl()
+        ), Layout.GRAY));
+
         return 1;
     }
 }

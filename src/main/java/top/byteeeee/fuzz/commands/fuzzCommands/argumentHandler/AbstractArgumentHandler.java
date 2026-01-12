@@ -27,6 +27,7 @@ import top.byteeeee.fuzz.config.FuzzConfig;
 import top.byteeeee.fuzz.commands.fuzzCommands.context.FuzzCommandContext;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.Messenger;
 import top.byteeeee.fuzz.settings.ValidatorManager;
 
@@ -73,27 +74,30 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         }
 
         sendSuccessMessage(ctx, field, validatedValue);
-        ObserverManager.notifyObservers(field, oldValue.get(), validatedValue);
+        ObserverManager.notifyObservers(ctx.getSource(), field, oldValue.get(), validatedValue);
 
         return 1;
     }
 
     private boolean validateInputValue(CommandContext<FabricClientCommandSource> ctx, T value) {
         if (isStrictMode() && !isValidOption(value.toString())) {
-            Messenger.tell(ctx.getSource(), tr.tr("is_not_valid_value").withStyle(ChatFormatting.RED));
+            Messenger.tell(ctx.getSource(), Messenger.f(tr.tr("is_not_valid_value"), Layout.RED));
             return false;
         }
+
         return true;
     }
 
     private T validateWithManager(CommandContext<FabricClientCommandSource> ctx, Field field, T value) {
         T validatedValue = ValidatorManager.validateValue(field, value, ctx.getSource());
+
         if (validatedValue == null) {
             List<String> descriptions = ValidatorManager.getValidatorDescriptions(field);
             String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.getFirst();
             Messenger.tell(ctx.getSource(), Messenger.s(errorMsg).withStyle(ChatFormatting.RED));
             return null;
         }
+
         return validatedValue;
     }
 
@@ -121,7 +125,9 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         if (!isStrictMode()) {
             return true;
         }
+
         String[] options = getAnnotationOptions();
+
         return options.length == 0 || Arrays.asList(options).contains(value);
     }
 
@@ -135,6 +141,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
 
     private void sendSuccessMessage(CommandContext<FabricClientCommandSource> ctx, Field field, T value) {
         String funcNameTrKey = tr.getRuleNameTrKey(field.getName());
+
         if (FuzzTranslations.isEnglish()) {
             Messenger.tell(ctx.getSource(), tr.tr("set_value", field.getName(), value));
         } else {

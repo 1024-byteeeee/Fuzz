@@ -23,10 +23,11 @@ package top.byteeeee.fuzz.observers.rule.fuzzCommandAlias;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.ChatFormatting;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.settings.Observer;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.Messenger;
 
 @Environment(EnvType.CLIENT)
@@ -34,7 +35,7 @@ public class FuzzCommandAliasObserver extends Observer<String> {
     private static final Translator tr = new Translator("validator.fuzzCommandAlias");
 
     @Override
-    public void onValueChange(String oldValue, String newValue) {
-        Messenger.sendMsgToPlayer(tr.tr("onValueChange").withStyle(ChatFormatting.YELLOW));
+    public void onValueChange(FabricClientCommandSource source, String oldValue, String newValue) {
+        Messenger.tell(source, Messenger.f(tr.tr("onValueChange"), Layout.YELLOW));
     }
 }

@@ -28,13 +28,13 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
 import top.byteeeee.fuzz.utils.Messenger;
@@ -79,12 +79,7 @@ public class FuzzCategoriesContext {
     }
 
     private static MutableComponent createCategoryButton(String category) {
-        return
-            Messenger.s(String.format("[%s]", tr.tr(category).getString()))
-            .withStyle(style -> style
-            .withColor(ChatFormatting.AQUA)
-            .withClickEvent(createClickEvent(category))
-            .withHoverEvent(createHoverEvent(category)));
+        return Messenger.f(Messenger.s(String.format("[%s]", tr.tr(category).getString())), Layout.AQUA).withStyle(Messenger.emptyStyle().withClickEvent(createClickEvent(category)).withHoverEvent(createHoverEvent(category)));
     }
 
     private static ClickEvent createClickEvent(String category) {
@@ -97,13 +92,14 @@ public class FuzzCategoriesContext {
 
     private static MutableComponent createHoverText(String category) {
         if (FuzzTranslations.isEnglish()) {
-            return tr.tr("click_to_view", tr.tr(category)).withStyle(ChatFormatting.YELLOW);
+            return Messenger.f(tr.tr("click_to_view", tr.tr(category)), Layout.YELLOW);
         }
-        return tr.tr("click_to_view", tr.tr(category), category).withStyle(ChatFormatting.YELLOW);
+
+        return Messenger.f(tr.tr("click_to_view", tr.tr(category), category), Layout.YELLOW);
     }
 
     private static void addCategoryTitle(List<MutableComponent> messages, String category) {
-        messages.add(tr.tr("list_title_for_category", tr.tr(category)).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
+        messages.add(Messenger.f(tr.tr("list_title_for_category", tr.tr(category)), Layout.AQUA, Layout.BOLD));
     }
 
     private static void addCategoryFunctions(List<MutableComponent> messages, String category) {

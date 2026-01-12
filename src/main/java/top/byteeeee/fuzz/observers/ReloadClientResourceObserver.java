@@ -23,13 +23,14 @@ package top.byteeeee.fuzz.observers;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import top.byteeeee.fuzz.settings.Observer;
 import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
 public class ReloadClientResourceObserver extends Observer<Object> {
     @Override
-    public void onValueChange(Object oldValue, Object newValue) {
+    public void onValueChange(FabricClientCommandSource source, Object oldValue, Object newValue) {
         if (oldValue != newValue) {
             ClientUtil.getCurrentClient().reloadResourcePacks();
         }

@@ -23,6 +23,7 @@ package top.byteeeee.fuzz.settings;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import top.byteeeee.fuzz.FuzzModClient;
 
 import java.lang.reflect.Field;
@@ -59,12 +60,12 @@ public class ObserverManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> void notifyObservers(Field field, T oldValue, T newValue) {
+    public static <T> void notifyObservers(FabricClientCommandSource source, Field field, T oldValue, T newValue) {
         List<Observer<?>> observers = fieldObservers.get(field);
         if (observers != null && !observers.isEmpty()) {
             for (Observer<?> observer : observers) {
                 Observer<T> typedObserver = (Observer<T>) observer;
-                typedObserver.notify(oldValue, newValue);
+                typedObserver.notify(source, oldValue, newValue);
             }
         }
     }

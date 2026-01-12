@@ -28,8 +28,6 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.FuzzMod;
 import top.byteeeee.fuzz.FuzzModClient;
@@ -37,6 +35,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
 import top.byteeeee.fuzz.utils.Messenger;
@@ -55,7 +54,7 @@ public abstract class FuzzCommandContext {
         boolean hasEnabledRules = collectEnabledRules(messages);
 
         if (!hasEnabledRules) {
-            messages.add(Messenger.s("· · · · · ·").withStyle(ChatFormatting.GRAY));
+            messages.add(Messenger.f(Messenger.s("· · · · · ·"), Layout.GRAY));
         }
 
         addCategoriesInfo(messages);
@@ -65,13 +64,14 @@ public abstract class FuzzCommandContext {
 
     private static List<MutableComponent> initializeMessageList() {
         List<MutableComponent> messages = new ArrayList<>();
-        messages.add(tr.tr("enable_rule").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
-        messages.add(tr.tr("mod_version", FuzzMod.getInstance().getVersion()).withStyle(ChatFormatting.GRAY));
+        messages.add(Messenger.f(tr.tr("enable_rule"), Layout.AQUA, Layout.BOLD));
+        messages.add(Messenger.f(tr.tr("mod_version", FuzzMod.getInstance().getVersion()), Layout.GRAY));
         return messages;
     }
 
     private static boolean collectEnabledRules(List<MutableComponent> messages) {
         boolean hasEnabledRules = false;
+
         for (Field field : getRuleAnnotatedFields()) {
             try {
                 field.setAccessible(true);
@@ -85,28 +85,30 @@ public abstract class FuzzCommandContext {
                 FuzzModClient.LOGGER.error("Field access error: {}", field.getName(), e);
             }
         }
+
         return hasEnabledRules;
     }
 
     private static void addCategoriesInfo(List<MutableComponent> messages) {
-        messages.add(FuzzCategoriesContext.tr.tr("categories_list").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        messages.add(Messenger.f(FuzzCategoriesContext.tr.tr("categories_list"), Layout.GOLD, Layout.BOLD));
         messages.add(FuzzCategoriesContext.showCategories());
-        messages.add(tr.tr("use_help").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
+        messages.add(Messenger.f(tr.tr("use_help"), Layout.ITALIC, Layout.GRAY));
     }
 
     public static int showAllRules(FabricClientCommandSource source) {
         List<MutableComponent> messages = new ArrayList<>();
-        messages.add(tr.tr("all_rules").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
+        messages.add(Messenger.f(tr.tr("all_rules"), Layout.AQUA, Layout.BOLD));
 
         List<Field> sortedFields = getSortedRuleAnnotatedFields();
         boolean hasAnyRule = addRuleEntries(messages, sortedFields);
 
         if (!hasAnyRule) {
-            messages.add(Messenger.s("· · · · · ·").withStyle(ChatFormatting.GRAY));
+            messages.add(Messenger.f(Messenger.s("· · · · · ·"), Layout.GRAY));
         }
 
-        messages.add(tr.tr("use_help").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
+        messages.add(Messenger.f(tr.tr("use_help"), Layout.ITALIC, Layout.GRAY));
         messages.forEach(message -> Messenger.tell(source, message));
+
         return 1;
     }
 
@@ -115,12 +117,12 @@ public abstract class FuzzCommandContext {
         String funcNameTrKey = tr.getRuleNameTrKey(field.getName());
 
         return
-            Messenger.s("")
-            .append(Messenger.s("- ").withStyle(ChatFormatting.WHITE))
-            .append(Messenger.tr(funcNameTrKey))
-            .append(createFieldNameText(field))
-            .withStyle(style -> style.withHoverEvent(createHoverEvent(field)).withClickEvent(createClickEvent(field)))
-            .append(valueDisplay);
+            Messenger.c(
+                Messenger.f(Messenger.s("- "), Layout.WHITE),
+                Messenger.tr(funcNameTrKey),
+                createFieldNameText(field),
+                valueDisplay
+            ).withStyle(Messenger.emptyStyle().withClickEvent(createClickEvent(field)).withHoverEvent(createHoverEvent(field)));
     }
 
     private static MutableComponent createFieldNameText(Field field) {
@@ -130,7 +132,7 @@ public abstract class FuzzCommandContext {
     private static HoverEvent createHoverEvent(Field field) {
         return HoverEventUtil.event(
             HoverEventUtil.SHOW_TEXT,
-            Messenger.tr(tr.getRuleDescTrKey(field.getName())).withStyle(ChatFormatting.YELLOW)
+            Messenger.f(Messenger.tr(tr.getRuleDescTrKey(field.getName())), Layout.YELLOW)
         );
     }
 
@@ -197,6 +199,7 @@ public abstract class FuzzCommandContext {
 
     private static boolean addRuleEntries(List<MutableComponent> messages, List<Field> fields) {
         boolean hasAnyRule = false;
+
         for (Field field : fields) {
             try {
                 Object currentValue = getFieldValue(field);
@@ -206,6 +209,7 @@ public abstract class FuzzCommandContext {
                 FuzzModClient.LOGGER.error("Field access error: {}", field.getName(), e);
             }
         }
+
         return hasAnyRule;
     }
 
@@ -215,10 +219,10 @@ public abstract class FuzzCommandContext {
     }
 
     private static void addRuleHeader(List<MutableComponent> messages, Field field) {
-        MutableComponent nameLine = Messenger.s("")
-            .append(Messenger.tr(tr.getRuleNameTrKey(field.getName())))
-            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-            .append(createFieldNameText(field).withStyle(ChatFormatting.BOLD));
+        MutableComponent nameLine = Messenger.c(
+            Messenger.f(Messenger.tr(tr.getRuleNameTrKey(field.getName())), Layout.GOLD, Layout.BOLD),
+            Messenger.f(createFieldNameText(field), Layout.BOLD)
+        );
 
         messages.add(nameLine);
     }
@@ -229,56 +233,61 @@ public abstract class FuzzCommandContext {
 
     private static void addExtraInformation(List<MutableComponent> messages, Field field) {
         int i = 0;
+
         while (true) {
             String extraKey = "fuzz.rule." + field.getName() + ".extra." + i;
             String extraText = Messenger.tr(extraKey).getString();
+
             if (extraKey.equals(extraText)) {
                 break;
             }
-            messages.add(Messenger.s(extraText).withStyle(ChatFormatting.GRAY));
+
+            messages.add(Messenger.f(Messenger.s(extraText), Layout.GRAY));
+
             i++;
         }
     }
 
     private static void addCategoriesLine(List<MutableComponent> messages, Rule annotation) {
-        MutableComponent categoriesLine = tr.tr("rule_info_categories").withStyle(ChatFormatting.WHITE);
+        MutableComponent categoriesLine = Messenger.f(tr.tr("rule_info_categories"), Layout.WHITE);
+
         for (String category : annotation.categories()) {
-            categoriesLine.append(createCategoryButton(category)).append(" ");
+            categoriesLine = Messenger.c(categoriesLine, Messenger.s(" "), createCategoryButton(category));
         }
+
         messages.add(categoriesLine);
     }
 
     private static MutableComponent createCategoryButton(String category) {
-        Component hoverText = createCategoryHoverText(category);
+        MutableComponent hoverText = createCategoryHoverText(category);
+
         return
-            Messenger.s("[" + FuzzCategoriesContext.tr.tr(category).getString() + "]")
-            .withStyle(ChatFormatting.AQUA)
-            .withStyle(style -> style
+            Messenger.c(
+                Messenger.f(Messenger.s("[" + FuzzCategoriesContext.tr.tr(category).getString() + "]"), Layout.AQUA)
+            )
+            .withStyle(Messenger.emptyStyle()
             .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, "/fuzz " + "list " + category))
             .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, hoverText)));
     }
 
-    private static Component createCategoryHoverText(String category) {
+    private static MutableComponent createCategoryHoverText(String category) {
         return
             FuzzTranslations.isEnglish() ?
-            tr.tr("rule_info_click_to_view", FuzzCategoriesContext.tr.tr(category)).withStyle(ChatFormatting.YELLOW) :
-            tr.tr("rule_info_click_to_view", FuzzCategoriesContext.tr.tr(category), category).withStyle(ChatFormatting.YELLOW);
+            Messenger.f(tr.tr("rule_info_click_to_view", FuzzCategoriesContext.tr.tr(category)), Layout.YELLOW) :
+            Messenger.f(tr.tr("rule_info_click_to_view", FuzzCategoriesContext.tr.tr(category), category), Layout.YELLOW);
     }
 
     private static void addValueInformation(List<MutableComponent> messages, Field field, Object currentValue, Object defaultValue) {
         messages.add(createCurrentValueLine(currentValue, defaultValue));
         Rule annotation = field.getAnnotation(Rule.class);
+
         if (annotation.options().length > 0 || field.getType() == boolean.class) {
-            messages.add(tr.tr("options_option").append(optionText(field, currentValue)));
+            messages.add(tr.tr("options_option", optionText(field, currentValue)));
         }
     }
 
     private static MutableComponent createCurrentValueLine(Object currentValue, Object defaultValue) {
-        return
-            tr.tr("current_value")
-            .append(Messenger.s(currentValue.toString())
-            .append(createValueStateIcon(currentValue, defaultValue))
-            .withStyle(ChatFormatting.AQUA));
+        return Messenger.f(Messenger.c(tr.tr("current_value", currentValue), createValueStateIcon(currentValue, defaultValue)), Layout.AQUA);
     }
 
     private static MutableComponent createValueStateIcon(Object currentValue, Object defaultValue) {
@@ -287,34 +296,23 @@ public abstract class FuzzCommandContext {
     }
 
     private static MutableComponent createDefaultValueIcon() {
-        return
-            Messenger.s(" ✔")
-            .withStyle(style -> style
-            .withHoverEvent(HoverEventUtil.event(
-                HoverEventUtil.SHOW_TEXT,
-                tr.tr("info_default_value").withStyle(ChatFormatting.DARK_GREEN)))
-            .withColor(ChatFormatting.GREEN));
+        return Messenger.f(Messenger.s(" ✔"), Layout.GREEN).withStyle(Messenger.emptyStyle().withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, Messenger.f(tr.tr("info_default_value"), Layout.DARK_GREEN))));
     }
 
     private static MutableComponent createModifiedValueIcon() {
-        return
-            Messenger.s(" ✎")
-            .withStyle(style -> style
-            .withHoverEvent(HoverEventUtil.event(
-                HoverEventUtil.SHOW_TEXT,
-                tr.tr("info_modified_value").withStyle(ChatFormatting.DARK_RED)
-            ))
-            .withColor(ChatFormatting.GOLD));
+        return Messenger.f(Messenger.s(" ✎"), Layout.GOLD).withStyle(Messenger.emptyStyle().withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, Messenger.f(tr.tr("info_default_value"), Layout.DARK_RED))));
     }
 
     private static String[] getOptions(Field field, Rule annotation) {
         String[] options = annotation.options();
+
         if (options.length == 0 && field.getType() == boolean.class) {
             return new String[]{"false", "true"};
         } else if (options.length == 0) {
             String defaultValue = getDefaultValue(field);
             return new String[]{defaultValue};
         }
+
         return options;
     }
 
@@ -324,7 +322,7 @@ public abstract class FuzzCommandContext {
     }
 
     private static boolean addOptionButton(MutableComponent optionsText, Field field, String option, boolean isCurrent, boolean isDefaultOption, boolean isDefaultState) {
-        ChatFormatting color = determineOptionColor(isDefaultState, isDefaultOption);
+        Layout color = determineOptionColor(isDefaultState, isDefaultOption);
         boolean underline = isDefaultState ? isDefaultOption : isCurrent;
         MutableComponent button = createOptionButton(field, option, isDefaultOption, color, underline);
         optionsText.append(button).append(" ");
@@ -332,36 +330,31 @@ public abstract class FuzzCommandContext {
         return isCurrent;
     }
 
-    private static ChatFormatting determineOptionColor(boolean isDefaultState, boolean isDefaultOption) {
+    private static Layout determineOptionColor(boolean isDefaultState, boolean isDefaultOption) {
         if (isDefaultState) {
-            return ChatFormatting.GRAY;
+            return Layout.GRAY;
         }
-        return isDefaultOption ? ChatFormatting.DARK_GREEN : ChatFormatting.YELLOW;
+
+        return isDefaultOption ? Layout.DARK_GREEN : Layout.YELLOW;
     }
 
-    private static MutableComponent createOptionButton(Field field, String option, boolean isDefaultOption, ChatFormatting color, boolean underline) {
+    private static MutableComponent createOptionButton(Field field, String option, boolean isDefaultOption, Layout color, boolean withUnderline) {
+        Layout underline = withUnderline ? Layout.UNDERLINE : color;
+
         return
-            Messenger.s("[" + option + "]")
-            .withStyle(color)
-            .withStyle(style -> style
-            .withUnderlined(underline)
+            Messenger.f(Messenger.s("[" + option + "]"), color, underline)
+            .withStyle(Messenger.emptyStyle()
             .withClickEvent(createOptionClickEvent(field, option))
             .withHoverEvent(createOptionHoverEvent(option, isDefaultOption)));
     }
 
     private static ClickEvent createOptionClickEvent(Field field, String option) {
-        return ClickEventUtil.event(
-            ClickEventUtil.RUN_COMMAND,
-            "/fuzz " + field.getName() + " " + option
-        );
+        return ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, "/fuzz " + field.getName() + " " + option);
     }
 
     private static HoverEvent createOptionHoverEvent(String option, boolean isDefaultOption) {
-        String message = isDefaultOption ? tr.tr("default_value").getString() + option : tr.tr("set_to").getString() + option;
-        return HoverEventUtil.event(
-            HoverEventUtil.SHOW_TEXT,
-            Messenger.s(message).withStyle(ChatFormatting.GREEN)
-        );
+        MutableComponent message = isDefaultOption ? tr.tr("default_value", option) : tr.tr("set_to", option);
+        return HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, Messenger.f(message, Layout.GREEN));
     }
 
     private static void appendCustomValueButton(MutableComponent optionsText, Field field, String currentValue) {
@@ -371,18 +364,13 @@ public abstract class FuzzCommandContext {
 
     private static MutableComponent createCustomValueButton(Field field, String currentValue) {
         return
-            Messenger.s("[" + currentValue + "]")
-            .withStyle(ChatFormatting.YELLOW)
-            .withStyle(style -> style
-            .withUnderlined(true)
+            Messenger.f(Messenger.s("[" + currentValue + "]"), Layout.YELLOW, Layout.UNDERLINE)
+            .withStyle(Messenger.emptyStyle()
             .withClickEvent(createOptionClickEvent(field, currentValue))
             .withHoverEvent(createCustomValueHoverEvent(currentValue)));
     }
 
     private static HoverEvent createCustomValueHoverEvent(String currentValue) {
-        return HoverEventUtil.event(
-            HoverEventUtil.SHOW_TEXT,
-            Messenger.s(tr.tr("custom_value").getString() + currentValue).withStyle(ChatFormatting.GREEN)
-        );
+        return HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, Messenger.f(tr.tr("custom_value", currentValue), Layout.GREEN));
     }
 }

@@ -33,9 +33,11 @@ public class ArgumentHandlerFactory {
 
     public static ArgumentHandlerInterface<?> create(Class<?> type) {
         Supplier<ArgumentHandlerInterface<?>> supplier = HANDLERS.get(type);
+
         if (supplier == null) {
             throw new IllegalArgumentException("Unsupported type: " + type);
         }
+
         return supplier.get();
     }
 

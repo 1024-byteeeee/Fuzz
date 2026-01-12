@@ -21,14 +21,14 @@ fuzz:
     set_to_true: "Set true"
     set_to_false: "set false"
     use_help: "Click the corresponding value to configure, or use the command /fuzz <rule> <option> to set"
-    default_value: "Default value: "
-    set_to: "Set value: "
-    custom_value: "Custom value: "
-    current_value: "Current value: "
+    default_value: "Default value: %s"
+    set_to: "Set value: %s"
+    custom_value: "Custom value: %s"
+    current_value: "Current value: %s"
     info_modified_value: "Modified value"
     info_default_value: "Default value"
-    options_option: "Options: "
-    rule_info_categories: "Tags: "
+    options_option: "Options: %s"
+    rule_info_categories: "Tags:"
     rule_info_click_to_view: 'list all "%s" settings'
     is_not_valid_value: "Is not valid value"
     util:
@@ -43,10 +43,11 @@ fuzz:
       cleared: "<FUZZ> All highlighted entities have been cleared"
       list_is_empty: "<FUZZ> There are currently no highlighted entities"
       list_title: "Highlight entity list (%s):"
-      add_help: "/highLight add <entityId> - Add a highlighted entity"
-      remove_help: "/highLight remove <entityId> - Remove the highlighted entity"
-      clear_help: "/highLight clear - Clears all highlighted entities"
-      list_help: "/highLight list - Lists all highlighted entities"
+      help:
+        add: "/highLight add <entityId> - Add a highlighted entity"
+        remove: "/highLight remove <entityId> - Remove the highlighted entity"
+        clear: "/highLight clear - Clears all highlighted entities"
+        list: "/highLight list - Lists all highlighted entities"
     coordCompass:
       near_the_target: "§aNear the target"
       help:

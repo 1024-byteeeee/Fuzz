@@ -21,14 +21,14 @@ fuzz:
     set_to_true: "设置为true"
     set_to_false: "设置为false"
     use_help: "可点击对应值进行设置，或使用/fuzz <规则> <选项> 进行设置"
-    default_value: "默认值: "
-    set_to: "设置为: "
-    custom_value: "自定义值: "
-    current_value: "当前值: "
+    default_value: "默认值: %s"
+    set_to: "设置为: %s"
+    custom_value: "自定义值: %s"
+    current_value: "当前值: %s"
     info_modified_value: "修改后的值"
     info_default_value: "默认值"
-    options_option: "设置: "
-    rule_info_categories: "分类: "
+    options_option: "设置: %s"
+    rule_info_categories: "分类:"
     rule_info_click_to_view: '列出所有 "%s (%s)" 选项'
     is_not_valid_value: "不是有效的值"
     util:
@@ -43,10 +43,11 @@ fuzz:
       cleared: "<FUZZ> 已清除所有高亮实体"
       list_is_empty: "<FUZZ> 当前无高亮实体"
       list_title: "高亮实体列表 (%s):"
-      add_help: "/highLight add <实体ID> - 添加高亮实体"
-      remove_help: "/highLight remove <实体ID> - 移除高亮实体"
-      clear_help: "/highLight clear - 清除所有高亮实体"
-      list_help: "/highLight list - 列出所有高亮实体"
+      help:
+        add: "/highLight add <实体ID> - 添加高亮实体"
+        remove: "/highLight remove <实体ID> - 移除高亮实体"
+        clear: "/highLight clear - 清除所有高亮实体"
+        list: "/highLight list - 列出所有高亮实体"
     coordCompass:
       near_the_target: "§a已到达目标附近"
       help:

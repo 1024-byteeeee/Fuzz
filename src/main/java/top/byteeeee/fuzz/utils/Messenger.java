@@ -22,9 +22,14 @@ package top.byteeeee.fuzz.utils;
 
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 
+import net.minecraft.network.chat.Style;
+import org.jetbrains.annotations.NotNull;
+import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
+import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
 import top.byteeeee.fuzz.utils.compat.MessengerCompatFactory;
 
 public class Messenger {
@@ -32,8 +37,58 @@ public class Messenger {
         return MessengerCompatFactory.LiteralText(text.toString());
     }
 
+    @NotNull
+    public static MutableComponent f(MutableComponent text, Layout... formattings) {
+        ChatFormatting[] chatFormattings = new ChatFormatting[formattings.length];
+
+        for (int i = 0; i < formattings.length; i++) {
+            chatFormattings[i] = formattings[i].getFormatting();
+        }
+
+        return text.withStyle(chatFormattings);
+    }
+
     public static MutableComponent tr(String key, Object... args) {
         return MessengerCompatFactory.TranslatableText(key, args);
+    }
+
+    @NotNull
+    public static MutableComponent copy(MutableComponent text) {
+        return text.copy();
+    }
+
+    public static MutableComponent c(Object ... fields) {
+        MutableComponent message = Component.literal("");
+
+        for (Object o: fields) {
+            if (o instanceof MutableComponent) {
+                message.append((MutableComponent) o);
+            }
+        }
+
+        return message;
+    }
+
+    public static MutableComponent sline() {
+        return Messenger.s("-----------------------------------");
+    }
+
+    public static MutableComponent dline() {
+        return Messenger.s("===================================");
+    }
+
+    @NotNull
+    public static Style simpleCmdButtonStyle(String command, MutableComponent hoverText, Layout... hoverTextFormattings) {
+        return emptyStyle()
+            .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, command))
+            .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, f(hoverText, hoverTextFormattings)));
+    }
+
+    @NotNull
+    public static Style simpleCopyButtonStyle(String copyText, MutableComponent hoverText, Layout... hoverTextFormattings) {
+        return emptyStyle()
+            .withClickEvent(ClickEventUtil.event(ClickEventUtil.COPY_TO_CLIPBOARD, copyText))
+            .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, f(hoverText, hoverTextFormattings)));
     }
 
     @SuppressWarnings("unused")
@@ -45,6 +100,14 @@ public class Messenger {
         MessengerCompatFactory.sendFeedBack(source, text);
     }
 
+    public static void tell(MutableComponent text) {
+        ClientUtil.getCurrentPlayer().displayClientMessage(text, false);
+    }
+
+    public static void tell(MutableComponent text, boolean actionBar) {
+        ClientUtil.getCurrentPlayer().displayClientMessage(text, actionBar);
+    }
+
     public static void sendChatCommand(String text) {
         if (ClientUtil.getCurrentClient().player != null) {
             if (text.startsWith("/")) {
@@ -54,11 +117,7 @@ public class Messenger {
         }
     }
 
-    public static void sendMsgToPlayer(MutableComponent text) {
-        ClientUtil.getCurrentPlayer().displayClientMessage(text, false);
-    }
-
-    public static void sendMsgToPlayer(MutableComponent text, boolean actionBar) {
-        ClientUtil.getCurrentPlayer().displayClientMessage(text, actionBar);
+    public static Style emptyStyle() {
+        return Style.EMPTY;
     }
 }
