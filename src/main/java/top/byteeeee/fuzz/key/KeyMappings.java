@@ -22,8 +22,8 @@ package top.byteeeee.fuzz.key;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -35,7 +35,7 @@ import top.byteeeee.fuzz.utils.IdentifierUtil;
 import top.byteeeee.fuzz.translations.Translator;
 
 @Environment(EnvType.CLIENT)
-public class KeyBindings {
+public class KeyMappings {
     private static final Translator tr = new Translator("key");
     private static final KeyMapping.Category FUZZ_CATEGORY = KeyMapping.Category.register(IdentifierUtil.of("fuzz", "fuzz"));
 
@@ -51,7 +51,7 @@ public class KeyBindings {
 
     private static KeyMapping registerKeyBinding(String translationKey) {
         FuzzKeyBinding fuzzKeyBinding = new FuzzKeyBinding(translationKey);
-        return KeyBindingHelper.registerKeyBinding(fuzzKeyBinding);
+        return KeyMappingHelper.registerKeyMapping(fuzzKeyBinding);
     }
 
     private static class FuzzKeyBinding extends KeyMapping {

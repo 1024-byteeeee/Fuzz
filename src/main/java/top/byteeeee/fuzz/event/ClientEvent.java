@@ -27,7 +27,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.key.KeyBindings;
+import top.byteeeee.fuzz.key.KeyMappings;
 import top.byteeeee.fuzz.utils.Messenger;
 import top.byteeeee.fuzz.helpers.rule.quickKickFakePlayer_quickDropFakePlayerAllItemStack.GetTargetPlayer;
 
@@ -43,7 +43,7 @@ public class ClientEvent {
 
     private static class ClientEventHandler {
         private static void quickKickFakePlayer(Minecraft client) {
-            while (FuzzSettings.quickKickFakePlayer && KeyBindings.quickKickFakePlayer.consumeClick()) {
+            while (FuzzSettings.quickKickFakePlayer && KeyMappings.quickKickFakePlayer.consumeClick()) {
                 if (client.player != null) {
                     String name = GetTargetPlayer.getName();
                     if (name != null && !name.isEmpty()) {
@@ -54,7 +54,7 @@ public class ClientEvent {
         }
 
         private static void quickDropFakePlayerAllItemStack(Minecraft client) {
-            while (FuzzSettings.quickDropFakePlayerAllItemStack && KeyBindings.quickDropFakePlayerAllItemStack.consumeClick()) {
+            while (FuzzSettings.quickDropFakePlayerAllItemStack && KeyMappings.quickDropFakePlayerAllItemStack.consumeClick()) {
                 if (client.player != null) {
                     String name = GetTargetPlayer.getName();
                     if (name != null && !name.isEmpty()) {
@@ -65,7 +65,7 @@ public class ClientEvent {
         }
 
         private static void clearCoordCompass(Minecraft client) {
-            while (FuzzSettings.commandCoordCompass && KeyBindings.clearCoordCompass.consumeClick()) {
+            while (FuzzSettings.commandCoordCompass && KeyMappings.clearCoordCompass.consumeClick()) {
                 if (client.player != null) {
                     String fuzzCommand = "/coordCompass clear";
                     String orgCommand = "/highlight clear";

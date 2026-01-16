@@ -56,9 +56,11 @@ public class ListSuggestionProvider<E> implements SuggestionProvider<FabricClien
 
     public static ListSuggestionProvider<String> fromEntityRegistry() {
         List<String> ids = new ArrayList<>();
+
         for (Identifier id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
             ids.add(id.toString());
         }
+
         return new ListSuggestionProvider<>(ids);
     }
 }

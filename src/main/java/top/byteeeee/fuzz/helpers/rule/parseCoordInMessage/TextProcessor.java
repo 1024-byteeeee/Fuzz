@@ -28,6 +28,7 @@ import net.minecraft.ChatFormatting;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
 import top.byteeeee.fuzz.utils.Messenger;
@@ -96,7 +97,7 @@ public class TextProcessor {
                 clickable.setStyle(
                     segNode.getStyle().withColor(ChatFormatting.GREEN).withUnderlined(true)
                     .withClickEvent(ClickEventUtil.event(ClickEventUtil.RUN_COMMAND, runCommand))
-                    .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, tr.tr("hover_text", mi.x + " " + mi.y + " " + mi.z).withStyle(ChatFormatting.YELLOW)))
+                    .withHoverEvent(HoverEventUtil.event(HoverEventUtil.SHOW_TEXT, Messenger.f(tr.tr("hover_text", mi.x + " " + mi.y + " " + mi.z), Layout.YELLOW)))
                 );
 
                 out.append(clickable);

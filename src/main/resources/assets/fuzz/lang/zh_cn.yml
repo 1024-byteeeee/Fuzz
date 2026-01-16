@@ -33,7 +33,7 @@ fuzz:
     is_not_valid_value: "不是有效的值"
     util:
       check:
-        need_enable_rule: "需要先启用 %s 规则"
+        need_enable_rule: "<FUZZ> 需要先启用 %s 规则"
 
     highlightEntity:
       already_in_list: "<FUZZ> %s 已在列表中"

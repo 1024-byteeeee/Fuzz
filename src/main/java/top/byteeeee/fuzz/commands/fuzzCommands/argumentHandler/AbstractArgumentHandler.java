@@ -16,7 +16,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.minecraft.ChatFormatting;
@@ -49,7 +49,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
     }
 
     private RequiredArgumentBuilder<FabricClientCommandSource, T> buildValueArgument(Field field) {
-        return ClientCommandManager.argument("value", getArgumentType()).suggests(this::getSuggestions).executes(ctx -> executeSetValue(ctx, field));
+        return ClientCommands.argument("value", getArgumentType()).suggests(this::getSuggestions).executes(ctx -> executeSetValue(ctx, field));
     }
 
     private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {

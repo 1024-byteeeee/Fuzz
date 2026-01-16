@@ -1,6 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'com.github.hierynomus.license'
-apply plugin: 'fabric-loom'
+apply plugin: 'net.fabricmc.fabric-loom'
 apply plugin: 'com.replaymod.preprocess'
 
 int mcVersion = 1
@@ -29,16 +29,15 @@ repositories {
 
 // https://github.com/FabricMC/fabric-loader/issues/783
 configurations {
-	modRuntimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
+	// runtimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	modRuntimeOnly "carpet:fabric-carpet:${project.carpet_core_version}"
-	include(modImplementation("com.github.1024-byteeeee:AnnotationToolBox:${project.annotationtoolbox_version}"))
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	//modRuntimeOnly "carpet:fabric-carpet:${project.carpet_core_version}"
+	include(implementation("com.github.1024-byteeeee:AnnotationToolBox:${project.annotationtoolbox_version}"))
 	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
     include(implementation("top.1024byteeeee:tiny_yaml:${project.tiny_yaml_version}"))
 }
@@ -62,11 +61,10 @@ loom {
 	accessWidenerPath = file("fuzz.accesswidener")
 }
 
-remapJar {
-}
-
 JavaVersion JAVA_VERSION
-if (mcVersion >= 12005) {
+if (mcVersion >= 260000) {
+	JAVA_VERSION = JavaVersion.VERSION_25
+} else if (mcVersion >= 12005) {
 	JAVA_VERSION = JavaVersion.VERSION_21
 } else if (mcVersion >= 11800) {
 	JAVA_VERSION = JavaVersion.VERSION_17

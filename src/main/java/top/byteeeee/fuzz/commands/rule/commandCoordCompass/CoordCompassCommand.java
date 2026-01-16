@@ -27,7 +27,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.minecraft.world.phys.Vec3;
@@ -52,15 +52,16 @@ public class CoordCompassCommand extends AbstractRuleCommand {
 
     @Override
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(ClientCommandManager.literal(MAIN_CMD_NAME)
-        .then(ClientCommandManager.literal("set")
-        .then(ClientCommandManager.argument("x", DoubleArgumentType.doubleArg())
-        .then(ClientCommandManager.argument("y", DoubleArgumentType.doubleArg())
-        .then(ClientCommandManager.argument("z", DoubleArgumentType.doubleArg())
+        dispatcher.register(
+        ClientCommands.literal(MAIN_CMD_NAME)
+        .then(ClientCommands.literal("set")
+        .then(ClientCommands.argument("x", DoubleArgumentType.doubleArg())
+        .then(ClientCommands.argument("y", DoubleArgumentType.doubleArg())
+        .then(ClientCommands.argument("z", DoubleArgumentType.doubleArg())
         .executes(c -> checkEnabled(c, () -> set(c)))))))
-        .then(ClientCommandManager.literal("clear")
+        .then(ClientCommands.literal("clear")
         .executes(c -> checkEnabled(c, CoordCompassCommand::clear)))
-        .then(ClientCommandManager.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
+        .then(ClientCommands.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
     }
 
     @Override

@@ -42,6 +42,7 @@ public class LiteralCommandSuggestionProvider implements SuggestionProvider<Comm
                 builder.suggest(node.getName());
             }
         });
+
         return builder.buildFuture();
     }
 }

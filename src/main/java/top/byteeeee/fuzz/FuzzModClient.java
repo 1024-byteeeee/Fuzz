@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 
 import top.byteeeee.fuzz.commands.RegisterCommands;
 import top.byteeeee.fuzz.event.ClientEvent;
-import top.byteeeee.fuzz.key.KeyBindings;
+import top.byteeeee.fuzz.key.KeyMappings;
 import top.byteeeee.fuzz.renderer.rule.commandCoordCompass.CoordCompassRenderer;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 
@@ -48,7 +48,7 @@ public class FuzzModClient implements ClientModInitializer {
         minecraftClient = Minecraft.getInstance();
         RegisterCommands.register();
         ClientEvent.register();
-        KeyBindings.register();
+        KeyMappings.register();
         this.RegisterRenderer();
         FuzzTranslations.loadTranslations();
     }

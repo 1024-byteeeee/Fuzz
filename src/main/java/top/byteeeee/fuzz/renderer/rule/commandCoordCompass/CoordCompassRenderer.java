@@ -24,9 +24,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -55,10 +55,10 @@ public class CoordCompassRenderer {
 
     public static void register() {
         HudElementRegistry.addLast(IdentifierUtil.of("fuzz", "coord_compass_hud"), CoordCompassRenderer::renderHud);
-        WorldRenderEvents.BEFORE_TRANSLUCENT.register(CoordCompassRenderer::renderWorld);
+        LevelRenderEvents.BEFORE_TRANSLUCENT.register(CoordCompassRenderer::renderWorld);
     }
 
-    protected static void renderWorld(WorldRenderContext context) {
+    protected static void renderWorld(LevelRenderContext context) {
         if (!isActive || targetCoord == null || !FuzzSettings.commandCoordCompass) {
             return;
         }
@@ -70,7 +70,7 @@ public class CoordCompassRenderer {
         }
 
         Camera camera = client.gameRenderer.getMainCamera();
-        PoseStack matrixStack = context.matrices();
+        PoseStack matrixStack = context.poseStack();
         matrixStack.pushPose();
         Vec3 cameraPos = camera.position();
         Vec3 offset = targetCoord.subtract(cameraPos);
@@ -97,7 +97,7 @@ public class CoordCompassRenderer {
         matrixStack.scale(scale, scale, scale);
         PoseStack.Pose entry = matrixStack.last();
         RenderType renderLayer = RenderTypes.fireScreenEffect(TARGET_ICON);
-        VertexConsumer vertexConsumer = Objects.requireNonNull(context.consumers()).getBuffer(renderLayer);
+        VertexConsumer vertexConsumer = Objects.requireNonNull(context.bufferSource()).getBuffer(renderLayer);
         vertexConsumer.addVertex(entry.pose(), -1F, -1F, 0F).setUv(0F, 0F).setColor(-1);
         vertexConsumer.addVertex(entry.pose(), -1F, 1F, 0F).setUv(0F, 1F).setColor(-1);
         vertexConsumer.addVertex(entry.pose(), 1F, 1F, 0F).setUv(1F, 1F).setColor(-1);

@@ -57,9 +57,11 @@ public class SetSuggestionProvider<E> implements SuggestionProvider<FabricClient
 
     public static SetSuggestionProvider<String> fromEntityRegistry() {
         LinkedHashSet<String> ids = new LinkedHashSet<>();
+
         for (Identifier id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
             ids.add(id.toString());
         }
+
         return new SetSuggestionProvider<>(ids);
     }
 }
