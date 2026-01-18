@@ -61,7 +61,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         .executes(c -> checkEnabled(c, () -> set(c)))))))
         .then(ClientCommands.literal("clear")
         .executes(c -> checkEnabled(c, CoordCompassCommand::clear)))
-        .then(ClientCommands.literal("help").executes(c ->checkEnabled(c, () -> help(c)))));
+        .then(ClientCommands.literal("help").executes(c -> checkEnabled(c, () -> help(c)))));
     }
 
     @Override

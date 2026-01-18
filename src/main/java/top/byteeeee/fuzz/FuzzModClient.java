@@ -34,6 +34,7 @@ import top.byteeeee.fuzz.event.ClientEvent;
 import top.byteeeee.fuzz.key.KeyMappings;
 import top.byteeeee.fuzz.renderer.rule.commandCoordCompass.CoordCompassRenderer;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
+import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
 @Environment(EnvType.CLIENT)
 public class FuzzModClient implements ClientModInitializer {
@@ -49,6 +50,7 @@ public class FuzzModClient implements ClientModInitializer {
         RegisterCommands.register();
         ClientEvent.register();
         KeyMappings.register();
+        BuiltinResourcesPackAdder.register();
         this.RegisterRenderer();
         FuzzTranslations.loadTranslations();
     }

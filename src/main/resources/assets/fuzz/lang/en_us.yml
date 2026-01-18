@@ -211,3 +211,10 @@ fuzz:
       extra:
         '0': "[fuzz] - Coordinate highlighting using the \"commandCoordCompass\" rule"
         '1': "[carpetorgaddition] - Coordinate highlighting using the Carpet Org Addition mod (Minecraft >= 1.21.3)"
+    commandAnimatedFreeze:
+      name: "commandAnimatedFreeze"
+      desc: "Use the /animatedFreeze command to disable the animation of a specified material"
+      extra: "Use the \"/animatedFreeze command\" to view the usage guide"
+    chestOptimization:
+      name: "chestOptimization"
+      desc: "Significantly optimized chest rendering (from FastChest mod)"

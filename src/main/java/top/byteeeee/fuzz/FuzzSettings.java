@@ -25,6 +25,7 @@ import net.fabricmc.api.Environment;
 
 import top.byteeeee.fuzz.config.FuzzRuleConfig;
 import top.byteeeee.fuzz.observers.ReloadClientResourceObserver;
+import top.byteeeee.fuzz.observers.rule.chestOptimization.ChestOptimizationObserver;
 import top.byteeeee.fuzz.observers.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
 import top.byteeeee.fuzz.settings.ObserverManager;
 import top.byteeeee.fuzz.validators.rule.BiomeColor.BiomeColorValidator;
@@ -37,9 +38,9 @@ import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorVali
 import top.byteeeee.fuzz.validators.rule.blockOutlineWidth.BlockOutlineWidthValidator;
 import top.byteeeee.fuzz.validators.rule.rainbowBlockoutlineBlinkSpeed.RainbowBlockOutlineBlinkSpeedValidator;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.util.LinkedList;
 import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -48,7 +49,8 @@ import static top.byteeeee.fuzz.settings.RuleCategory.*;
 @Environment(EnvType.CLIENT)
 public class FuzzSettings {
     public static Map<String, Object> DEFAULT_VALUES = new ConcurrentHashMap<>();
-    public static List<String> highlightEntityList = new ArrayList<>();
+    public static List<String> highlightEntityList = new LinkedList<>();
+    public static final List<String> animationDisableList = new LinkedList<>();
 
     @Rule(
         options = {"none", "en_us", "zh_cn"},
@@ -204,6 +206,18 @@ public class FuzzSettings {
         categories = {FUZZ, QOL}
     )
     public static String parseCoordInMessage = "false";
+
+    @Rule(
+        categories = {FUZZ, RENDER, COMMAND},
+        observers = ReloadClientResourceObserver.class
+    )
+    public static boolean commandAnimatedFreeze = false;
+
+    @Rule(
+        categories = {FUZZ, RENDER, EXPERIMENTAL},
+        observers = ChestOptimizationObserver.class
+    )
+    public static boolean chestOptimization = false;
 
     static {
         for (Field field : FuzzSettings.class.getDeclaredFields()) {

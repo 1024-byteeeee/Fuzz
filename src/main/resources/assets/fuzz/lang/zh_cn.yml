@@ -211,3 +211,10 @@ fuzz:
       extra:
         '0': "[fuzz] - 使用\"坐标罗盘 (commandCoordCompass)\"规则的坐标高亮"
         '1': "[carpetorgaddition] - 使用Carpet Org Addition模组的坐标高亮 (Minecraft >= 1.21.3)"
+    commandAnimatedFreeze:
+      name: "动画冻结"
+      desc: "使用 /animatedFreeze 指令禁用指定材质的动画"
+      extra: "使用 /animatedFreeze help 指令查看使用指南"
+    chestOptimization:
+      name: "箱子优化"
+      desc: "大幅优化箱子渲染（来自FastChest模组）"

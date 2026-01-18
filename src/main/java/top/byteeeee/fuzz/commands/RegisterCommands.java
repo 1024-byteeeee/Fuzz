@@ -28,6 +28,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
+import top.byteeeee.fuzz.commands.rule.animatedFreezeCommand.AnimatedFreezeCommand;
 import top.byteeeee.fuzz.commands.rule.commandHighLightEntity.HighLightEntityCommand;
 import top.byteeeee.fuzz.commands.fuzzCommands.FuzzCommand;
 import top.byteeeee.fuzz.commands.rule.commandCoordCompass.CoordCompassCommand;
@@ -40,6 +41,7 @@ public class RegisterCommands {
         registerCommand(FuzzCommand::register);
         registerCommand(dispatcher -> HighLightEntityCommand.getInstance().register(dispatcher));
         registerCommand(dispatcher -> CoordCompassCommand.getInstance().register(dispatcher));
+        registerCommand(dispatcher -> AnimatedFreezeCommand.getInstance().register(dispatcher));
     }
 
     private static void registerCommand(Consumer<CommandDispatcher<FabricClientCommandSource>> registrator) {

@@ -90,11 +90,13 @@ public class FuzzConfig {
         } else if (targetType == boolean.class || targetType == Boolean.class) {
             return Boolean.valueOf(value.toString());
         }
+
         return value;
     }
 
     private static Map<String, Object> toMap() {
         Map<String, Object> map = new ConcurrentHashMap<>();
+
         try {
             for (Field field : FuzzSettings.class.getDeclaredFields()) {
                 if (field.isAnnotationPresent(Rule.class)) {
@@ -105,6 +107,7 @@ public class FuzzConfig {
         } catch (Exception e) {
             FuzzModClient.LOGGER.warn("Field read error: {}", e.getMessage());
         }
+
         return map;
     }
 }

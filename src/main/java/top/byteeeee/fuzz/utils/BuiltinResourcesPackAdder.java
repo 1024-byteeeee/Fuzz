@@ -2,7 +2,7 @@
  * This file is part of the Fuzz project, licensed under the
  * GNU Lesser General Public License v3.0
  *
- * Copyright (C) 2025 1024_byteeeee and contributors
+ * Copyright (C) 2026 1024_byteeeee and contributors
  *
  * Fuzz is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,32 +18,24 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.config.rule.commandHighlightEntities;
+package top.byteeeee.fuzz.utils;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
+
 import net.fabricmc.loader.api.FabricLoader;
-
-import top.byteeeee.fuzz.config.template.AbstractListJsonConfig;
-
-import java.nio.file.Path;
+import net.fabricmc.loader.api.ModContainer;
 
 @Environment(EnvType.CLIENT)
-public class CommandHighlightEntitiesConfig extends AbstractListJsonConfig<String> {
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("fuzz").resolve("commandHighlightEntities").resolve("entities.json");
-    private static final CommandHighlightEntitiesConfig INSTANCE = new CommandHighlightEntitiesConfig();
-
-    private CommandHighlightEntitiesConfig() {
-        super(CONFIG_PATH);
+public class BuiltinResourcesPackAdder {
+    public static void register() {
+        FabricLoader.getInstance().getModContainer("fuzz").ifPresent(BuiltinResourcesPackAdder::add);
     }
 
-    public static CommandHighlightEntitiesConfig getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    protected Class<String> getElementType() {
-        return String.class;
+    private static void add(ModContainer modContainer) {
+        ResourceLoader.registerBuiltinPack(IdentifierUtil.of("fuzz_mod", "chest_optimization"), modContainer, PackActivationType.NORMAL);
     }
 }

@@ -2,7 +2,7 @@
  * This file is part of the Fuzz project, licensed under the
  * GNU Lesser General Public License v3.0
  *
- * Copyright (C) 2025 1024_byteeeee and contributors
+ * Copyright (C) 2026 1024_byteeeee and contributors
  *
  * Fuzz is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,19 +18,25 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.config;
+package top.byteeeee.fuzz.mixin.rule.commandAnimatedFreeze.ShulkerBoxAnimationDisabled;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.config.rule.commandAnimatedFreeze.CommandAnimatedFreezeConfig;
-import top.byteeeee.fuzz.config.rule.commandHighlightEntities.CommandHighlightEntitiesConfig;
 
 @Environment(EnvType.CLIENT)
-public class FuzzRuleConfig {
-    public static void load() {
-        CommandHighlightEntitiesConfig.getInstance().loadFromJson(FuzzSettings.highlightEntityList);
-        CommandAnimatedFreezeConfig.getInstance().loadFromJson(FuzzSettings.animationDisableList);
+@Mixin(ShulkerBoxBlockEntity.class)
+public abstract class ShulkerBoxBlockEntityMixin {
+    @ModifyReturnValue(method = "getProgress", at = @At("RETURN"))
+    private float getAnimationProgress(float original) {
+        return FuzzSettings.animationDisableList.contains("shulker_box") ? 0.0F : original;
     }
 }
