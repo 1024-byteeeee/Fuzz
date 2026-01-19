@@ -4,6 +4,7 @@
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [
+    "rule.chestOptimization.PackMixin"
   ],
   "client": [
     "hooks.MinecraftMixin",
