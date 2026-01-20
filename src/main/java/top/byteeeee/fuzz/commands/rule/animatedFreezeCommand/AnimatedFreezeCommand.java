@@ -28,6 +28,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 
@@ -44,7 +45,7 @@ import top.byteeeee.fuzz.utils.Messenger;
 @Environment(EnvType.CLIENT)
 public class AnimatedFreezeCommand extends AbstractRuleCommand {
     private static final AnimatedFreezeCommand INSTANCE = new AnimatedFreezeCommand();
-    private static final Translator tr = new Translator("commandAnimatedFreeze");
+    private static final Translator tr = new Translator("command.animatedFreeze");
     private static final String MAIN_CMD_NAME = "animatedFreeze";
     private static final String RULE_NAME = "commandAnimatedFreeze";
 
@@ -175,6 +176,12 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
     }
 
     private static int help(FabricClientCommandSource source) {
+        Messenger.tell(source, Messenger.f(Messenger.c(
+            tr.tr("help.add"), Messenger.endl(),
+            tr.tr("help.remove"), Messenger.endl(),
+            tr.tr("help.removeAll"), Messenger.endl(),
+            tr.tr("help.list"), Messenger.endl()
+        ), Layout.GRAY));
         return 1;
     }
 

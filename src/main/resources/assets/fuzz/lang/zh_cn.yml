@@ -54,6 +54,19 @@ fuzz:
         set: "/coordCompass set <x> <y> <z> - 设置目标坐标"
         clear: "/coordCompass clear - 清除目标坐标"
         help: "/coordCompass help - 显示帮助信息"
+    animatedFreeze:
+      add_success: "<FUZZ> %s 已添加到列表"
+      add_fail: "<FUZZ> %s 已存在于列表中"
+      remove_success: "<FUZZ> %s 已从列表中删除"
+      remove_fail: "<FUZZ> %s 不存在于列表中"
+      removeAll_success: "<FUZZ> 所有纹理已从列表中移除"
+      removeAll_fail: "<FUZZ> 列表为空"
+      list_head: "[ 动画禁用列表 ]"
+      help:
+        add: "/animatedFreeze add <纹理> - 添加一个需要禁用动画的纹理"
+        remove: "/animatedFreeze remove <纹理> - 移除一个已被禁用动画的纹理"
+        removeAll: "/animatedFreeze removeAll - 解禁所有被禁用动画的纹理"
+        list: "/animatedFreeze list - 查看被禁用动画的纹理列表"
 
   rule_feedback:
     parseCoordInMessage:
@@ -213,7 +226,7 @@ fuzz:
         '1': "[carpetorgaddition] - 使用Carpet Org Addition模组的坐标高亮 (Minecraft >= 1.21.3)"
     commandAnimatedFreeze:
       name: "动画冻结"
-      desc: "使用 /animatedFreeze 指令禁用指定材质的动画"
+      desc: "使用 /animatedFreeze 指令禁用指定纹理的动画"
       extra: "使用 /animatedFreeze help 指令查看使用指南"
     chestOptimization:
       name: "箱子优化"

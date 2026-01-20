@@ -54,6 +54,19 @@ fuzz:
         set: "/coordCompass set <x> <y> <z> - Set the target coordinates"
         clear: "/coordCompass clear - Clear the target coordinates"
         help: "/coordCompass help - Show help information"
+    animatedFreeze:
+      add_success: "<FUZZ> Added %s to the list"
+      add_fail: "<FUZZ> %s is already in the list"
+      remove_success: "<FUZZ> Removed %s from the list"
+      remove_fail: "<FUZZ> %s is not in the list"
+      removeAll_success: "<FUZZ> All texture has been removed"
+      removeAll_fail: "<FUZZ> list is empty"
+      list_head: "[ Animation disable list ]"
+      help:
+        add: "/animatedFreeze add <texture> - Disable animations for a texture"
+        remove: "/animatedFreeze remove <texture> - Enable the animation of a texture"
+        removeAll: "/animatedFreeze removeAll - Enable all textures with disabled animations"
+        list: "/animatedFreeze list - View the list of textures with disabled animations"
 
   rule_feedback:
     parseCoordInMessage:
@@ -213,7 +226,7 @@ fuzz:
         '1': "[carpetorgaddition] - Coordinate highlighting using the Carpet Org Addition mod (Minecraft >= 1.21.3)"
     commandAnimatedFreeze:
       name: "commandAnimatedFreeze"
-      desc: "Use the /animatedFreeze command to disable the animation of a specified material"
+      desc: "Use the /animatedFreeze command to disable the animation of a specified texture"
       extra: "Use the \"/animatedFreeze command\" to view the usage guide"
     chestOptimization:
       name: "chestOptimization"
