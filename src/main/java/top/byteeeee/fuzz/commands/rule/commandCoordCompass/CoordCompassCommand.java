@@ -84,7 +84,7 @@ public class CoordCompassCommand extends AbstractRuleCommand {
     }
 
     private static int clear() {
-        CoordCompassRenderer.targetCoord = null;
+        CoordCompassRenderer.targetCoord = Vec3.ZERO;
         CoordCompassRenderer.isActive = false;
         return 1;
     }

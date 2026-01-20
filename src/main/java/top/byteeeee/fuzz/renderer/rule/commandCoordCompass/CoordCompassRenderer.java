@@ -59,7 +59,7 @@ public class CoordCompassRenderer {
     }
 
     protected static void renderWorld(LevelRenderContext context) {
-        if (!isActive || targetCoord == null || !FuzzSettings.commandCoordCompass) {
+        if (!isActive || targetCoord == Vec3.ZERO || !FuzzSettings.commandCoordCompass) {
             return;
         }
 
@@ -106,7 +106,7 @@ public class CoordCompassRenderer {
     }
 
     protected static void renderHud(GuiGraphics drawContext, DeltaTracker renderTickCounter) {
-        if (!isActive || targetCoord == null) {
+        if (!isActive || targetCoord == Vec3.ZERO) {
             return;
         }
 

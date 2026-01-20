@@ -28,24 +28,22 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.commands.AbstractRuleCommand;
+import top.byteeeee.fuzz.commands.suggestionProviders.ListSuggestionProvider;
 import top.byteeeee.fuzz.config.rule.commandAnimatedFreeze.CommandAnimatedFreezeConfig;
 import top.byteeeee.fuzz.translations.Translator;
+import top.byteeeee.fuzz.utils.ClientUtil;
 import top.byteeeee.fuzz.utils.Layout;
 import top.byteeeee.fuzz.utils.Messenger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class AnimatedFreezeCommand extends AbstractRuleCommand {
     private static final AnimatedFreezeCommand INSTANCE = new AnimatedFreezeCommand();
-    private static final List<String> EXTRA_SUGGESTIONS = new ArrayList<>();
     private static final Translator tr = new Translator("commandAnimatedFreeze");
     private static final String MAIN_CMD_NAME = "animatedFreeze";
     private static final String RULE_NAME = "commandAnimatedFreeze";
@@ -69,18 +67,19 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
             ClientCommands.literal(MAIN_CMD_NAME)
             // add
             .then(ClientCommands.literal("add")
-            .then(suggestions(StringArgumentType.string())
+            .then(suggestions(StringArgumentType.greedyString())
             .executes(c -> checkEnabled(c, () -> add(
                 c.getSource(),
-                StringArgumentType.getString(c, "block")
+                StringArgumentType.getString(c, "texture")
             )))))
 
             // remove
             .then(ClientCommands.literal("remove")
-            .then(suggestions(StringArgumentType.string())
+            .then(ClientCommands.argument("texture", StringArgumentType.greedyString())
+            .suggests(ListSuggestionProvider.of(FuzzSettings.animationDisableList))
             .executes(c -> checkEnabled(c, () -> remove(
                 c.getSource(),
-                StringArgumentType.getString(c, "block")
+                StringArgumentType.getString(c, "texture")
             )))))
 
             // removeAll
@@ -98,27 +97,35 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
     }
 
     private static RequiredArgumentBuilder<FabricClientCommandSource, String> suggestions(StringArgumentType type) {
-        return
-            ClientCommands.argument("block", type).suggests(
-                (context, builder) -> {
-                    String remaining = builder.getRemaining().toLowerCase();
+        return ClientCommands.argument("texture", type).suggests((context, builder) -> {
+            String remaining = builder.getRemaining().toLowerCase();
+            Minecraft client = ClientUtil.getCurrentClient();
+            ResourceManager resourceManager = client.getResourceManager();
 
-                    for (Identifier id : BuiltInRegistries.BLOCK.keySet()) {
-                        String suggestion = id.toString().replace("minecraft:", "");
-                        if (remaining.isEmpty() || suggestion.toLowerCase().startsWith(remaining)) {
-                            builder.suggest(suggestion);
-                        }
-                    }
+            resourceManager.listResources("textures", id -> true).forEach((id, resource) -> {
+                String suggestion = id.getPath();
 
-                    for (String extra : EXTRA_SUGGESTIONS) {
-                        if (remaining.isEmpty() || extra.toLowerCase().startsWith(remaining)) {
-                            builder.suggest(extra);
-                        }
-                    }
-
-                    return builder.buildFuture();
+                int dot = suggestion.lastIndexOf('.');
+                if (dot != -1) {
+                    suggestion = suggestion.substring(0, dot);
                 }
-            );
+
+                int slash = suggestion.lastIndexOf('/');
+                if (slash != -1) {
+                    suggestion = suggestion.substring(slash + 1);
+                }
+
+                if (suggestion.matches("\\d+")) {
+                    return;
+                }
+
+                if (remaining.isEmpty() || suggestion.toLowerCase().startsWith(remaining)) {
+                    builder.suggest(suggestion);
+                }
+            });
+
+            return builder.buildFuture();
+        });
     }
 
     private static int add(FabricClientCommandSource source, String blockName) {
@@ -159,9 +166,11 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
 
     private static int list(FabricClientCommandSource source) {
         Messenger.tell(Messenger.f(Messenger.c(tr.tr("list_head"), Messenger.endl(), Messenger.sline()), Layout.AQUA));
+
         for (String blockName : FuzzSettings.animationDisableList) {
             Messenger.tell(source, Messenger.f(Messenger.s(blockName), Layout.AQUA));
         }
+
         return 1;
     }
 
@@ -172,22 +181,5 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
     private static void saveToConfigAndReload() {
         CommandAnimatedFreezeConfig.getInstance().saveToJson(FuzzSettings.animationDisableList);
         FuzzModClient.minecraftClient.reloadResourcePacks();
-    }
-
-    static {
-        EXTRA_SUGGESTIONS.add("water_still");
-        EXTRA_SUGGESTIONS.add("water_flow");
-        EXTRA_SUGGESTIONS.add("lava_still");
-        EXTRA_SUGGESTIONS.add("lava_flow");
-        EXTRA_SUGGESTIONS.add("fire_0");
-        EXTRA_SUGGESTIONS.add("fire_1");
-        EXTRA_SUGGESTIONS.add("soul_fire_0");
-        EXTRA_SUGGESTIONS.add("soul_fire_1");
-        EXTRA_SUGGESTIONS.add("campfire_fire");
-        EXTRA_SUGGESTIONS.add("campfire_log_lit");
-        EXTRA_SUGGESTIONS.add("soul_campfire_fire");
-        EXTRA_SUGGESTIONS.add("soul_campfire_log_lit");
-        EXTRA_SUGGESTIONS.add("tall_seagrass_bottom");
-        EXTRA_SUGGESTIONS.add("tall_seagrass_top");
     }
 }
