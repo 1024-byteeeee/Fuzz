@@ -37,49 +37,65 @@ import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler.ArgumentHandlerInterface;
 import top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler.ArgumentHandlerFactory;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
 public class FuzzCommand {
+
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(buildFuzzCommand("fuzz"));
+        registerCommand(dispatcher, "fuzz");
+
         if (!Objects.equals(FuzzSettings.fuzzCommandAlias, "false")) {
-            dispatcher.register(buildFuzzCommand(FuzzSettings.fuzzCommandAlias));
+            registerCommand(dispatcher, FuzzSettings.fuzzCommandAlias);
         }
     }
 
-    private static LiteralArgumentBuilder<FabricClientCommandSource> buildFuzzCommand(String commandName) {
-        LiteralArgumentBuilder<FabricClientCommandSource> main = ClientCommands.literal(commandName)
-        .executes(ctx -> FuzzCommandContext.showRuleList(ctx.getSource()));
-        LiteralArgumentBuilder<FabricClientCommandSource> listCommand = ClientCommands.literal("list")
-        .executes(ctx -> FuzzCommandContext.showAllRules(ctx.getSource()))
-        .then(ClientCommands.argument("category", StringArgumentType.string())
-        .suggests((context, builder) -> {
-            FuzzCategoriesContext.getAllCategories().forEach(builder::suggest);
-            return CompletableFuture.completedFuture(builder.build());
-        })
-        .executes(ctx -> {
-            String category = StringArgumentType.getString(ctx, "category");
-            return FuzzCategoriesContext.showFunctionListByCategory(ctx.getSource(), category);
-        }));
+    private static void registerCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, String name) {
+        dispatcher.register(buildRootCommand(name));
+    }
 
-        main.then(listCommand);
+    private static LiteralArgumentBuilder<FabricClientCommandSource> buildRootCommand(String name) {
+        LiteralArgumentBuilder<FabricClientCommandSource> root = ClientCommands.literal(name).executes(ctx -> FuzzCommandContext.showRuleList(ctx.getSource()));
 
-        Arrays.stream(FuzzSettings.class.getDeclaredFields())
-        .filter(f -> f.isAnnotationPresent(Rule.class))
-        .forEach(field -> {
-            LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommands.literal(field.getName())
-                .executes(context -> {
-                    FuzzCommandContext.showRuleList(context.getSource());
-                    FuzzCommandContext.showRuleInfo(context.getSource(), field);
-                    return 1;
-                });
-            ArgumentHandlerInterface<?> handler = ArgumentHandlerFactory.create(field.getType());
-            handler.configureArgument(cmd, field);
-            main.then(cmd);
-        });
+        root.then(buildListCommand());
+        registerRuleCommands(root);
 
-        return main;
+        return root;
+    }
+
+    private static void registerRuleCommands(LiteralArgumentBuilder<FabricClientCommandSource> root) {
+        Arrays.stream(FuzzSettings.class.getDeclaredFields()).filter(f -> f.isAnnotationPresent(Rule.class)).forEach(field -> root.then(buildRuleCommand(field)));
+    }
+
+    private static LiteralArgumentBuilder<FabricClientCommandSource> buildListCommand() {
+        return
+            ClientCommands.literal("list")
+            .executes(ctx -> FuzzCommandContext.showAllRules(ctx.getSource()))
+            .then(ClientCommands.argument("category", StringArgumentType.string())
+                .suggests((context, builder) -> {
+                    FuzzCategoriesContext.getAllCategories().forEach(builder::suggest);
+                    return CompletableFuture.completedFuture(builder.build());
+                })
+                .executes(ctx -> {
+                    String category = StringArgumentType.getString(ctx, "category");
+                    return FuzzCategoriesContext.showFunctionListByCategory(ctx.getSource(), category);
+                })
+            );
+    }
+
+    private static LiteralArgumentBuilder<FabricClientCommandSource> buildRuleCommand(Field field) {
+        LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommands.literal(field.getName())
+            .executes(context -> {
+                FuzzCommandContext.showRuleList(context.getSource());
+                FuzzCommandContext.showRuleInfo(context.getSource(), field);
+                return 1;
+            });
+
+        ArgumentHandlerInterface<?> handler = ArgumentHandlerFactory.create(field.getType());
+        handler.configureArgument(cmd, field);
+
+        return cmd;
     }
 }
