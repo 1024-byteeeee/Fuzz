@@ -20,8 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.cobwebSlowDownDisabled;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.entity.Entity;
@@ -31,17 +31,23 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.helpers.Noop;
+import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Mixin(WebBlock.class)
 public abstract class WebBlockMixin {
-    @WrapWithCondition(
+    @WrapOperation(
         method = "entityInside",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;makeStuckInBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/phys/Vec3;)V"
         )
     )
-    private boolean slowDownDisabled(Entity entity, BlockState state, Vec3 multiplier) {
-        return !FuzzSettings.cobwebSlowDownDisabled;
+    private void slowDownDisabled(Entity entity, BlockState blockState, Vec3 speedMultiplier, Operation<Void> original) {
+        if (FuzzSettings.cobwebSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+            Noop.noop();
+        } else {
+            original.call(entity, blockState, speedMultiplier);
+        }
     }
 }
