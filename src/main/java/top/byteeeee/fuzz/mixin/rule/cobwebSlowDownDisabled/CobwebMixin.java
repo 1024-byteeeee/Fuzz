@@ -20,7 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.cobwebSlowDownDisabled;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CobwebBlock;
@@ -31,17 +32,23 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.helpers.Noop;
+import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Mixin(CobwebBlock.class)
 public abstract class CobwebMixin {
-    @WrapWithCondition(
+    @WrapOperation(
         method = "onEntityCollision",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/Entity;slowMovement(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Vec3d;)V"
         )
     )
-    private boolean slowDownDisabled(Entity entity, BlockState state, Vec3d multiplier) {
-        return !FuzzSettings.cobwebSlowDownDisabled;
+    private void slowDownDisabled(Entity entity, BlockState state, Vec3d multiplier, Operation<Void> original) {
+        if (FuzzSettings.cobwebSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+            Noop.noop();
+        } else {
+            original.call(entity, state, multiplier);
+        }
     }
 }

@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.ClientUtil;
 
 @SuppressWarnings("SimplifiableConditionalExpression")
 @Environment(EnvType.CLIENT)
@@ -38,6 +39,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 public abstract class PlayerEntityMixin {
     @ModifyReturnValue(method = "isPushedByFluids", at = @At("RETURN"))
     public boolean isPushedByFluids(boolean original) {
-        return FuzzSettings.fluidPushDisabled ? false : original;
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        return FuzzSettings.fluidPushDisabled && player.equals(ClientUtil.getCurrentPlayer()) ? false : original;
     }
 }
