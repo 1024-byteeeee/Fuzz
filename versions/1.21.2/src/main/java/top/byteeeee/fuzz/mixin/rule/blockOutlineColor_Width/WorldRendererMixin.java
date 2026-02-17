@@ -30,7 +30,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.*;
@@ -38,7 +37,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.shape.VoxelShape;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -84,9 +82,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccessor {
                     return;
                 }
             }
-
-            VoxelShape shape = state.getOutlineShape(this.getWorld(), pos, ShapeContext.of(entity));
-            VertexRendering.drawOutline(matrices, vertexConsumer, shape, pos.getX() - cameraX, pos.getY() - cameraY, pos.getZ() - cameraZ, customColor);
+            original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, customColor);
         } else {
             original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
         }
