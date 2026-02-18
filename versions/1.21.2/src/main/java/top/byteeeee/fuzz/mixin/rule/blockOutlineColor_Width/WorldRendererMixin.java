@@ -29,18 +29,16 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
+
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.validators.HexValidator;
@@ -53,18 +51,8 @@ import java.util.OptionalDouble;
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin implements WorldRendererAccessor {
-    @WrapOperation(
-        method = "renderTargetBlockOutline",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;DDDLnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)V"
-        )
-    )
-    private void renderBlockOutlineWrapper(
-        WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity,
-        double cameraX, double cameraY, double cameraZ,
-        BlockPos pos, BlockState state, int originalColor, Operation<Void> original
-    ) {
+    @ModifyVariable(method = "drawBlockOutline", at = @At("HEAD"), argsOnly = true)
+    private int ModifyColor(int originalColor) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
             int customColor;
@@ -78,13 +66,12 @@ public abstract class WorldRendererMixin implements WorldRendererAccessor {
                     double alpha = FuzzSettings.blockOutlineAlpha;
                     customColor = ColorHelper.getArgb((int) alpha, red, green, blue);
                 } else {
-                    original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
-                    return;
+                    return originalColor;
                 }
             }
-            original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, customColor);
+            return customColor;
         } else {
-            original.call(worldRenderer, matrices, vertexConsumer, entity, cameraX, cameraY, cameraZ, pos, state, originalColor);
+            return originalColor;
         }
     }
 
