@@ -27,6 +27,7 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.client.render.fog.FogRenderer;
 
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -41,7 +42,8 @@ public abstract class FogRendererMixin {
         method = "getFogBuffer",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/client/render/fog/FogRenderer;fogEnabled:Z"
+            target = "Lnet/minecraft/client/render/fog/FogRenderer;fogEnabled:Z",
+            opcode = Opcodes.GETSTATIC
         )
     )
     private boolean noFog(boolean original) {
