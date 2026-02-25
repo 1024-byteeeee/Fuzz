@@ -100,12 +100,12 @@ public class Messenger {
         MessengerCompatFactory.sendFeedBack(source, text);
     }
 
-    public static void tell(MutableComponent text) {
-        ClientUtil.getCurrentPlayer().displayClientMessage(text, false);
-    }
-
     public static void tell(MutableComponent text, boolean actionBar) {
-        ClientUtil.getCurrentPlayer().displayClientMessage(text, actionBar);
+        if (actionBar) {
+            ClientUtil.getCurrentPlayer().sendOverlayMessage(text);
+        } else {
+            ClientUtil.getCurrentPlayer().sendSystemMessage(text);
+        }
     }
 
     public static void sendChatCommand(String text) {

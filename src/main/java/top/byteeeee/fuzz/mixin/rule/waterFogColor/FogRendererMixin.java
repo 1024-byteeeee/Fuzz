@@ -20,8 +20,7 @@
 
 package top.byteeeee.fuzz.mixin.rule.waterFogColor;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-
+import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -29,12 +28,12 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.world.level.material.FogType;
 
-import org.joml.Vector4f;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import top.byteeeee.fuzz.FuzzSettings;
 
 import java.util.Objects;
@@ -42,27 +41,64 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 @Mixin(FogRenderer.class)
 public abstract class FogRendererMixin {
-
     @Shadow
     protected abstract FogType getFogType(Camera camera);
 
-    @ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
-    private Vector4f modifyWaterFogColor(Vector4f original, Camera camera) {
+    @ModifyArg(
+        method = "computeFogColor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"
+        ),
+        index = 0
+    )
+    private float modifyFogRed(float originalRed, @Local(argsOnly = true) Camera camera) {
+        return getCustomColorComponent(0, originalRed, camera);
+    }
+
+    @ModifyArg(
+        method = "computeFogColor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"
+        ),
+        index = 1
+    )
+    private float modifyFogGreen(float originalGreen, @Local(argsOnly = true) Camera camera) {
+        return getCustomColorComponent(1, originalGreen, camera);
+    }
+
+    @ModifyArg(
+        method = "computeFogColor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"
+        ),
+        index = 2
+    )
+    private float modifyFogBlue(float originalBlue, @Local(argsOnly = true) Camera camera) {
+        return getCustomColorComponent(2, originalBlue, camera);
+    }
+
+    @Unique
+    private float getCustomColorComponent(int index, float originalValue, Camera camera) {
         FogType fogType = this.getFogType(camera);
-        if (!Objects.equals(FuzzSettings.waterFogColor, "false") && fogType.equals(FogType.WATER)) {
-            try {
-                int colorInt = Integer.parseInt(FuzzSettings.waterFogColor.substring(1), 16);
+        if (Objects.equals(FuzzSettings.waterFogColor, "false") || FuzzSettings.waterFogColor == null) {
+            return originalValue;
+        }
 
-                float r = ((colorInt >> 16) & 0xFF) / 255.0f;
-                float g = ((colorInt >> 8) & 0xFF) / 255.0f;
-                float b = (colorInt & 0xFF) / 255.0f;
-
-                return (new Vector4f(r, g, b, 1.0f));
-            } catch (Exception e) {
-                return original;
-            }
-        } else {
-            return original;
+        try {
+            String colorStr = FuzzSettings.waterFogColor.startsWith("#") ? FuzzSettings.waterFogColor.substring(1) : FuzzSettings.waterFogColor;
+            int colorInt = Integer.parseInt(colorStr, 16);
+            int colorComponent = switch (index) {
+                case 0 -> (colorInt >> 16) & 0xFF; // r
+                case 1 -> (colorInt >> 8) & 0xFF; // g
+                case 2 -> colorInt & 0xFF; // b
+                default -> 0;
+            };
+            return colorComponent / 255.0f;
+        } catch (Exception e) {
+            return originalValue;
         }
     }
 }

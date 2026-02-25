@@ -27,6 +27,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,13 +38,13 @@ import top.byteeeee.fuzz.helpers.Noop;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public abstract class GameRendererMixin {
     @WrapMethod(method = "bobHurt")
-    private void worldRenderDisabled(PoseStack matrices, float tickDelta, Operation<Void> original) {
+    private void worldRenderDisabled(CameraRenderState cameraState, PoseStack poseStack, Operation<Void> original) {
         if (FuzzSettings.hurtShakeDisabled) {
             Noop.noop();
         } else {
-            original.call(matrices, tickDelta);
+            original.call(cameraState, poseStack);
         }
     }
 }

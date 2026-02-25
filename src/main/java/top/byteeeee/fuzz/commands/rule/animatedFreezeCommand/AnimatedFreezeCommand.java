@@ -166,7 +166,7 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
     }
 
     private static int list(FabricClientCommandSource source) {
-        Messenger.tell(Messenger.f(Messenger.c(tr.tr("list_head"), Messenger.endl(), Messenger.sline()), Layout.AQUA));
+        Messenger.tell(Messenger.f(Messenger.c(tr.tr("list_head"), Messenger.endl(), Messenger.sline()), Layout.AQUA), false);
 
         for (String blockName : FuzzSettings.animationDisableList) {
             Messenger.tell(source, Messenger.f(Messenger.s(blockName), Layout.AQUA));

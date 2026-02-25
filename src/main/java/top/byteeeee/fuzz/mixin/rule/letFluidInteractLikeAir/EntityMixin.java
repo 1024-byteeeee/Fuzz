@@ -39,7 +39,37 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Environment(EnvType.CLIENT)
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-    @ModifyReturnValue(method = "updateFluidHeightAndDoFluidPushing", at = @At("RETURN"))
+    @ModifyReturnValue(method = "isInWater", at = @At("RETURN"))
+    private boolean isInWater(boolean original) {
+        Entity entity = (Entity) (Object) this;
+        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+            return false;
+        } else {
+            return original;
+        }
+    }
+
+    @ModifyReturnValue(method = "isInShallowWater", at = @At("RETURN"))
+    private boolean isInShallowWater(boolean original) {
+        Entity entity = (Entity) (Object) this;
+        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+            return false;
+        } else {
+            return original;
+        }
+    }
+
+    @ModifyReturnValue(method = "isInLava", at = @At("RETURN"))
+    private boolean isInLava(boolean original) {
+        Entity entity = (Entity) (Object) this;
+        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+            return false;
+        } else {
+            return original;
+        }
+    }
+
+    @ModifyReturnValue(method = "updateFluidInteraction", at = @At("RETURN"))
     private boolean noUpdate(boolean original) {
         Entity entity = (Entity) (Object) this;
         if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
@@ -50,7 +80,7 @@ public abstract class EntityMixin {
     }
 
     @WrapOperation(
-        method = "updateFluidHeightAndDoFluidPushing",
+        method = "updateFluidInteraction",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;isPushedByFluid()Z"

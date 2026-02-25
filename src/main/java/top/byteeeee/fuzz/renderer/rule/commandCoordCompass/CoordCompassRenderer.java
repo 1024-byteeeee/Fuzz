@@ -24,9 +24,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -55,7 +55,7 @@ public class CoordCompassRenderer {
 
     public static void register() {
         HudElementRegistry.addLast(IdentifierUtil.of("fuzz", "coord_compass_hud"), CoordCompassRenderer::renderHud);
-        LevelRenderEvents.BEFORE_TRANSLUCENT.register(CoordCompassRenderer::renderWorld);
+        LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(CoordCompassRenderer::renderWorld);
     }
 
     protected static void renderWorld(LevelRenderContext context) {

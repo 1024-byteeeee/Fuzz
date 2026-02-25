@@ -20,17 +20,16 @@
 
 package top.byteeeee.fuzz.mixin.rule.fogColor;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.fog.FogRenderer;
 
-import org.joml.Vector4f;
-
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import top.byteeeee.fuzz.FuzzSettings;
 
@@ -39,22 +38,60 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 @Mixin(FogRenderer.class)
 public abstract class FogRendererMixin {
-    @ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
-    private Vector4f modifyFogColor(Vector4f original) {
-        if (!Objects.equals(FuzzSettings.fogColor, "false")) {
-            try {
-                int colorInt = Integer.parseInt(FuzzSettings.fogColor.substring(1), 16);
+    @ModifyArg(
+        method = "computeFogColor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"
+        ),
+        index = 0
+    )
+    private float modifyFogRed(float originalRed) {
+        return getCustomColorComponent(0, originalRed);
+    }
 
-                float r = ((colorInt >> 16) & 0xFF) / 255.0f;
-                float g = ((colorInt >> 8) & 0xFF) / 255.0f;
-                float b = (colorInt & 0xFF) / 255.0f;
+    @ModifyArg(
+        method = "computeFogColor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"
+        ),
+        index = 1
+    )
+    private float modifyFogGreen(float originalGreen) {
+        return getCustomColorComponent(1, originalGreen);
+    }
 
-                return (new Vector4f(r, g, b, 1.0f));
-            } catch (Exception e) {
-                return original;
-            }
-        } else {
-            return original;
+    @ModifyArg(
+        method = "computeFogColor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"
+        ),
+        index = 2
+    )
+    private float modifyFogBlue(float originalBlue) {
+        return getCustomColorComponent(2, originalBlue);
+    }
+
+    @Unique
+    private float getCustomColorComponent(int channelIndex, float originalValue) {
+        if (Objects.equals(FuzzSettings.fogColor, "false") || FuzzSettings.fogColor == null) {
+            return originalValue;
+        }
+
+        try {
+            String colorStr = FuzzSettings.fogColor.startsWith("#") ? FuzzSettings.fogColor.substring(1) : FuzzSettings.fogColor;
+            int colorInt = Integer.parseInt(colorStr, 16);
+            int colorComponent = switch (channelIndex) {
+                case 0 -> (colorInt >> 16) & 0xFF; // r
+                case 1 -> (colorInt >> 8) & 0xFF; // g
+                case 2 -> colorInt & 0xFF; // b
+                default -> 0;
+            };
+            return colorComponent / 255.0f;
+        } catch (Exception e) {
+            return originalValue;
         }
     }
 }

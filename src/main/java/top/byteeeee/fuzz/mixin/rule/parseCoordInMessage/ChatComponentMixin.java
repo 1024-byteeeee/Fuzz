@@ -38,7 +38,7 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 @Mixin(value = ChatComponent.class, priority = 1688)
 public abstract class ChatComponentMixin {
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "addPlayerMessage", at = @At("HEAD"), argsOnly = true)
     private Component parseCoordInMessage(Component original) {
         return !Objects.equals(FuzzSettings.parseCoordInMessage, "false") ? TextProcessor.processTextForCoordinates(original) : original;
     }
