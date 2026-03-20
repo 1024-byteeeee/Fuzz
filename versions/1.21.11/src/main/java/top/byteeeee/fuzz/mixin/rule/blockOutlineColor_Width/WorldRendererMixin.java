@@ -35,6 +35,7 @@ import net.minecraft.util.math.ColorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
@@ -46,18 +47,8 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin implements WorldRendererAccessor {
-    @WrapOperation(
-        method = "renderTargetBlockOutline",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;DDDLnet/minecraft/client/render/state/OutlineRenderState;IF)V"
-        )
-    )
-    private void renderBlockOutlineWrapper(
-        WorldRenderer worldRenderer, MatrixStack matrixStack, VertexConsumer vertexConsumer,
-        double cameraX, double cameraY, double cameraZ, OutlineRenderState outlineRenderState, int color, float width,
-        Operation<Void> original
-    ) {
+    @ModifyVariable(method = "drawBlockOutline", at = @At("HEAD"), argsOnly = true)
+    private int ModifyColor(int originalColor) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
             int customColor;
@@ -71,13 +62,12 @@ public abstract class WorldRendererMixin implements WorldRendererAccessor {
                     double alpha = FuzzSettings.blockOutlineAlpha;
                     customColor = ColorHelper.getArgb((int) alpha, red, green, blue);
                 } else {
-                    original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, color, width);
-                    return;
+                    return originalColor;
                 }
             }
-            original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, customColor, width);
+            return customColor;
         } else {
-            original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, color, width);
+            return originalColor;
         }
     }
 
