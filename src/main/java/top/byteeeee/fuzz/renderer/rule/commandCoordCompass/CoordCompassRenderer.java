@@ -96,12 +96,12 @@ public class CoordCompassRenderer {
         float scale = 1.0F;
         matrixStack.scale(scale, scale, scale);
         PoseStack.Pose entry = matrixStack.last();
-        RenderType renderLayer = RenderTypes.fireScreenEffect(TARGET_ICON);
+        RenderType renderLayer = RenderTypes.textSeeThrough(TARGET_ICON);
         VertexConsumer vertexConsumer = Objects.requireNonNull(context.bufferSource()).getBuffer(renderLayer);
-        vertexConsumer.addVertex(entry.pose(), -1F, -1F, 0F).setUv(0F, 0F).setColor(-1);
-        vertexConsumer.addVertex(entry.pose(), -1F, 1F, 0F).setUv(0F, 1F).setColor(-1);
-        vertexConsumer.addVertex(entry.pose(), 1F, 1F, 0F).setUv(1F, 1F).setColor(-1);
-        vertexConsumer.addVertex(entry.pose(), 1F, -1F, 0F).setUv(1F, 0F).setColor(-1);
+        vertexConsumer.addVertex(entry.pose(), -1F, -1F, 0F).setUv(0F, 0F).setColor(-1).setLight(0xF000F0);
+        vertexConsumer.addVertex(entry.pose(), -1F, 1F, 0F).setUv(0F, 1F).setColor(-1).setLight(0xF000F0);
+        vertexConsumer.addVertex(entry.pose(), 1F, 1F, 0F).setUv(1F, 1F).setColor(-1).setLight(0xF000F0);
+        vertexConsumer.addVertex(entry.pose(), 1F, -1F, 0F).setUv(1F, 0F).setColor(-1).setLight(0xF000F0);
         matrixStack.popPose();
     }
 
