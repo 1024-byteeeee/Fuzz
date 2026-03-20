@@ -209,9 +209,6 @@ fuzz:
     jumpDelayDisabled:
       name: "跳跃延迟移除"
       desc: "消除了玩家落地后的跳跃延迟"
-    fogRenderDisabled:
-      name: "禁用雾渲染"
-      desc: "清除所有雾气"
     commandCoordCompass:
       name: "坐标罗盘"
       desc: "使用指令来指定一个坐标，在屏幕上会显示一个箭头指引你到目的坐标处"

@@ -3,9 +3,7 @@
   "minVersion": "0.8.5",
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
-  "mixins": [
-    "rule.chestOptimization.PackMixin"
-  ],
+  "mixins": [],
   "client": [
     "hooks.MinecraftMixin",
     "key.KeyMapping_CategoryMixin",
@@ -27,7 +25,6 @@
     "rule.commandHighlightEntites.MinecraftMixin",
     "rule.fluidPushDisabled.PlayerMixin",
     "rule.fogColor.FogRendererMixin",
-    "rule.fogRenderDisabled.FogRendererMixin",
     "rule.honeyBlockSlowDownDisabled.HoneyBlockMixin",
     "rule.hurtShakeDisabled.GameRendererMixin",
     "rule.iceSlipperinessDisabled.LivingEntityMixin",
@@ -47,7 +44,8 @@
     "rule.usingItemSlowDownDisabled.LocalPlayerMixin",
     "rule.waterColor.WaterRendererMixin",
     "rule.waterFogColor.FogRendererMixin",
-    "translations.TranslatableTextMixin"
+    "translations.TranslatableTextMixin",
+    "rule.chestOptimization.PackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -209,9 +209,6 @@ fuzz:
     jumpDelayDisabled:
       name: "jumpDelayDisabled"
       desc: "Removed jump delay after player landed"
-    fogRenderDisabled:
-      name: "fogRenderDisabled"
-      desc: "Removes all fog"
     commandCoordCompass:
       name: "commandCoordCompass"
       desc: "Use the command to specify a coordinate, and an arrow will appear on the screen to guide you to the desired coordinate"
