@@ -27,8 +27,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.SkyRenderer;
-import net.minecraft.client.renderer.state.SkyRenderState;
 
+import net.minecraft.client.renderer.state.level.SkyRenderState;
 import org.objectweb.asm.Opcodes;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +45,7 @@ public abstract class SkyRenderStateMixin {
         method = "extractRenderState",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/client/renderer/state/SkyRenderState;skyColor:I",
+            target = "Lnet/minecraft/client/renderer/state/level/SkyRenderState;skyColor:I",
             opcode = Opcodes.PUTFIELD
         )
     )

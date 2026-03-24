@@ -25,10 +25,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.state.BlockOutlineRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.util.ARGB;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,13 +49,14 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         method = "renderBlockOutline",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/BlockOutlineRenderState;IF)V"
+            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;IF)V"
         )
     )
     private void renderBlockOutlineWrapper(
-            LevelRenderer worldRenderer, PoseStack matrixStack, VertexConsumer vertexConsumer,
-            double cameraX, double cameraY, double cameraZ, BlockOutlineRenderState outlineRenderState, int color, float width,
-            Operation<Void> original
+        LevelRenderer levelRenderer, PoseStack poseStack, VertexConsumer vertexConsumer,
+        double camX, double camY, double camZ,
+        BlockOutlineRenderState state,
+        int color, float width, Operation<Void> original
     ) {
         if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
             String colorString = FuzzSettings.blockOutlineColor;
@@ -68,13 +71,13 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
                     double alpha = FuzzSettings.blockOutlineAlpha;
                     customColor = ARGB.color((int) alpha, red, green, blue);
                 } else {
-                    original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, color, width);
+                    original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, color, width);
                     return;
                 }
             }
-            original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, customColor, width);
+            original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, customColor, width);
         } else {
-            original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, color, width);
+            original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, color, width);
         }
     }
 
@@ -82,7 +85,7 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         method = "renderBlockOutline",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/BlockOutlineRenderState;IF)V"
+            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;IF)V"
         )
     )
     private void setBlockOutlineWidth(
@@ -104,7 +107,7 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         method = "renderBlockOutline",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/state/BlockOutlineRenderState;highContrast()Z"
+            target = "Lnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;highContrast()Z"
         )
     )
     private boolean setBlockOutlineColor(BlockOutlineRenderState outlineRenderState, Operation<Boolean> original) {

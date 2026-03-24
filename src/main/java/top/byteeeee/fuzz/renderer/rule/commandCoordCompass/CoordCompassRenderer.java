@@ -30,7 +30,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
@@ -105,7 +105,7 @@ public class CoordCompassRenderer {
         matrixStack.popPose();
     }
 
-    protected static void renderHud(GuiGraphics drawContext, DeltaTracker renderTickCounter) {
+    protected static void renderHud(GuiGraphicsExtractor drawContext, DeltaTracker renderTickCounter) {
         if (!isActive || targetCoord == Vec3.ZERO) {
             return;
         }
@@ -157,11 +157,7 @@ public class CoordCompassRenderer {
             distanceText = String.format("§e%s %.1fm %s", verticalIndicator, distance, verticalIndicator);
         }
 
-        drawContext.drawString(
-            client.font, distanceText,
-            centerX - client.font.width(distanceText) / 2,
-            centerY + 20, 0xFFFFFF00
-        );
+        drawContext.centeredText(client.font, distanceText, centerX, centerY + 20, 0xFFFFFF00);
 
         String targetX = formatCoord(targetCoord.x);
         String targetY = formatCoord(targetCoord.y);
@@ -169,14 +165,9 @@ public class CoordCompassRenderer {
         String playerX = formatCoord(playerPos.x);
         String playerY = formatCoord(playerPos.y);
         String playerZ = formatCoord(playerPos.z);
-
         String coordText = String.format("§b[ %s, %s, %s ]§f §r§a[ %s, %s, %s ]", targetX, targetY, targetZ, playerX, playerY, playerZ);
 
-        drawContext.drawString(
-            client.font, coordText,
-            centerX - client.font.width(coordText) / 2,
-            centerY + 30, 0xFF00FFFF
-        );
+        drawContext.centeredText(client.font, coordText, centerX, centerY + 30, 0xFF00FFFF);
     }
 
     private static int getArrowHudYPosition(int screenHeight) {
@@ -193,13 +184,13 @@ public class CoordCompassRenderer {
         return centerY;
     }
 
-    private static void renderXMark(GuiGraphics drawContext, int centerX, int centerY) {
+    private static void renderXMark(GuiGraphicsExtractor drawContext, int centerX, int centerY) {
         int size = 8;
         drawLine(drawContext, centerX - size, centerY - size, centerX + size, centerY + size);
         drawLine(drawContext, centerX - size, centerY + size, centerX + size, centerY - size);
     }
 
-    private static void renderCircle(GuiGraphics drawContext, int centerX, int centerY) {
+    private static void renderCircle(GuiGraphicsExtractor drawContext, int centerX, int centerY) {
         int radius = 13;
         int segments = 66;
 
@@ -230,7 +221,7 @@ public class CoordCompassRenderer {
         }
     }
 
-    private static void renderArrow(GuiGraphics drawContext, int startX, int startY, int endX, int endY) {
+    private static void renderArrow(GuiGraphicsExtractor drawContext, int startX, int startY, int endX, int endY) {
         drawLine(drawContext, startX, startY, endX, endY);
 
         double angle = Math.atan2(endY - startY, endX - startX);
@@ -245,7 +236,7 @@ public class CoordCompassRenderer {
         drawLine(drawContext, endX, endY, arrow2X, arrow2Y);
     }
 
-    private static void drawLine(GuiGraphics drawContext, int x1, int y1, int x2, int y2) {
+    private static void drawLine(GuiGraphicsExtractor drawContext, int x1, int y1, int x2, int y2) {
         int dx = Math.abs(x2 - x1);
         int dy = Math.abs(y2 - y1);
         int sx = x1 < x2 ? 1 : -1;
