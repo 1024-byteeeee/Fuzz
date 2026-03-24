@@ -55,3 +55,25 @@
 - /coordCompass help
 
   显示帮助信息。
+
+## 动画冻结（commandAnimatedFreeze）
+
+- /animatedFreeze add &lt;纹理&gt;
+
+  添加一个需要禁用动画的纹理。
+
+- /animatedFreeze remove &lt;纹理&gt;
+
+  移除一个已被禁用动画的纹理。
+
+- /animatedFreeze removeAll
+
+  解禁所有被禁用动画的纹理。
+  
+- /animatedFreeze list
+
+  查看被禁用动画的纹理列表。
+
+- /animatedFreeze help
+
+  显示帮助信息。

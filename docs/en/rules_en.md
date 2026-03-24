@@ -664,3 +664,45 @@ Parse coordinates in chat messages, display them in green with underlines, and a
 
 
 - Categroies: `FUZZ`, `QOL`
+
+
+
+## commandAnimatedFreeze
+
+Use the /animatedFreeze command to disable the animation of a specified texture.
+
+Use the /animatedFreeze command to view the usage guide
+
+- Type: `boolean`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `true`
+
+
+
+- Categroies: `FUZZ`, `RENDER`, `COMMAND`
+
+
+
+## chestOptimization
+
+Significantly optimized chest rendering (from FastChest mod).
+
+- Type: `boolean`
+
+
+
+- Default: `false`
+
+
+
+- Suggested options: `false`, `true`
+
+
+
+- Categroies: `FUZZ`, `RENDER`, `EXPERIMENTAL`

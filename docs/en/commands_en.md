@@ -55,3 +55,25 @@
 - /coordCompass help
 
   Show help information.
+
+## commandAnimatedFreeze
+
+- /animatedFreeze add &lt;texture&gt;
+
+  Disable animations for a texture.
+
+- /animatedFreeze remove &lt;texture&gt;
+
+  Enable the animation of a texture.
+
+- /animatedFreeze removeAll
+
+  Enable all textures with disabled animations.
+
+- /animatedFreeze list
+
+  View the list of textures with disabled animations.
+
+- /animatedFreeze help
+
+  Show help information.

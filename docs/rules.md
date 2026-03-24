@@ -667,3 +667,45 @@
 
 
 - 分类: `FUZZ`, `QOL`
+
+
+
+## 动画冻结（commandAnimatedFreeze）
+
+使用 /animatedFreeze 指令禁用指定纹理的动画。
+
+使用 /animatedFreeze help 指令查看使用指南
+
+- 类型: `boolean`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `true`
+
+
+
+- 分类: `FUZZ`, `RENDER`, `COMMAND`
+
+
+
+## 箱子优化（chestOptimization）
+
+大幅优化箱子渲染（来自FastChest模组）。
+
+- 类型: `boolean`
+
+
+
+- 默认值: `false`
+
+
+
+- 参考选项: `false`, `true`
+
+
+
+- 分类: `FUZZ`, `RENDER`, `EXPERIMENTAL`
