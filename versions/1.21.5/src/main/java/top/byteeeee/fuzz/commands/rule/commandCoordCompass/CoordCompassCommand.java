@@ -166,15 +166,15 @@ public class CoordCompassCommand extends AbstractRuleCommand {
         //#if MC>=12111
         //$$ RenderLayer renderLayer = RenderLayers.fireScreenEffect(TARGET_ICON);
         //#elseif MC>=12106
-        //$$ RenderLayer renderLayer = RenderLayer.getFireScreenEffect(TARGET_ICON);
+        //$$ RenderLayer renderLayer = RenderLayer.getTextSeeThrough(TARGET_ICON);
         //#else
         RenderLayer renderLayer = RenderLayer.getGuiTexturedOverlay(TARGET_ICON);
         //#endif
         VertexConsumer vertexConsumer = Objects.requireNonNull(context.consumers()).getBuffer(renderLayer);
-        vertexConsumer.vertex(entry.getPositionMatrix(), -1F, -1F, 0F).texture(0F, 0F).color(-1);
-        vertexConsumer.vertex(entry.getPositionMatrix(), -1F, 1F, 0F).texture(0F, 1F).color(-1);
-        vertexConsumer.vertex(entry.getPositionMatrix(), 1F, 1F, 0F).texture(1F, 1F).color(-1);
-        vertexConsumer.vertex(entry.getPositionMatrix(), 1F, -1F, 0F).texture(1F, 0F).color(-1);
+        vertexConsumer.vertex(entry.getPositionMatrix(), -1F, -1F, 0F).texture(0F, 0F).color(-1).light(0xF000F0);
+        vertexConsumer.vertex(entry.getPositionMatrix(), -1F, 1F, 0F).texture(0F, 1F).color(-1).light(0xF000F0);
+        vertexConsumer.vertex(entry.getPositionMatrix(), 1F, 1F, 0F).texture(1F, 1F).color(-1).light(0xF000F0);
+        vertexConsumer.vertex(entry.getPositionMatrix(), 1F, -1F, 0F).texture(1F, 0F).color(-1).light(0xF000F0);
         //#if MC<12106
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         //#endif
