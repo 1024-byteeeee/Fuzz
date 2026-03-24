@@ -1,4 +1,4 @@
-version:4768
+version:4786
 ao:true
 biomeBlendRadius:2
 chunkSectionFadeInTime:0.75
@@ -16,6 +16,7 @@ glintStrength:0.75
 graphicsPreset:"custom"
 prioritizeChunkUpdates:0
 fullscreen:false
+exclusiveFullscreen:false
 gamma:0.5
 guiScale:0
 maxAnisotropyBit:2
@@ -29,7 +30,7 @@ particles:0
 reducedDebugInfo:false
 renderClouds:"false"
 cloudRange:128
-renderDistance:2
+renderDistance:32
 simulationDistance:5
 screenEffectScale:1.0
 soundDevice:""
@@ -63,7 +64,7 @@ damageTiltStrength:1.0
 highContrast:false
 highContrastBlockOutline:false
 narratorHotkey:true
-resourcePacks:["vanilla","fuzz_mod:chest_optimization"]
+resourcePacks:["vanilla"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:zh_cn
@@ -168,7 +169,7 @@ key_key.debug.networkCharts:key.keyboard.3
 key_key.debug.lightmapTexture:key.keyboard.4
 key_快捷踢出假人:key.keyboard.unknown
 key_快捷扔出假人背包:key.keyboard.unknown
-key_清除坐标罗盘:key.keyboard.unknown
+key_清除坐标罗盘:key.keyboard.c
 soundCategory_master:0.24668874
 soundCategory_music:0.0
 soundCategory_record:1.0
