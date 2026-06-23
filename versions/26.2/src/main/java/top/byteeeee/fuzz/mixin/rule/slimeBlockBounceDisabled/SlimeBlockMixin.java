@@ -23,25 +23,26 @@ package top.byteeeee.fuzz.mixin.rule.slimeBlockBounceDisabled;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SlimeBlock;
 import net.minecraft.world.entity.Entity;
 
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 
-import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.helpers.Noop;
 import top.byteeeee.fuzz.utils.ClientUtil;
 
-@GameVersion(version = "Minecraft < 26.2")
 @Mixin(SlimeBlock.class)
 public abstract class SlimeBlockMixin {
-    @WrapMethod(method = "bounceUp")
-    private void slimeBlockBounceDisabled(Entity entity, Operation<Void> original) {
+    @WrapMethod(method = "fallOn")
+    private void slimeBlockBounceDisabled(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance, Operation<Void> original) {
         if (FuzzSettings.slimeBlockSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
             Noop.noop();
         } else {
-            original.call(entity);
+            original.call(level, state, pos, entity, fallDistance);
         }
     }
 }
