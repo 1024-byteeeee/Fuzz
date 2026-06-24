@@ -39,6 +39,6 @@ public abstract class SoulSandBlockMixin extends Block {
 
     @Override
     public float getSpeedFactor() {
-        return FuzzSettings.soulSandBlockSlowDownDisabled ? Blocks.GRAY_CONCRETE.getSpeedFactor() : super.getSpeedFactor();
+        return FuzzSettings.soulSandBlockSlowDownDisabled ? Blocks.TNT.getSpeedFactor() : super.getSpeedFactor();
     }
 }

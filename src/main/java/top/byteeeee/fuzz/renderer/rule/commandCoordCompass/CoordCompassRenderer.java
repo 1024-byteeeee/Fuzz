@@ -69,7 +69,11 @@ public class CoordCompassRenderer {
             return;
         }
 
+        //#if MC>=260200
+        //$$ Camera camera = client.gameRenderer.mainCamera();
+        //#else
         Camera camera = client.gameRenderer.getMainCamera();
+        //#endif
         PoseStack matrixStack = context.poseStack();
         matrixStack.pushPose();
         Vec3 cameraPos = camera.position();
@@ -95,13 +99,24 @@ public class CoordCompassRenderer {
         matrixStack.mulPose(new Quaternionf().rotationYXZ((float)Math.toRadians(yaw), (float)Math.toRadians(pitch), 0));
         float scale = 1.0F;
         matrixStack.scale(scale, scale, scale);
+        //#if MC<260200
         PoseStack.Pose entry = matrixStack.last();
+        //#endif
         RenderType renderLayer = RenderTypes.textSeeThrough(TARGET_ICON);
+        //#if MC>=260200
+        //$$ context.submitNodeCollector().order(-1).submitCustomGeometry(context.poseStack(), renderLayer, (pose, buffer) -> {
+        //$$     buffer.addVertex(pose, -1F, -1F, 0F).setColor(1F, 1F, 1F, 1).setUv(0F, 0F);
+        //$$     buffer.addVertex(pose, -1F, 1F, 0F).setColor(1F, 1F, 1F, 1).setUv(0F, 1F);
+        //$$     buffer.addVertex(pose, 1F, 1F, 0F).setColor(1F, 1F, 1F, 1).setUv(1F, 1F);
+        //$$     buffer.addVertex(pose, 1F, -1F, 0F).setColor(1F, 1F, 1F, 1).setUv(1F, 0F);
+        //$$ });
+        //#else
         VertexConsumer vertexConsumer = Objects.requireNonNull(context.bufferSource()).getBuffer(renderLayer);
         vertexConsumer.addVertex(entry.pose(), -1F, -1F, 0F).setUv(0F, 0F).setColor(-1).setLight(0xF000F0);
         vertexConsumer.addVertex(entry.pose(), -1F, 1F, 0F).setUv(0F, 1F).setColor(-1).setLight(0xF000F0);
         vertexConsumer.addVertex(entry.pose(), 1F, 1F, 0F).setUv(1F, 1F).setColor(-1).setLight(0xF000F0);
         vertexConsumer.addVertex(entry.pose(), 1F, -1F, 0F).setUv(1F, 0F).setColor(-1).setLight(0xF000F0);
+        //#endif
         matrixStack.popPose();
     }
 

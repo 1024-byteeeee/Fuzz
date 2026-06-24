@@ -18,33 +18,20 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.honeyBlockSlowDownDisabled;
+package top.byteeeee.fuzz.mixin.rule.blockOutlineColor_Width;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HoneyBlock;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.multiplayer.ClientLevel;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+import top.byteeeee.fuzz.utils.compat.DummyInterface;
 
-import top.byteeeee.fuzz.FuzzSettings;
-
+@GameVersion(version = "Minecraft < 21.2")
 @Environment(EnvType.CLIENT)
-@Mixin(HoneyBlock.class)
-public abstract class HoneyBlockMixin extends Block {
-    public HoneyBlockMixin(Properties settings) {
-        super(settings);
-    }
-
-    @Override
-    public float getSpeedFactor() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.TNT.getSpeedFactor() : super.getSpeedFactor();
-    }
-
-    @Override
-    public float getJumpFactor() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.TNT.getJumpFactor() : super.getJumpFactor();
-    }
-}
+@Mixin(DummyInterface.class)
+public interface LevelRendererAccessor {}

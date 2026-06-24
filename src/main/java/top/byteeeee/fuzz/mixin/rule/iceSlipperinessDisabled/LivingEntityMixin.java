@@ -50,7 +50,7 @@ public abstract class LivingEntityMixin {
     private float iceSlipperinessDisabled(Block block, Operation<Float> original) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (FuzzSettings.iceSlipperinessDisabled && entity.equals(ClientUtil.getCurrentPlayer()) && IceFamily.isIce(block)) {
-            return Blocks.GRAY_CONCRETE.getFriction();
+            return Blocks.TNT.getFriction();
         } else {
             return original.call(block);
         }
