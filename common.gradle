@@ -61,6 +61,17 @@ loom {
 	accessWidenerPath = file("fuzz.accesswidener")
 }
 
+afterEvaluate {
+	tasks.matching { it.name.startsWith('runMixinAudit') }.configureEach { runTask ->
+		parent.subprojects.findAll { it != project }.each { otherProject ->
+			def downloadAssets = otherProject.tasks.findByName('downloadAssets')
+			if (downloadAssets != null) {
+				runTask.mustRunAfter(downloadAssets)
+			}
+		}
+	}
+}
+
 JavaVersion JAVA_VERSION
 if (mcVersion >= 260000) {
 	JAVA_VERSION = JavaVersion.VERSION_25

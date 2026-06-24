@@ -21,7 +21,6 @@
 package top.byteeeee.fuzz.utils;
 
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-
 import net.minecraft.network.chat.MutableComponent;
 
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +32,7 @@ public class MixinUtil {
     public static boolean audit(@Nullable FabricClientCommandSource source) {
         boolean ok;
         MutableComponent response;
+
         try {
             MixinEnvironment.getCurrentEnvironment().audit();
             response = Messenger.s("Mixin environment audited successfully");
@@ -42,9 +42,11 @@ public class MixinUtil {
             response = Messenger.s(String.format("Mixin environment auditing failed, check console for more information (%s)", e));
             ok = false;
         }
+
         if (source != null) {
             Messenger.tell(source, response);
         }
+
         return ok;
     }
 }
