@@ -23,11 +23,8 @@ package top.byteeeee.fuzz.mixin.rule.blockOutlineColor_Width;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.multiplayer.ClientLevel;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.utils.compat.DummyInterface;
 

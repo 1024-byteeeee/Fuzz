@@ -20,31 +20,43 @@
 
 package top.byteeeee.fuzz.mixin.rule.honeyBlockSlowDownDisabled;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HoneyBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.ClientUtil;
+import top.byteeeee.fuzz.utils.EntityUtil;
 
 @Environment(EnvType.CLIENT)
-@Mixin(HoneyBlock.class)
-public abstract class HoneyBlockMixin extends Block {
-    public HoneyBlockMixin(Properties settings) {
-        super(settings);
-    }
+@Mixin(Entity.class)
+public abstract class EntityMixin {
+    @ModifyReturnValue(method = {"getBlockSpeedFactor", "getBlockJumpFactor"}, at = @At("RETURN"))
+    private float modifySpeedFactorValue(float original) {
+        if (!FuzzSettings.honeyBlockSlowDownDisabled) {
+            return original;
+        }
 
-    @Override
-    public float getSpeedFactor() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.TNT.getSpeedFactor() : super.getSpeedFactor();
-    }
+        Entity entity = (Entity) (Object) this;
 
-    @Override
-    public float getJumpFactor() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.TNT.getJumpFactor() : super.getJumpFactor();
+        if (!ClientUtil.isSelf(entity)) {
+            return original;
+        }
+
+        BlockState blockState = EntityUtil.getEntityWorld(entity).getBlockState(entity.getOnPos());
+
+        if (blockState.is(Blocks.HONEY_BLOCK)) {
+            return 1.0F;
+        } else {
+            return original;
+        }
     }
 }

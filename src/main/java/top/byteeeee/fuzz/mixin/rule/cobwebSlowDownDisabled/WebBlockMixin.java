@@ -44,7 +44,7 @@ public abstract class WebBlockMixin {
         )
     )
     private void slowDownDisabled(Entity entity, BlockState blockState, Vec3 speedMultiplier, Operation<Void> original) {
-        if (FuzzSettings.cobwebSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.cobwebSlowDownDisabled && ClientUtil.isSelf(entity)) {
             Noop.noop();
         } else {
             original.call(entity, blockState, speedMultiplier);

@@ -18,40 +18,44 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.slimeBlockBounceDisabled;
+package top.byteeeee.fuzz.mixin.rule.soulSandBlockSlowDownDisabled;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.ClientUtil;
+import top.byteeeee.fuzz.utils.EntityUtil;
 
 @Environment(EnvType.CLIENT)
-@Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin {
-    @WrapOperation(
-        method = "travelInAir",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/Block;getFriction()F"
-        )
-    )
-    private float slimeSlipperinessDisabled(Block block, Operation<Float> original) {
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (FuzzSettings.slimeBlockSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer()) && block.equals(Blocks.SLIME_BLOCK)) {
-            return Blocks.TNT.getFriction();
+@Mixin(Entity.class)
+public abstract class EntityMixin {
+    @ModifyReturnValue(method = "getBlockSpeedFactor", at = @At("RETURN"))
+    private float modifySpeedFactorValue(float original) {
+        if (!FuzzSettings.soulSandBlockSlowDownDisabled) {
+            return original;
+        }
+
+        Entity entity = (Entity) (Object) this;
+
+        if (!ClientUtil.isSelf(entity)) {
+            return original;
+        }
+
+        BlockState blockState = EntityUtil.getEntityWorld(entity).getBlockState(entity.getOnPos());
+
+        if (blockState.is(Blocks.SOUL_SAND)) {
+            return 1.0F;
         } else {
-            return original.call(block);
+            return original;
         }
     }
 }

@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.slimeBlockBounceDisabled;
+package top.byteeeee.fuzz.mixin.rule.slimeBlockSlowDownDisabled;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -39,7 +39,7 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 public abstract class SlimeBlockMixin {
     @WrapMethod(method = "fallOn")
     private void slimeBlockBounceDisabled(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance, Operation<Void> original) {
-        if (FuzzSettings.slimeBlockSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isSelf(entity)) {
             Noop.noop();
         } else {
             original.call(level, state, pos, entity, fallDistance);

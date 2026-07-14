@@ -26,12 +26,21 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 
+import net.minecraft.world.entity.Entity;
 import top.byteeeee.fuzz.FuzzModClient;
 
 @Environment(EnvType.CLIENT)
 public class ClientUtil {
     public static LocalPlayer getCurrentPlayer() {
         return FuzzModClient.minecraftClient.player;
+    }
+
+    public static boolean isSelf(Entity entity) {
+        if (getCurrentPlayer() != null) {
+            return entity.getId() ==  getCurrentPlayer().getId();
+        } else {
+            return false;
+        }
     }
 
     public static Minecraft getCurrentClient() {

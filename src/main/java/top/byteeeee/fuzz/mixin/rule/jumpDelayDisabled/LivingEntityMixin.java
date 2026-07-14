@@ -45,7 +45,7 @@ public abstract class LivingEntityMixin {
     private void removeJumpDelay1(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
-            if (entity.equals(ClientUtil.getCurrentPlayer())) {
+            if (ClientUtil.isSelf(entity)) {
                 this.noJumpDelay = 0;
             }
         }
@@ -55,7 +55,7 @@ public abstract class LivingEntityMixin {
     private void removeJumpDelay2(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
-            if (entity.equals(ClientUtil.getCurrentPlayer())) {
+            if (ClientUtil.isSelf(entity)) {
                 this.noJumpDelay = 0;
             }
         }
@@ -65,7 +65,7 @@ public abstract class LivingEntityMixin {
     private void removeJumpDelay3(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
-            if (entity.equals(ClientUtil.getCurrentPlayer())) {
+            if (ClientUtil.isSelf(entity)) {
                 this.noJumpDelay = 0;
             }
         }
@@ -75,7 +75,7 @@ public abstract class LivingEntityMixin {
     private void removeJumpDelay4(CallbackInfo ci) {
         if (FuzzSettings.jumpDelayDisabled) {
             LivingEntity entity = (LivingEntity) (Object) this;
-            if (entity.equals(ClientUtil.getCurrentPlayer())) {
+            if (ClientUtil.isSelf(entity)) {
                 this.noJumpDelay = 0;
             }
         }

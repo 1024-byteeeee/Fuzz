@@ -44,7 +44,7 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 public abstract class BubbleColumnBlockMixin {
     @WrapMethod(method = "entityInside")
     private void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier handler, boolean bl, Operation<Void> original) {
-        if (FuzzSettings.bubbleColumnInteractDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.bubbleColumnInteractDisabled && ClientUtil.isSelf(entity)) {
             Noop.noop();
         } else {
             original.call(state, world, pos, entity,handler,bl);
