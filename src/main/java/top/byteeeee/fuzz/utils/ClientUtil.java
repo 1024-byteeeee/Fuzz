@@ -31,13 +31,15 @@ import top.byteeeee.fuzz.FuzzModClient;
 
 @Environment(EnvType.CLIENT)
 public class ClientUtil {
+    public static final ThreadLocal<Boolean> IS_LOCAL_PLAYER_TICKING = ThreadLocal.withInitial(() -> false);
+
     public static LocalPlayer getCurrentPlayer() {
         return FuzzModClient.minecraftClient.player;
     }
 
     public static boolean isSelf(Entity entity) {
         if (getCurrentPlayer() != null) {
-            return entity.getId() ==  getCurrentPlayer().getId();
+            return entity.is(getCurrentPlayer());
         } else {
             return false;
         }
