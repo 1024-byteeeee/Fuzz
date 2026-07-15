@@ -4,6 +4,8 @@
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [
+    "rule.slimeBlockSlowDownDisabled.BlockMixin",
+    "rule.slimeBlockSlowDownDisabled.EntityMixin"
   ],
   "client": [
     "hooks.LocalPlayerMixin",

@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.soulSandBlockSlowDownDisabled;
+package top.byteeeee.fuzz.mixin.rule.slimeBlockSlowDownDisabled;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
@@ -27,7 +27,7 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoulSandBlock;
+import net.minecraft.world.level.block.SlimeBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -45,7 +45,7 @@ public abstract class BlockMixin {
         }
 
         Block block = (Block) (Object) this;
-        if (FuzzSettings.soulSandBlockSlowDownDisabled && block instanceof SoulSandBlock) {
+        if (FuzzSettings.slimeBlockSlowDownDisabled && block instanceof SlimeBlock) {
             return Blocks.TNT.getFriction();
         } else {
             return original;
@@ -59,7 +59,7 @@ public abstract class BlockMixin {
         }
 
         Block block = (Block) (Object) this;
-        if (FuzzSettings.soulSandBlockSlowDownDisabled && block instanceof SoulSandBlock) {
+        if (FuzzSettings.slimeBlockSlowDownDisabled && block instanceof SlimeBlock) {
             return Blocks.TNT.getSpeedFactor();
         } else {
             return original;
@@ -73,7 +73,7 @@ public abstract class BlockMixin {
         }
 
         Block block = (Block) (Object) this;
-        if (FuzzSettings.soulSandBlockSlowDownDisabled && block instanceof SoulSandBlock) {
+        if (FuzzSettings.slimeBlockSlowDownDisabled && block instanceof SlimeBlock) {
             return Blocks.TNT.getJumpFactor();
         } else {
             return original;
