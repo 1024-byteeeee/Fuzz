@@ -1,4 +1,4 @@
-version:4788
+version:4903
 ao:true
 biomeBlendRadius:2
 chunkSectionFadeInTime:0.75
@@ -13,6 +13,7 @@ fovEffectScale:1.0
 darknessEffectScale:1.0
 glintSpeed:0.5
 glintStrength:0.75
+preferredGraphicsBackend:"default"
 graphicsPreset:"custom"
 prioritizeChunkUpdates:0
 fullscreen:false
@@ -30,7 +31,7 @@ particles:0
 reducedDebugInfo:false
 renderClouds:"false"
 cloudRange:128
-renderDistance:32
+renderDistance:2
 simulationDistance:5
 screenEffectScale:1.0
 soundDevice:""
@@ -49,7 +50,6 @@ invertYMouse:false
 realmsNotifications:true
 showSubtitles:false
 directionalAudio:false
-touchscreen:false
 bobView:true
 toggleCrouch:false
 toggleSprint:false
@@ -59,12 +59,12 @@ sprintWindow:7
 darkMojangStudiosBackground:false
 hideLightningFlashes:false
 hideSplashTexts:false
-mouseSensitivity:0.5
+mouseSensitivity:0.3287943808685447
 damageTiltStrength:1.0
 highContrast:false
 highContrastBlockOutline:false
 narratorHotkey:true
-resourcePacks:["vanilla"]
+resourcePacks:["vanilla","fuzz_mod:chest_optimization"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:zh_cn
@@ -98,6 +98,8 @@ joinedFirstServer:false
 syncChunkWrites:true
 showAutosaveIndicator:true
 allowServerListing:true
+inGameNotification:false
+sharePresence:"all"
 onlyShowSecureChat:false
 saveChatDrafts:false
 panoramaScrollSpeed:1.0
@@ -122,6 +124,7 @@ key_key.chat:key.keyboard.t
 key_key.playerlist:key.keyboard.tab
 key_key.pickItem:key.mouse.middle
 key_key.command:key.keyboard.slash
+key_key.friends:key.keyboard.o
 key_key.socialInteractions:key.keyboard.p
 key_key.toggleGui:key.keyboard.f1
 key_key.toggleSpectatorShaderEffects:key.keyboard.f4
@@ -170,7 +173,7 @@ key_key.debug.lightmapTexture:key.keyboard.4
 key_快捷踢出假人:key.keyboard.unknown
 key_快捷扔出假人背包:key.keyboard.unknown
 key_清除坐标罗盘:key.keyboard.unknown
-soundCategory_master:0.24668874
+soundCategory_master:1.0
 soundCategory_music:0.0
 soundCategory_record:1.0
 soundCategory_weather:1.0

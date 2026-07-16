@@ -49,7 +49,7 @@ public abstract class LocalPlayerMixin {
     @WrapMethod(method = "updateIsUnderwater")
     private boolean preventSwimmingWhileSprinting(Operation<Boolean> original) {
         LocalPlayer player = (LocalPlayer) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && player.equals(ClientUtil.getCurrentPlayer()) && !player.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(player) && !player.isOnFire()) {
             return false;
         } else {
             return original.call();

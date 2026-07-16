@@ -42,7 +42,7 @@ public abstract class EntityMixin {
     @ModifyReturnValue(method = "isInWater", at = @At("RETURN"))
     private boolean isInWater(boolean original) {
         Entity entity = (Entity) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) {
             return false;
         } else {
             return original;
@@ -52,7 +52,7 @@ public abstract class EntityMixin {
     @ModifyReturnValue(method = "isInShallowWater", at = @At("RETURN"))
     private boolean isInShallowWater(boolean original) {
         Entity entity = (Entity) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) {
             return false;
         } else {
             return original;
@@ -62,7 +62,7 @@ public abstract class EntityMixin {
     @ModifyReturnValue(method = "isInLava", at = @At("RETURN"))
     private boolean isInLava(boolean original) {
         Entity entity = (Entity) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) {
             return false;
         } else {
             return original;
@@ -72,7 +72,7 @@ public abstract class EntityMixin {
     @ModifyReturnValue(method = "updateFluidInteraction", at = @At("RETURN"))
     private boolean noUpdate(boolean original) {
         Entity entity = (Entity) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) {
             return false;
         } else {
             return original;
@@ -87,7 +87,7 @@ public abstract class EntityMixin {
         )
     )
     private boolean noPush(Entity entity, Operation<Boolean> original) {
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && !entity.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) {
             return false;
         } else {
             return original.call(entity);
@@ -102,13 +102,13 @@ public abstract class EntityMixin {
         )
     )
     private boolean setSwimming(Entity entity, int index, boolean value) {
-        return !FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer());
+        return !FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity);
     }
 
     @ModifyReturnValue(method = "getFluidHeight", at = @At("RETURN"))
     private double getFluidHeight(double original) {
         Entity entity = (Entity) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity)) {
             return 0.114514D;
         } else {
             return original;

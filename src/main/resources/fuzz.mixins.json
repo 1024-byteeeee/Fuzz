@@ -3,8 +3,10 @@
   "minVersion": "0.8.5",
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
-  "mixins": [],
+  "mixins": [
+  ],
   "client": [
+    "hooks.LocalPlayerMixin",
     "hooks.MinecraftMixin",
     "key.KeyMapping_CategoryMixin",
     "rule.bedRockFlying.LocalPlayerInvoker",
@@ -16,6 +18,7 @@
     "rule.chestOptimization.BlockEntityRenderDispatcherMixin",
     "rule.chestOptimization.ChestBlockMixin",
     "rule.chestOptimization.EnderChestBlockMixin",
+    "rule.chestOptimization.PackMixin",
     "rule.chestOptimization.PackRepositoryMixin",
     "rule.cobwebSlowDownDisabled.WebBlockMixin",
     "rule.commandAnimatedFreeze.chestBlockAnimationDisabled.ChestBlockEntityMixin",
@@ -25,7 +28,7 @@
     "rule.commandHighlightEntites.MinecraftMixin",
     "rule.fluidPushDisabled.PlayerMixin",
     "rule.fogColor.FogRendererMixin",
-    "rule.honeyBlockSlowDownDisabled.HoneyBlockMixin",
+    "rule.honeyBlockSlowDownDisabled.BlockMixin",
     "rule.hurtShakeDisabled.GameRendererMixin",
     "rule.iceSlipperinessDisabled.LivingEntityMixin",
     "rule.jumpDelayDisabled.LivingEntityMixin",
@@ -37,15 +40,15 @@
     "rule.pickFluidBucketItemInCreative.MinecraftMixin",
     "rule.renderHandDisabled.GameRendererMixin",
     "rule.skyColor.SkyRenderStateMixin",
-    "rule.slimeBlockBounceDisabled.LivingEntityMixin",
-    "rule.slimeBlockBounceDisabled.SlimeBlockMixin",
+    "rule.slimeBlockSlowDownDisabled.SlimeBlockMixin",
     "rule.sneakingSlowDownDisabled.LocalPlayerMixin",
-    "rule.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
+    "rule.soulSandBlockSlowDownDisabled.BlockMixin",
     "rule.usingItemSlowDownDisabled.LocalPlayerMixin",
     "rule.waterColor.WaterRendererMixin",
     "rule.waterFogColor.FogRendererMixin",
     "translations.TranslatableTextMixin",
-    "rule.chestOptimization.PackMixin"
+    "rule.slimeBlockSlowDownDisabled.BlockMixin",
+    "rule.slimeBlockSlowDownDisabled.EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -2,7 +2,7 @@
  * This file is part of the Fuzz project, licensed under the
  * GNU Lesser General Public License v3.0
  *
- * Copyright (C) 2025 1024_byteeeee and contributors
+ * Copyright (C) 2026 1024_byteeeee and contributors
  *
  * Fuzz is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,33 +18,35 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.honeyBlockSlowDownDisabled;
+package top.byteeeee.fuzz.mixin.rule.slimeBlockSlowDownDisabled;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HoneyBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.ClientUtil;
+import top.byteeeee.fuzz.utils.EntityUtil;
 
 @Environment(EnvType.CLIENT)
-@Mixin(HoneyBlock.class)
-public abstract class HoneyBlockMixin extends Block {
-    public HoneyBlockMixin(Properties settings) {
-        super(settings);
-    }
-
-    @Override
-    public float getSpeedFactor() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.TNT.getSpeedFactor() : super.getSpeedFactor();
-    }
-
-    @Override
-    public float getJumpFactor() {
-        return FuzzSettings.honeyBlockSlowDownDisabled ? Blocks.TNT.getJumpFactor() : super.getJumpFactor();
+@Mixin(Entity.class)
+public abstract class EntityMixin {
+    @ModifyReturnValue(method = "isSuppressingBounce", at = @At("RETURN"))
+    private boolean skipSlimeBounceLogic(boolean original) {
+        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
+            Entity entity = (Entity) (Object) this;
+            BlockPos belowPos = entity.getBlockPosBelowThatAffectsMyMovement();
+            return EntityUtil.getEntityWorld(entity).getBlockState(belowPos).is(Blocks.SLIME_BLOCK);
+        } else {
+            return original;
+        }
     }
 }

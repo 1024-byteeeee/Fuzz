@@ -2,7 +2,7 @@
  * This file is part of the Fuzz project, licensed under the
  * GNU Lesser General Public License v3.0
  *
- * Copyright (C) 2025 1024_byteeeee and contributors
+ * Copyright (C) 2026 1024_byteeeee and contributors
  *
  * Fuzz is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,27 +18,36 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.renderHandDisabled;
+package top.byteeeee.fuzz.mixin.hooks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.player.LocalPlayer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
-@Mixin(GameRenderer.class)
-public abstract class GameRendererMixin {
-    @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
-    private void renderHandDisabled(CallbackInfo ci) {
-        if (FuzzSettings.renderHandDisabled) {
-            ci.cancel();
+@Mixin(LocalPlayer.class)
+public abstract class LocalPlayerMixin {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onTickStart(CallbackInfo ci) {
+        LocalPlayer player = (LocalPlayer) (Object) this;
+        if (ClientUtil.isLocalPlayerSelf(player)) {
+            ClientUtil.setLocalPlayerTicking(true);
+        }
+    }
+
+    @Inject(method = "tick", at = @At("RETURN"))
+    private void onTickEnd(CallbackInfo ci) {
+        LocalPlayer player = (LocalPlayer) (Object) this;
+        if (ClientUtil.isLocalPlayerSelf(player)) {
+            ClientUtil.removeLocalPlayerTicking();
         }
     }
 }

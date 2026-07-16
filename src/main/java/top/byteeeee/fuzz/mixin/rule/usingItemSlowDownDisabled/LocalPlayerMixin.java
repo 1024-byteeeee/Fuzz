@@ -71,7 +71,7 @@ public abstract class LocalPlayerMixin {
         )
     )
     private boolean noApplySlowDown(LocalPlayer player, Operation<Boolean> original) {
-        if (FuzzSettings.usingItemSlowDownDisabled && player.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.usingItemSlowDownDisabled && ClientUtil.isLocalPlayerSelf(player)) {
             return false;
         } else {
             return original.call(player);
