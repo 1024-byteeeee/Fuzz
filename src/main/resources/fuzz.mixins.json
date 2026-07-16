@@ -4,8 +4,11 @@
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [
+    "rule.slimeBlockSlowDownDisabled.EntityMixin",
+    "rule.slimeBlockSlowDownDisabled.SlimeBlockMixin"
   ],
   "client": [
+    "hooks.ClientPlayerEntityMixin",
     "hooks.MinecraftClientMixin",
     "hooks.fabricapi.WorldRendererMixin",
     "key.KeyBinding_CategoryMixin",
@@ -34,10 +37,9 @@
     "rule.pickFluidBucketItemInCreative.MinecraftClientMixin",
     "rule.renderHandDisabled.GameRendererMixin",
     "rule.skyColor.SkyRenderStateMixin",
-    "rule.slimeBlockBounceDisabled.LivingEntityMixin",
-    "rule.slimeBlockBounceDisabled.SlimeBlockMixin",
+    "rule.slimeBlockSlowDownDisabled.BlockMixin",
     "rule.sneakingSlowDownDisabled.ClientPlayerEntityMixin",
-    "rule.soulSandBlockSlowDownDisabled.SoulSandBlockMixin",
+    "rule.soulSandBlockSlowDownDisabled.BlockMixin",
     "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
     "rule.waterColor.WaterRendererMixin",
     "rule.waterFogColor.FogRendererMixin",

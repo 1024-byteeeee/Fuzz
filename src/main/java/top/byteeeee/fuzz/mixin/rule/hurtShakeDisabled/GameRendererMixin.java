@@ -36,7 +36,7 @@ import top.byteeeee.fuzz.helpers.Noop;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public abstract class GameRendererMixin {
     @WrapMethod(method = "bobViewWhenHurt")
     private void worldRenderDisabled(MatrixStack matrices, float tickDelta, Operation<Void> original) {
         if (FuzzSettings.hurtShakeDisabled) {

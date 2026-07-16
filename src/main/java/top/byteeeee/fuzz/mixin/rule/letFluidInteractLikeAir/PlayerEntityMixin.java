@@ -45,7 +45,7 @@ public abstract class PlayerEntityMixin {
         )
     )
     private boolean checkFallFlying(PlayerEntity player, Operation<Boolean> original) {
-        if (FuzzSettings.letFluidInteractLikeAir && player.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(player)) {
             return false;
         } else {
             return original.call(player);

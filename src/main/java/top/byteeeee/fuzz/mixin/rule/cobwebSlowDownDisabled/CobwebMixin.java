@@ -45,7 +45,7 @@ public abstract class CobwebMixin {
         )
     )
     private void slowDownDisabled(Entity entity, BlockState state, Vec3d multiplier, Operation<Void> original) {
-        if (FuzzSettings.cobwebSlowDownDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.cobwebSlowDownDisabled && ClientUtil.isLocalPlayerSelf(entity)) {
             Noop.noop();
         } else {
             original.call(entity, state, multiplier);

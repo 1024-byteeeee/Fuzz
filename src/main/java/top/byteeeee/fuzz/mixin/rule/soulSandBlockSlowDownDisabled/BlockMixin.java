@@ -18,7 +18,7 @@
  * along with Fuzz. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.byteeeee.fuzz.mixin.rule.honeyBlockSlowDownDisabled;
+package top.byteeeee.fuzz.mixin.rule.soulSandBlockSlowDownDisabled;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
@@ -27,7 +27,7 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.HoneyBlock;
+import net.minecraft.block.SoulSandBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,7 +37,7 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
 @Mixin(Block.class)
-public abstract class HoneyBlockMixin {
+public abstract class BlockMixin {
     @ModifyReturnValue(method = "getSlipperiness", at = @At("RETURN"))
     private float modifyFriction(float original){
         if (!ClientUtil.isLocalPlayerTicking()) {
@@ -45,7 +45,7 @@ public abstract class HoneyBlockMixin {
         }
 
         Block block = (Block) (Object) this;
-        if (FuzzSettings.honeyBlockSlowDownDisabled && block instanceof HoneyBlock) {
+        if (FuzzSettings.soulSandBlockSlowDownDisabled && block instanceof SoulSandBlock) {
             return Blocks.TNT.getSlipperiness();
         } else {
             return original;
@@ -59,7 +59,7 @@ public abstract class HoneyBlockMixin {
         }
 
         Block block = (Block) (Object) this;
-        if (FuzzSettings.honeyBlockSlowDownDisabled && block instanceof HoneyBlock) {
+        if (FuzzSettings.soulSandBlockSlowDownDisabled && block instanceof SoulSandBlock) {
             return Blocks.TNT.getVelocityMultiplier();
         } else {
             return original;
@@ -73,7 +73,7 @@ public abstract class HoneyBlockMixin {
         }
 
         Block block = (Block) (Object) this;
-        if (FuzzSettings.honeyBlockSlowDownDisabled && block instanceof HoneyBlock) {
+        if (FuzzSettings.soulSandBlockSlowDownDisabled && block instanceof SoulSandBlock) {
             return Blocks.TNT.getJumpVelocityMultiplier();
         } else {
             return original;

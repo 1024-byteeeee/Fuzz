@@ -49,7 +49,7 @@ public abstract class ClientPlayerEntityMixin {
     @WrapMethod(method = "updateWaterSubmersionState")
     private boolean preventSwimmingWhileSprinting(Operation<Boolean> original) {
         ClientPlayerEntity player = (ClientPlayerEntity) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && player.equals(ClientUtil.getCurrentPlayer()) && !player.isOnFire()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(player) && !player.isOnFire()) {
             return false;
         } else {
             return original.call();
@@ -61,7 +61,7 @@ public abstract class ClientPlayerEntityMixin {
         if (FuzzSettings.letFluidInteractLikeAir) {
             final MinecraftClient client = ClientUtil.getCurrentClient();
             final ClientPlayerEntity player = ClientUtil.getCurrentPlayer();
-            if (!client.isInSingleplayer() && client.getCurrentServerEntry() != null) {
+            if (!client.isInSingleplayer() && client.getCurrentServerEntry() != null && ClientUtil.isLocalPlayerSelf(player)) {
                 boolean isSprinting = player.isSprinting();
                 if (isSprinting != this.lastSprinting) {
                     this.lastSprinting = isSprinting;

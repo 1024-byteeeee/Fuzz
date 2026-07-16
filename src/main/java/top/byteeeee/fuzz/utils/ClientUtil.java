@@ -25,13 +25,36 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 
 import top.byteeeee.fuzz.FuzzModClient;
 
 @Environment(EnvType.CLIENT)
 public class ClientUtil {
+    private static final ThreadLocal<Boolean> IS_LOCAL_PLAYER_TICKING = ThreadLocal.withInitial(() -> false);
+
     public static ClientPlayerEntity getCurrentPlayer() {
         return FuzzModClient.minecraftClient.player;
+    }
+
+    public static boolean isLocalPlayerSelf(Entity entity) {
+        if (getCurrentPlayer() != null) {
+            return entity.isPartOf(getCurrentPlayer());
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isLocalPlayerTicking() {
+        return IS_LOCAL_PLAYER_TICKING.get();
+    }
+
+    public static void setLocalPlayerTicking(boolean isLocalPlayerTicking) {
+        IS_LOCAL_PLAYER_TICKING.set(isLocalPlayerTicking);
+    }
+
+    public static void removeLocalPlayerTicking() {
+        IS_LOCAL_PLAYER_TICKING.remove();
     }
 
     public static MinecraftClient getCurrentClient() {

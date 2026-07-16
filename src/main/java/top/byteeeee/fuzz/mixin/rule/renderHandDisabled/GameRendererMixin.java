@@ -34,7 +34,7 @@ import top.byteeeee.fuzz.FuzzSettings;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public abstract class GameRendererMixin {
     @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
     private void renderHandDisabled(CallbackInfo ci) {
         if (FuzzSettings.renderHandDisabled) {

@@ -42,6 +42,7 @@ import org.spongepowered.asm.mixin.injection.At;
 //#endif
 
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.ClientUtil;
 
 @SuppressWarnings("SimplifiableConditionalExpression")
 @Environment(EnvType.CLIENT)
@@ -59,14 +60,15 @@ public abstract class ClientPlayerEntityMixin {
         )
     )
     private boolean usingItemNoSlowDown(boolean original) {
-        return FuzzSettings.usingItemSlowDownDisabled ? false : original;
+        ClientPlayerEntity player = (ClientPlayerEntity) (Object) this;
+        return FuzzSettings.usingItemSlowDownDisabled && ClientUtil.isLocalPlayerSelf(player) ? false : original;
     }
 
     //#if MC>=12104
     //$$ @ModifyReturnValue(method = "shouldStopSprinting", at = @At("RETURN"))
     //$$ private boolean shouldStopSprinting(boolean original) {
     //$$     ClientPlayerEntity player = ClientUtil.getCurrentPlayer();
-    //$$     if (FuzzSettings.usingItemSlowDownDisabled && player != null && player.isSprinting() && player.isUsingItem()) {
+    //$$     if (FuzzSettings.usingItemSlowDownDisabled && player != null && player.isSprinting() && player.isUsingItem() && ClientUtil.isLocalPlayerSelf(player)) {
     //$$         return false;
     //$$     } else {
     //$$         return original;
@@ -83,7 +85,7 @@ public abstract class ClientPlayerEntityMixin {
     //$$     )
     //$$ )
     //$$ private boolean noApplySlowDown(ClientPlayerEntity player, Operation<Boolean> original) {
-    //$$     if (FuzzSettings.usingItemSlowDownDisabled && player.equals(ClientUtil.getCurrentPlayer())) {
+    //$$     if (FuzzSettings.usingItemSlowDownDisabled && ClientUtil.isLocalPlayerSelf(player)) {
     //$$         return false;
     //$$     } else {
     //$$         return original.call(player);

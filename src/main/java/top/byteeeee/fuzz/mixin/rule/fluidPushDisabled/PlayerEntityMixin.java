@@ -40,6 +40,6 @@ public abstract class PlayerEntityMixin {
     @ModifyReturnValue(method = "isPushedByFluids", at = @At("RETURN"))
     public boolean isPushedByFluids(boolean original) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        return FuzzSettings.fluidPushDisabled && player.equals(ClientUtil.getCurrentPlayer()) ? false : original;
+        return FuzzSettings.fluidPushDisabled && ClientUtil.isLocalPlayerSelf(player) ? false : original;
     }
 }

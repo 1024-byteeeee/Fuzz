@@ -55,7 +55,7 @@ public abstract class BubbleColumnBlockMixin {
         //#endif
         Operation<Void> original
     ) {
-        if (FuzzSettings.bubbleColumnInteractDisabled && entity.equals(ClientUtil.getCurrentPlayer())) {
+        if (FuzzSettings.bubbleColumnInteractDisabled && ClientUtil.isLocalPlayerSelf(entity)) {
             Noop.noop();
         } else {
             original.call(

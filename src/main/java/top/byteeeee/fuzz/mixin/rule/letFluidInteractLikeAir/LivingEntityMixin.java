@@ -58,7 +58,7 @@ public abstract class LivingEntityMixin {
         //#endif
         Operation<Boolean> original
     ) {
-        if (FuzzSettings.letFluidInteractLikeAir && entity.equals(ClientUtil.getCurrentPlayer()) && entity.isInLava()) {
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && entity.isInLava()) {
             return false;
         } else {
             return original.call(
