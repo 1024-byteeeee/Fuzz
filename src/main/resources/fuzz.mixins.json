@@ -4,8 +4,6 @@
   "package": "top.byteeeee.fuzz.mixin",
   "compatibilityLevel": "/*JAVA_VERSION*/",
   "mixins": [
-    "rule.slimeBlockSlowDownDisabled.EntityMixin",
-    "rule.slimeBlockSlowDownDisabled.SlimeBlockMixin"
   ],
   "client": [
     "hooks.ClientPlayerEntityMixin",
@@ -43,7 +41,8 @@
     "rule.usingItemSlowDownDisabled.ClientPlayerEntityMixin",
     "rule.waterColor.WaterRendererMixin",
     "rule.waterFogColor.FogRendererMixin",
-    "translations.TranslatableTextMixin"
+    "translations.TranslatableTextMixin",
+    "rule.slimeBlockSlowDownDisabled.SlimeBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
