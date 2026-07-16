@@ -20,44 +20,59 @@
 
 package top.byteeeee.fuzz.mixin.rule.slimeBlockSlowDownDisabled;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-//#if MC<260200
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
-//#endif
-import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.SlimeBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SlimeBlock.class)
-public abstract class SlimeBlockMixin extends HalfTransparentBlock {
-    public SlimeBlockMixin(Properties properties) {
-        super(properties);
+public abstract class SlimeBlockMixin {
+    @ModifyExpressionValue(
+        method = "stepOn",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;isSteppingCarefully()Z"
+        )
+    )
+    private boolean skipStepOnLogic(boolean original) {
+        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
+            return true;
+        } else {
+            return original;
+        }
     }
 
-    @Inject(method = "stepOn", at = @At("HEAD"), cancellable = true)
-    private void tt(CallbackInfo ci) {
+    @ModifyExpressionValue(
+        method = "fallOn",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;isSuppressingBounce()Z"
+        )
+    )
+    private boolean skipFallOnLogic(boolean original) {
         if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
-            ci.cancel();
+            return true;
+        } else {
+            return original;
         }
     }
 
     //#if MC<260200
-    @Inject(method = "updateEntityMovementAfterFallOn", at = @At("HEAD"), cancellable = true)
-    private void skipSlimeBounceLogic(BlockGetter level, Entity entity, CallbackInfo ci) {
+    @ModifyExpressionValue(method = "updateEntityMovementAfterFallOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isSuppressingBounce()Z"))
+    private boolean skipUpdateMovementLogic(boolean original) {
         if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
-            super.updateEntityMovementAfterFallOn(level, entity);
-            ci.cancel();
+            return true;
+        } else {
+            return original;
         }
     }
     //#endif
