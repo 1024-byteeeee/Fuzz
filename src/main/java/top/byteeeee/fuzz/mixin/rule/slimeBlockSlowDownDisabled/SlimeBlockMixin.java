@@ -26,6 +26,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.block.SlimeBlock;
+import net.minecraft.block.TransparentBlock;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,20 +36,20 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SlimeBlock.class)
-public abstract class SlimeBlockMixin {
+public abstract class SlimeBlockMixin extends TransparentBlock {
+    protected SlimeBlockMixin(Settings settings) {
+        super(settings);
+    }
+
     @ModifyExpressionValue(
-        method = "onSteppedOn",
+    method = "onSteppedOn",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/Entity;bypassesSteppingEffects()Z"
         )
     )
     private boolean skipOnSteppedOnLogic(boolean original) {
-        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
-            return true;
-        } else {
-            return original;
-        }
+        return (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) || original;
     }
 
     @ModifyExpressionValue(
