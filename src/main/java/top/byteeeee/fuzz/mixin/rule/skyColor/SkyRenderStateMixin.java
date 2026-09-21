@@ -27,8 +27,13 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.SkyRenderer;
-
 import net.minecraft.client.renderer.state.level.SkyRenderState;
+
+//#if MC>=260300
+//$$ import org.joml.Vector3f;
+//$$ import org.joml.Vector3fc;
+//#endif
+
 import org.objectweb.asm.Opcodes;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,11 +41,37 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
 
-import java.util.Objects;
-
 @Environment(EnvType.CLIENT)
 @Mixin(SkyRenderer.class)
 public abstract class SkyRenderStateMixin {
+    //#if MC>=260300
+    //$$ @WrapOperation(
+    //$$     method = "extractRenderState",
+    //$$     at = @At(
+    //$$         value = "FIELD",
+    //$$         target = "Lnet/minecraft/client/renderer/state/level/SkyRenderState;skyColor:Lorg/joml/Vector3fc;",
+    //$$         opcode = Opcodes.PUTFIELD
+    //$$     )
+    //$$ )
+    //$$ private void modifySkyColor(
+    //$$     SkyRenderState state,
+    //$$     Vector3fc value,
+    //$$     Operation<Void> original
+    //$$ ) {
+    //$$     if ("false".equals(FuzzSettings.skyColor)) {
+    //$$         original.call(state, value);
+    //$$         return;
+    //$$     }
+    //$$
+    //$$     int rgb = Integer.parseInt(FuzzSettings.skyColor.substring(1), 16);
+    //$$     Vector3fc customColor = new Vector3f(
+    //$$         ((rgb >>> 16) & 0xFF) / 255.0F,
+    //$$         ((rgb >>> 8) & 0xFF) / 255.0F,
+    //$$         (rgb & 0xFF) / 255.0F
+    //$$     );
+    //$$     original.call(state, customColor);
+    //$$ }
+    //#else
     @WrapOperation(
         method = "extractRenderState",
         at = @At(
@@ -49,12 +80,18 @@ public abstract class SkyRenderStateMixin {
             opcode = Opcodes.PUTFIELD
         )
     )
-    private static void modifySkyColor(SkyRenderState state, int value, Operation<Void> original) {
-        if (!Objects.equals(FuzzSettings.skyColor, "false")) {
-            int customColor = Integer.parseInt(FuzzSettings.skyColor.substring(1), 16);
-            original.call(state, customColor);
-        } else {
+    private static void modifySkyColor(
+        SkyRenderState state,
+        int value,
+        Operation<Void> original
+    ) {
+        if ("false".equals(FuzzSettings.skyColor)) {
             original.call(state, value);
+            return;
         }
+
+        int customColor = Integer.parseInt(FuzzSettings.skyColor.substring(1), 16);
+        original.call(state, customColor);
     }
+    //#endif
 }

@@ -21,7 +21,6 @@
 package top.byteeeee.fuzz.mixin.rule.letFluidInteractLikeAir;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
@@ -32,6 +31,9 @@ import net.minecraft.world.entity.Entity;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.ClientUtil;
@@ -94,22 +96,27 @@ public abstract class EntityMixin {
         }
     }
 
-    @WrapWithCondition(
-        method = "setSwimming",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/Entity;setSharedFlag(IZ)V"
-        )
-    )
-    private boolean setSwimming(Entity entity, int index, boolean value) {
-        return !FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity);
+   @Inject(method = "setSwimming", at = @At("HEAD"), cancellable = true)
+   private void setSwimming(CallbackInfo ci) {
+       Entity entity = (Entity) (Object) this;
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity)) {
+            ci.cancel();
+        }
+   }
+
+    @Inject(method = "isSwimming", at = @At("HEAD"), cancellable = true)
+    private void isSwimming(CallbackInfoReturnable<Boolean> cir) {
+        Entity entity = (Entity) (Object) this;
+        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity)) {
+            cir.setReturnValue(false);
+        }
     }
 
     @ModifyReturnValue(method = "getFluidHeight", at = @At("RETURN"))
     private double getFluidHeight(double original) {
         Entity entity = (Entity) (Object) this;
         if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity)) {
-            return 0.114514D;
+            return 0.0D;
         } else {
             return original;
         }

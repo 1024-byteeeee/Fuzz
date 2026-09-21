@@ -29,7 +29,9 @@ import net.minecraft.client.KeyMapping;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import org.jspecify.annotations.NonNull;
+//#if MC<260300
 import org.lwjgl.glfw.GLFW;
+//#endif
 
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 import top.byteeeee.fuzz.translations.Translator;
@@ -58,7 +60,15 @@ public class KeyMappings {
         private final String translationKey;
 
         public FuzzKeyBinding(String translationKey) {
-            super(tr.tr(translationKey).getString(), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, FUZZ_CATEGORY);
+            super(
+                tr.tr(translationKey).getString(),
+                //#if MC>=260300
+                //$$ InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(),
+                //#else
+                InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
+                //#endif
+                FUZZ_CATEGORY
+            );
             this.translationKey = translationKey;
         }
 

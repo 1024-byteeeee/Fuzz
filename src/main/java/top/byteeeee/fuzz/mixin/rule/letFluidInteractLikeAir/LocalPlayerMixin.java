@@ -20,21 +20,17 @@
 
 package top.byteeeee.fuzz.mixin.rule.letFluidInteractLikeAir;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 
 import org.spongepowered.asm.mixin.Mixin;
-
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.ClientUtil;
@@ -42,10 +38,6 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Environment(EnvType.CLIENT)
 @Mixin(value = LocalPlayer.class, priority = 1688)
 public abstract class LocalPlayerMixin {
-
-    @Shadow
-    private boolean wasSprinting;
-
     @WrapMethod(method = "updateIsUnderwater")
     private boolean preventSwimmingWhileSprinting(Operation<Boolean> original) {
         LocalPlayer player = (LocalPlayer) (Object) this;
@@ -56,18 +48,14 @@ public abstract class LocalPlayerMixin {
         }
     }
 
-    @Inject(method = "sendPosition", at = @At("HEAD"), cancellable = true)
-    private void onSendMovementPackets(CallbackInfo ci) {
-        if (FuzzSettings.letFluidInteractLikeAir) {
-            final Minecraft client = ClientUtil.getCurrentClient();
-            final LocalPlayer player = ClientUtil.getCurrentPlayer();
-            if (!client.isLocalServer() && client.getCurrentServer() != null) {
-                boolean isSprinting = player.isSprinting();
-                if (isSprinting != this.wasSprinting) {
-                    this.wasSprinting = isSprinting;
-                    ci.cancel();
-                }
-            }
-        }
+    @ModifyExpressionValue(
+        method = "sendIsSprintingIfNeeded",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/player/LocalPlayer;isSprinting()Z"
+        )
+    )
+    private boolean hideSprintingFromServer(boolean original) {
+        return original && !FuzzSettings.letFluidInteractLikeAir;
     }
 }
