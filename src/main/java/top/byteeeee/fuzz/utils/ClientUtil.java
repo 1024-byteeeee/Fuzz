@@ -38,11 +38,13 @@ public class ClientUtil {
     }
 
     public static boolean isLocalPlayerSelf(Entity entity) {
-        if (getCurrentPlayer() != null) {
-            return entity.isPartOf(getCurrentPlayer());
-        } else {
+        ClientPlayerEntity player = getCurrentPlayer();
+
+        if (player == null) {
             return false;
         }
+
+        return entity == player || entity.getUuid().equals(player.getUuid());
     }
 
     public static boolean isLocalPlayerTicking() {
