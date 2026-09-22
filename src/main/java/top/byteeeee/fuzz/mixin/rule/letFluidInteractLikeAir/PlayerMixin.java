@@ -41,7 +41,11 @@ public abstract class PlayerMixin {
         method = "tryToStartFallFlying",
         at = @At(
             value = "INVOKE",
+            //#if MC>=260300
+            //$$ target = "Lnet/minecraft/world/entity/player/Player;isInLiquid()Z"
+            //#else
             target = "Lnet/minecraft/world/entity/player/Player;isInWater()Z"
+            //#endif
         )
     )
     private boolean checkFallFlying(Player player, Operation<Boolean> original) {

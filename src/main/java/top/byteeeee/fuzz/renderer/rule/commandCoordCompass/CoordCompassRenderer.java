@@ -36,6 +36,9 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
+//#if MC>=260300
+//$$ import org.joml.Matrix4f;
+//#endif
 import org.joml.Quaternionf;
 
 import top.byteeeee.fuzz.FuzzSettings;
@@ -96,7 +99,11 @@ public class CoordCompassRenderer {
 
         float yaw = -camera.yRot();
         float pitch = camera.xRot();
+        //#if MC>=260300
+        //$$ matrixStack.mulPose(new Matrix4f().rotation(new Quaternionf().rotationYXZ((float)Math.toRadians(yaw), (float)Math.toRadians(pitch), 0)));
+        //#else
         matrixStack.mulPose(new Quaternionf().rotationYXZ((float)Math.toRadians(yaw), (float)Math.toRadians(pitch), 0));
+        //#endif
         float scale = 1.0F;
         matrixStack.scale(scale, scale, scale);
         //#if MC<260200
