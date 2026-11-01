@@ -27,6 +27,9 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+//#if MC>=12109
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+//#endif
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 
@@ -40,7 +43,11 @@ import top.byteeeee.fuzz.helpers.rule.commandAnimatedFreeze.EntityRenderBlock;
 @Mixin(BlockEntityRenderDispatcher.class)
 public abstract class BlockEntityRenderDispatcherMixin {
     @ModifyReturnValue(method = "getRenderer(Lnet/minecraft/world/level/block/entity/BlockEntity;)Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderer;", at = @At("RETURN"))
-    private BlockEntityRenderer get(BlockEntityRenderer original, BlockEntity blockEntity) {
+    //#if MC>=12109
+    private <E extends BlockEntity, S extends BlockEntityRenderState> BlockEntityRenderer<E, S> get(BlockEntityRenderer<E, S> original, E blockEntity) {
+    //#else
+    //$$ private <E extends BlockEntity> BlockEntityRenderer<E> get(BlockEntityRenderer<E> original, E blockEntity) {
+    //#endif
         return EntityRenderBlock.isOf(blockEntity.getClass()) && FuzzSettings.chestOptimization ? null : original;
     }
 }

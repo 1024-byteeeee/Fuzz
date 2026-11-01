@@ -66,15 +66,12 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
             ClientCommandManager.literal(MAIN_CMD_NAME)
-            // add
             .then(ClientCommandManager.literal("add")
             .then(suggestions(StringArgumentType.greedyString())
             .executes(c -> checkEnabled(c, () -> add(
                 c.getSource(),
                 StringArgumentType.getString(c, "texture")
             )))))
-
-            // remove
             .then(ClientCommandManager.literal("remove")
             .then(ClientCommandManager.argument("texture", StringArgumentType.greedyString())
             .suggests(ListSuggestionProvider.of(FuzzSettings.animationDisableList))
@@ -82,16 +79,10 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
                 c.getSource(),
                 StringArgumentType.getString(c, "texture")
             )))))
-
-            // removeAll
             .then(ClientCommandManager.literal("removeAll")
             .executes(c -> checkEnabled(c, () -> removeAll(c.getSource()))))
-
-            // list
             .then(ClientCommandManager.literal("list")
             .executes(c -> checkEnabled(c, () -> list(c.getSource()))))
-
-            // help
             .then(ClientCommandManager.literal("help")
             .executes(c -> checkEnabled(c, () -> help(c.getSource()))))
         );

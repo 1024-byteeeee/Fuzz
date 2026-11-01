@@ -20,27 +20,11 @@
 
 package top.byteeeee.fuzz.mixin.rule.chestOptimization;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.compat.DummyClass;
 
-//#if MC<12105
-//$$ import net.minecraft.world.level.block.ChestBlock;
-//$$ import net.minecraft.world.level.block.EnderChestBlock;
-//$$ import net.minecraft.world.level.block.RenderShape;
-//#endif
-
-//#if MC<12105
-//$$ @Mixin({ChestBlock.class, EnderChestBlock.class})
-//#else
-@Mixin(top.byteeeee.fuzz.utils.compat.DummyClass.class)
-//#endif
-public abstract class ChestRenderShapeMixin {
-    //#if MC<12105
-    //$$ @ModifyReturnValue(method = "getRenderShape", at = @At("RETURN"))
-    //$$ private RenderShape useBakedChestModel(RenderShape original) {
-    //$$     return FuzzSettings.chestOptimization ? RenderShape.MODEL : original;
-    //$$ }
-    //#endif
-}
+@GameVersion(version = "Minecraft >= 1.21.5")
+@Mixin(DummyClass.class)
+public abstract class ChestRenderShapeMixin {}

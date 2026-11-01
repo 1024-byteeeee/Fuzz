@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.blockOutlineColor_Width;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -29,6 +31,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+@GameVersion(version = "Minecraft < 26.2")
 @Environment(EnvType.CLIENT)
 @Mixin(LevelRenderer.class)
 public interface LevelRendererAccessor {

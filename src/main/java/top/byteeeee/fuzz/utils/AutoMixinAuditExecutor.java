@@ -24,10 +24,12 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import top.byteeeee.fuzz.FuzzModClient;
 
+import java.util.Objects;
+
 public class AutoMixinAuditExecutor {
     private static final String KEYWORD_PROPERTY = "fuzz.mixin_audit";
     public static void run() {
-        if (FabricLoader.getInstance().isDevelopmentEnvironment() && "true".equals(System.getProperty(KEYWORD_PROPERTY))) {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment() && Objects.equals(System.getProperty(KEYWORD_PROPERTY), "true")) {
             FuzzModClient.LOGGER.info("Triggered auto mixin audit");
             boolean ok = MixinUtil.audit(null);
             FuzzModClient.LOGGER.info("Mixin audit result: {}", ok ? "successful" : "failed");

@@ -29,13 +29,15 @@ import net.minecraft.server.packs.repository.PackCompatibility;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+import java.util.Objects;
+
 @Mixin(Pack.class)
 public abstract class PackMixin {
     @ModifyReturnValue(method = "getCompatibility", at = @At("RETURN"))
     private PackCompatibility setCompatible(PackCompatibility original) {
         Pack pack = (Pack) (Object) this;
 
-        if (pack.getId().equals(top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())) {
+        if (Objects.equals(pack.getId(), top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())) {
             return PackCompatibility.COMPATIBLE;
         } else {
             return original;

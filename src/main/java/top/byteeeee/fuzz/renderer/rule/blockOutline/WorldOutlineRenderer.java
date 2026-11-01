@@ -28,19 +28,20 @@ import org.joml.Vector3f;
 //#else
 //$$ import com.mojang.math.Vector4f;
 //#endif
-
-/** Camera-facing ribbons whose width is a percentage of one world-space block. */
 public final class WorldOutlineRenderer {
-    // Match vanilla line shader and VIEW_OFFSET_Z_LAYERING depth separation.
-    // The quad render type must not apply either offset a second time.
     private static final float VIEW_SHRINK = (1.0F - 1.0F / 256.0F) * (1.0F - 1.0F / 4096.0F);
 
     private WorldOutlineRenderer() {}
 
-    public static void render(PoseStack.Pose pose, VertexConsumer consumer, VoxelShape shape,
-                              double x, double y, double z, double eyeX, double eyeY, double eyeZ,
-                              double percentage, int color) {
-        if (!(percentage > 0.0D) || !Double.isFinite(percentage)) return;
+    public static void render(
+        PoseStack.Pose pose, VertexConsumer consumer, VoxelShape shape,
+        double x, double y, double z,
+        double eyeX, double eyeY, double eyeZ,
+        double percentage, int color
+    ) {
+        if (!(percentage > 0.0D) || !Double.isFinite(percentage)) {
+            return;
+        }
         final double halfWidth = percentage / 200.0D;
         shape.forAllEdges((ax, ay, az, bx, by, bz) -> {
             ax += x; ay += y; az += z;
@@ -51,8 +52,9 @@ public final class WorldOutlineRenderer {
             double ny = dz * vx - dx * vz;
             double nz = dx * vy - dy * vx;
             double length = Math.sqrt(nx * nx + ny * ny + nz * nz);
-            // A zero-length edge, or an edge viewed end-on, has no projected line.
-            if (!(length > 0.0D) || !Double.isFinite(length)) return;
+            if (!(length > 0.0D) || !Double.isFinite(length)) {
+                return;
+            }
             double scale = halfWidth / length;
             nx *= scale; ny *= scale; nz *= scale;
             vertex(pose, consumer, ax - nx, ay - ny, az - nz, color);

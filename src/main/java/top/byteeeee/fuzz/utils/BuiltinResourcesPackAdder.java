@@ -23,8 +23,13 @@ package top.byteeeee.fuzz.utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+//#if MC>=12111
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
+//#else
+//$$ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+//$$ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+//#endif
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -47,6 +52,10 @@ public class BuiltinResourcesPackAdder {
     }
 
     private static void add(ModContainer modContainer) {
-        ResourceManagerHelper.registerBuiltinResourcePack(IdentifierUtil.of(CHEST_PACK_NAMESPACE, CHEST_PACK_PATH), modContainer, ResourcePackActivationType.NORMAL);
+        //#if MC>=12111
+        ResourceLoader.registerBuiltinPack(IdentifierUtil.of(CHEST_PACK_NAMESPACE, CHEST_PACK_PATH), modContainer, PackActivationType.NORMAL);
+        //#else
+        //$$ ResourceManagerHelper.registerBuiltinResourcePack(IdentifierUtil.of(CHEST_PACK_NAMESPACE, CHEST_PACK_PATH), modContainer, ResourcePackActivationType.NORMAL);
+        //#endif
     }
 }

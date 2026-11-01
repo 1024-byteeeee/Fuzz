@@ -29,6 +29,7 @@ import top.byteeeee.fuzz.utils.FileUtil;
 import top.byteeeee.yaml.TinyYamlParser;
 import top.byteeeee.yaml.exception.YamlParseException;
 
+import java.util.Objects;
 import java.io.IOException;
 import java.util.*;
 
@@ -109,6 +110,6 @@ public class FuzzTranslations {
     }
 
     public static boolean isEnglish() {
-        return FuzzSettings.language.startsWith("en") || FuzzSettings.language.equals("none");
+        return FuzzSettings.language.startsWith("en") || Objects.equals(FuzzSettings.language, "none");
     }
 }

@@ -48,8 +48,8 @@ import static top.byteeeee.fuzz.settings.RuleCategory.*;
 
 @Environment(EnvType.CLIENT)
 public class FuzzSettings {
-    public static Map<String, Object> DEFAULT_VALUES = new ConcurrentHashMap<>();
-    public static List<String> highlightEntityList = new LinkedList<>();
+    public static final Map<String, Object> DEFAULT_VALUES = new ConcurrentHashMap<>();
+    public static final List<String> highlightEntityList = new LinkedList<>();
     public static final List<String> animationDisableList = new LinkedList<>();
 
     @Rule(

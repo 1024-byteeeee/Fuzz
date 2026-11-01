@@ -28,6 +28,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import top.byteeeee.fuzz.settings.Validator;
 import top.byteeeee.fuzz.translations.Translator;
 
+import java.util.Objects;
 import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
@@ -36,7 +37,7 @@ public class FuzzCommandAliasValidator extends Validator<String> {
 
     @Override
     public String validate(FabricClientCommandSource source, Field field, String value) {
-        return value.matches("^[a-zA-Z]+$") && !value.equals("fuzz") ? value : null;
+        return value.matches("^[a-zA-Z]+$") && !Objects.equals(value, "fuzz") ? value : null;
     }
 
     @Override

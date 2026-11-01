@@ -31,8 +31,11 @@ import com.mojang.blaze3d.platform.InputConstants;
 //#if MC<260300
 import org.lwjgl.glfw.GLFW;
 //#endif
+import org.jetbrains.annotations.NotNull;
 
+//#if MC>=12109
 import top.byteeeee.fuzz.utils.IdentifierUtil;
+//#endif
 import top.byteeeee.fuzz.translations.Translator;
 
 @Environment(EnvType.CLIENT)
@@ -76,6 +79,7 @@ public class KeyMappings {
         }
 
         @Override
+        @NotNull
         public String getName() {
             return tr.tr(translationKey).getString();
         }

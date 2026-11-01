@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.blockOutlineColor_Width;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
@@ -46,6 +48,7 @@ import top.byteeeee.fuzz.validators.HexValidator;
 
 import java.util.Objects;
 
+@GameVersion(version = "Minecraft >= 1.21.11 && Minecraft < 26.2")
 @Environment(EnvType.CLIENT)
 @Mixin(LevelRenderer.class)
 public abstract class LevelRendererMixin implements LevelRendererAccessor {
@@ -63,14 +66,19 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         int color, float width, Operation<Void> original
     ) {
         String configuredColor = FuzzSettings.blockOutlineColor;
-        if ("rainbow".equals(configuredColor)) {
+
+        if (Objects.equals(configuredColor, "rainbow")) {
             color = RainbowColorHelper.getRainbowColor();
         } else if (HexValidator.isValidHexColor(configuredColor)) {
             color = (FuzzSettings.blockOutlineAlpha << 24) | Integer.parseInt(configuredColor.substring(1), 16);
         }
+
         double configuredWidth = FuzzSettings.blockOutlineWidth;
+
         if (configuredWidth >= 0.0D) {
-            if (configuredWidth == 0.0D) return;
+            if (configuredWidth == 0.0D) {
+                return;
+            }
             RenderType quads = RenderTypes.debugQuads();
             MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
             WorldOutlineRenderer.render(poseStack.last(), buffers.getBuffer(quads), state.shape(),
@@ -90,10 +98,6 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         )
     )
     private boolean setBlockOutlineColor(BlockOutlineRenderState outlineRenderState, Operation<Boolean> original) {
-        if (!Objects.equals(FuzzSettings.blockOutlineColor, "false") || FuzzSettings.blockOutlineWidth != -1) {
-            return false;
-        } else {
-            return original.call(outlineRenderState);
-        }
+        return !(!Objects.equals(FuzzSettings.blockOutlineColor, "false") || FuzzSettings.blockOutlineWidth != -1) && original.call(outlineRenderState);
     }
 }

@@ -55,31 +55,22 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
             ClientCommandManager.literal(MAIN_CMD_NAME)
-            // Add entity command
             .then(ClientCommandManager.literal("add")
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(SetSuggestionProvider.fromEntityRegistry())
             .executes(c -> checkEnabled(
                 c, () -> add(c.getSource(), StringArgumentType.getString(c, "entityId"))
             ))))
-
-            // Remove entity command
             .then(ClientCommandManager.literal("remove")
             .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(ListSuggestionProvider.of(FuzzSettings.highlightEntityList))
             .executes(c -> checkEnabled(
                 c, () -> remove(c.getSource(), StringArgumentType.getString(c, "entityId"))
             ))))
-
-            // Clear all entities
             .then(ClientCommandManager.literal("clear")
             .executes(c -> checkEnabled(c, () -> clear(c.getSource()))))
-
-            // List entities
             .then(ClientCommandManager.literal("list")
             .executes(c -> checkEnabled(c, () -> list(c.getSource()))))
-
-            // Show help
             .then(ClientCommandManager.literal("help")
             .executes(c -> checkEnabled(c, () -> help(c.getSource()))))
         );

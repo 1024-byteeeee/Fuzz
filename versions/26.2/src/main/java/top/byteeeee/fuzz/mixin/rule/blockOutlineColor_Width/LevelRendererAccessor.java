@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.utils.compat.DummyInterface;
 
-@GameVersion(version = "Minecraft < 21.2")
+@GameVersion(version = "Minecraft >= 26.2")
 @Environment(EnvType.CLIENT)
 @Mixin(DummyInterface.class)
 public interface LevelRendererAccessor {}

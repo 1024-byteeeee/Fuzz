@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.waterFogColor;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
@@ -29,45 +31,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.validators.HexValidator;
 
-//#if MC>=12106
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.world.level.material.FogType;
 import org.joml.Vector4f;
-//#else
-//$$ import net.minecraft.world.level.biome.BiomeSpecialEffects;
-//#endif
 
+@GameVersion(version = "Minecraft >= 1.21.6 && Minecraft < 26.1")
 @Environment(EnvType.CLIENT)
-//#if MC>=12106
 @Mixin(FogRenderer.class)
-//#else
-//$$ @Mixin(BiomeSpecialEffects.class)
-//#endif
 public abstract class FogRendererMixin {
-    //#if MC>=260000
-    //$$ @org.spongepowered.asm.mixin.injection.Inject(method = "computeFogColor", at = @At("RETURN"))
-    //$$ private void modifyColor(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci, @Local(argsOnly = true) Vector4f original, @Local(argsOnly = true) Camera camera) {
-    //$$     if (camera.getFluidInCamera() != FogType.WATER) return;
-    //$$     String color = FuzzSettings.waterFogColor;
-    //$$     if (!HexValidator.isValidHexColor(color)) return;
-    //$$     int rgb = Integer.parseInt(color.substring(1), 16);
-    //$$     original.set(((rgb >>> 16) & 255) / 255.0F, ((rgb >>> 8) & 255) / 255.0F, (rgb & 255) / 255.0F, original.w);
-    //$$ }
-    //#elseif MC>=12106
     @ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
     private Vector4f modifyColor(Vector4f original, @Local(argsOnly = true) Camera camera) {
-        if (camera.getFluidInCamera() != FogType.WATER) return original;
+        if (camera.getFluidInCamera() != FogType.WATER) {
+            return original;
+        }
         String color = FuzzSettings.waterFogColor;
-        if (!HexValidator.isValidHexColor(color)) return original;
+        if (!HexValidator.isValidHexColor(color)) {
+            return original;
+        }
         int rgb = Integer.parseInt(color.substring(1), 16);
         return new Vector4f(((rgb >>> 16) & 255) / 255.0F, ((rgb >>> 8) & 255) / 255.0F, (rgb & 255) / 255.0F, original.w);
     }
-    //#else
-    //$$ @ModifyReturnValue(method = "getWaterFogColor", at = @At("RETURN"))
-    //$$ private int modifyColor(int original) {
-    //$$     String color = FuzzSettings.waterFogColor;
-    //$$     return HexValidator.isValidHexColor(color) ? Integer.parseInt(color.substring(1), 16) : original;
-    //$$ }
-    //#endif
 }

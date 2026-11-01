@@ -40,11 +40,7 @@ public class ClientUtil {
     public static boolean isLocalPlayerSelf(Entity entity) {
         LocalPlayer player = getCurrentPlayer();
 
-        if (player == null) {
-            return false;
-        }
-
-        return entity == player || entity.getUUID().equals(player.getUUID());
+        return player != null && (entity == player || entity.getUUID().equals(player.getUUID()));
     }
 
     public static boolean isLocalPlayerTicking() {

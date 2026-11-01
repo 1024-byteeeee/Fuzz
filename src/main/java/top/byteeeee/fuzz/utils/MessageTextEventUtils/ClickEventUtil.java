@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.utils.MessageTextEventUtils;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -31,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-@SuppressWarnings("unused")
+@GameVersion(version = "Minecraft >= 1.21.5")
 @Environment(EnvType.CLIENT)
 public class ClickEventUtil {
     public static final ClickEvent.Action OPEN_URL = ClickEvent.Action.OPEN_URL;
@@ -43,16 +45,11 @@ public class ClickEventUtil {
     private static final Map<ClickEvent.Action, Function<Object, ClickEvent>> CLICK_EVENT_ACTION_MAP = new HashMap<>();
 
     public static ClickEvent event(ClickEvent.Action action, Object value) {
-        //#if MC>=12105
         return Optional.ofNullable(CLICK_EVENT_ACTION_MAP.get(action)).map(function -> function.apply(value)).orElseThrow(() -> new IllegalArgumentException("Invalid action or value type"));
-        //#else
-        //$$ return new ClickEvent(action, String.valueOf(value));
-        //#endif
     }
 
     static {
-        //#if MC>=12105
-        CLICK_EVENT_ACTION_MAP.put(ClickEvent.Action.OPEN_URL, value -> {
+        CLICK_EVENT_ACTION_MAP.put(OPEN_URL, value -> {
             if (value instanceof URI) {
                 return new ClickEvent.OpenUrl((URI) value);
             } else if (value instanceof String) {
@@ -64,11 +61,10 @@ public class ClickEventUtil {
             }
             throw new IllegalArgumentException("Expected a URI or String for OPEN_URL action");
         });
-        CLICK_EVENT_ACTION_MAP.put(ClickEvent.Action.OPEN_FILE, value -> new ClickEvent.OpenFile((String) value));
-        CLICK_EVENT_ACTION_MAP.put(ClickEvent.Action.RUN_COMMAND, value -> new ClickEvent.RunCommand((String) value));
-        CLICK_EVENT_ACTION_MAP.put(ClickEvent.Action.SUGGEST_COMMAND, value -> new ClickEvent.SuggestCommand((String) value));
-        CLICK_EVENT_ACTION_MAP.put(ClickEvent.Action.CHANGE_PAGE, value -> new ClickEvent.ChangePage((Integer) value));
-        CLICK_EVENT_ACTION_MAP.put(ClickEvent.Action.COPY_TO_CLIPBOARD, value -> new ClickEvent.CopyToClipboard((String) value));
-        //#endif
+        CLICK_EVENT_ACTION_MAP.put(OPEN_FILE, value -> new ClickEvent.OpenFile((String) value));
+        CLICK_EVENT_ACTION_MAP.put(RUN_COMMAND, value -> new ClickEvent.RunCommand((String) value));
+        CLICK_EVENT_ACTION_MAP.put(SUGGEST_COMMAND, value -> new ClickEvent.SuggestCommand((String) value));
+        CLICK_EVENT_ACTION_MAP.put(CHANGE_PAGE, value -> new ClickEvent.ChangePage((Integer) value));
+        CLICK_EVENT_ACTION_MAP.put(COPY_TO_CLIPBOARD, value -> new ClickEvent.CopyToClipboard((String) value));
     }
 }

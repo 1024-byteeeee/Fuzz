@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.utils.MessageTextEventUtils;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -36,7 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-@SuppressWarnings("unused")
+@GameVersion(version = "Minecraft >= 1.21.5")
 @Environment(EnvType.CLIENT)
 public class HoverEventUtil {
     public static final HoverEvent.Action SHOW_TEXT = HoverEvent.Action.SHOW_TEXT;
@@ -49,7 +51,6 @@ public class HoverEventUtil {
     }
 
     static {
-        //#if MC>=12105
         HOVER_EVENT_ACTION_MAP.put(SHOW_TEXT, value -> new HoverEvent.ShowText((Component) value));
         //#if MC>=260000
         //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent.ShowItem((ItemStackTemplate) value));
@@ -57,10 +58,5 @@ public class HoverEventUtil {
         HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent.ShowItem((ItemStack) value));
         //#endif
         HOVER_EVENT_ACTION_MAP.put(SHOW_ENTITY, value -> new HoverEvent.ShowEntity((HoverEvent.EntityTooltipInfo) value));
-        //#else
-        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_TEXT, value -> new HoverEvent(SHOW_TEXT, (Component) value));
-        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent(SHOW_ITEM, new HoverEvent.ItemStackInfo((ItemStack) value)));
-        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_ENTITY, value -> new HoverEvent(SHOW_ENTITY, (HoverEvent.EntityTooltipInfo) value));
-        //#endif
     }
 }

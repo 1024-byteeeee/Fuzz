@@ -40,6 +40,7 @@ dependencies {
 		}
 		return dep
 	}
+
 	def autoImplementation = { Object... args ->
 		processDependency(unobfuscated ? implementation(*args) : modImplementation(*args))
 	}
@@ -50,6 +51,7 @@ dependencies {
 			officialMojangMappings()
 		}
 	}
+
 	autoImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	include(autoImplementation("com.github.1024-byteeeee:AnnotationToolBox:${project.annotationtoolbox_version}"))

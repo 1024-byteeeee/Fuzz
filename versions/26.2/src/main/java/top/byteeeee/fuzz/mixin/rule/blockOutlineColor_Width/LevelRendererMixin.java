@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.blockOutlineColor_Width;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
@@ -48,6 +50,7 @@ import top.byteeeee.fuzz.validators.HexValidator;
 
 import java.util.Objects;
 
+@GameVersion(version = "Minecraft >= 26.2")
 @Environment(EnvType.CLIENT)
 @Mixin(LevelRenderer.class)
 public abstract class LevelRendererMixin implements LevelRendererAccessor {
@@ -55,10 +58,15 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
     @Unique
     private int getCustomOutlineColor(int fallback) {
         String colorCfg = FuzzSettings.blockOutlineColor;
-        if (Objects.equals(colorCfg, "false")) return fallback;
+
+        if (Objects.equals(colorCfg, "false")) {
+            return fallback;
+        }
+
         if (Objects.equals(colorCfg, "rainbow")) {
             return RainbowColorHelper.getRainbowColor();
         }
+
         if (HexValidator.isValidHexColor(colorCfg)) {
             int r = Integer.parseInt(colorCfg.substring(1, 3), 16);
             int g = Integer.parseInt(colorCfg.substring(3, 5), 16);
@@ -66,6 +74,7 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
             int alpha = Math.clamp(FuzzSettings.blockOutlineAlpha, 0, 255);
             return ARGB.color(alpha, r, g, b);
         }
+
         return fallback;
     }
 
@@ -77,15 +86,17 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         )
     )
     private void wrapSubmitHitOutline(
-            LevelRenderer instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector,
-            RenderType renderType, BlockOutlineRenderState state,
-            int originalColor, float lineWidth, boolean translucent,
-            Operation<Void> original
+        LevelRenderer instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector,
+        RenderType renderType, BlockOutlineRenderState state,
+        int originalColor, float lineWidth, boolean translucent,
+        Operation<Void> original
     ) {
         int color = getCustomOutlineColor(originalColor);
         double width = FuzzSettings.blockOutlineWidth;
         if (width >= 0.0D) {
-            if (width == 0.0D) return;
+            if (width == 0.0D) {
+                return;
+            }
             Vec3 eye = Minecraft.getInstance().gameRenderer.mainCamera().position();
             double eyeX = eye.x() - state.pos().getX();
             double eyeY = eye.y() - state.pos().getY();

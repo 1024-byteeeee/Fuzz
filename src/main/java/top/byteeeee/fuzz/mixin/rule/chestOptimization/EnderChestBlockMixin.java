@@ -20,10 +20,10 @@
 
 package top.byteeeee.fuzz.mixin.rule.chestOptimization;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.EnderChestBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,20 +31,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.byteeeee.fuzz.FuzzSettings;
 
+@GameVersion(version = "Minecraft >= 1.17")
 @Environment(EnvType.CLIENT)
 @Mixin(EnderChestBlockEntity.class)
 public abstract class EnderChestBlockMixin {
-    //#if MC>=11700
     @Inject(method = "lidAnimateTick", at = @At("HEAD"), cancellable = true)
     private static void skipAnimationTick(CallbackInfo ci) {
-        // Keep the ticker attached so loaded chests resume when the rule is disabled.
-        if (FuzzSettings.chestOptimization) ci.cancel();
+        if (FuzzSettings.chestOptimization) {
+            ci.cancel();
+        }
     }
-    //#else
-    //$$ @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    //$$ private void skipAnimationTick(CallbackInfo ci) {
-    //$$     Level level = ((BlockEntity) (Object) this).getLevel();
-    //$$     if (FuzzSettings.chestOptimization && level != null && level.isClientSide) ci.cancel();
-    //$$ }
-    //#endif
 }

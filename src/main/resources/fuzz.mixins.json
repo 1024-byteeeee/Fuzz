@@ -34,6 +34,7 @@
     "rule.iceSlipperinessDisabled.LivingEntityMixin",
     "rule.jumpDelayDisabled.LivingEntityMixin",
     "rule.letFluidInteractLikeAir.EntityMixin",
+    "rule.letFluidInteractLikeAir.EntityAccessor",
     "rule.letFluidInteractLikeAir.LivingEntityMixin",
     "rule.letFluidInteractLikeAir.LocalPlayerMixin",
     "rule.letFluidInteractLikeAir.PlayerMixin",

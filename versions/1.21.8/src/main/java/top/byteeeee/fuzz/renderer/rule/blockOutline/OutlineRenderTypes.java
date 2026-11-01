@@ -20,31 +20,37 @@
 
 package top.byteeeee.fuzz.renderer.rule.blockOutline;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 //#if MC<11700
 //$$ import com.mojang.blaze3d.systems.RenderSystem;
+//$$ import org.lwjgl.opengl.GL11;
 //#endif
 //#if MC>=12105
 import net.minecraft.client.renderer.RenderPipelines;
 //#else
 //$$ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+//#if MC>=11700
 //$$ import com.mojang.blaze3d.vertex.VertexFormat;
+//#endif
 //#endif
 import java.util.OptionalDouble;
 
+@GameVersion(version = "Minecraft <= 1.21.8")
 public final class OutlineRenderTypes extends RenderStateShard {
-    // The 1.16.5 line render type predates RenderType.SMALL_BUFFER_SIZE.
-    private static final int LEGACY_LINE_BUFFER_SIZE = 256;
     //#if MC<11700
-    //$$ // Vanilla's 1.17+ line shader applies this additional view-space shrink.
-    //$$ // Fixed-function lines need the same depth separation from adjacent faces.
+    //$$ private static final int LEGACY_LINE_BUFFER_SIZE = 256;
+    //#endif
+    //#if MC<11700
     //$$ private static final float LINE_SHADER_VIEW_SHRINK = 1.0F - 1.0F / 256.0F;
     //$$ private static final LayeringStateShard LEGACY_LINE_LAYERING = new LayeringStateShard(
     //$$     "fuzz_legacy_line_layering",
     //$$     () -> {
     //$$         VIEW_OFFSET_Z_LAYERING.setupRenderState();
-    //$$         RenderSystem.scalef(LINE_SHADER_VIEW_SHRINK, LINE_SHADER_VIEW_SHRINK, LINE_SHADER_VIEW_SHRINK);
+    //$$         RenderSystem.assertThread(RenderSystem::isOnRenderThread);
+    //$$         GL11.glScalef(LINE_SHADER_VIEW_SHRINK, LINE_SHADER_VIEW_SHRINK, LINE_SHADER_VIEW_SHRINK);
     //$$     },
     //$$     VIEW_OFFSET_Z_LAYERING::clearRenderState
     //$$ );

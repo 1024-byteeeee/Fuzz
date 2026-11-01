@@ -22,7 +22,9 @@ package top.byteeeee.fuzz.utils.compat;
 
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
+//#if MC>=11900
 import net.minecraft.network.chat.Component;
+//#endif
 import net.minecraft.network.chat.MutableComponent;
 
 public class MessengerCompatFactory {

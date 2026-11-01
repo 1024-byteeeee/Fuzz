@@ -32,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
 
-@SuppressWarnings("SimplifiableConditionalExpression")
 @Environment(EnvType.CLIENT)
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
@@ -44,6 +43,6 @@ public abstract class LocalPlayerMixin {
         )
     )
     private boolean shouldSlowDown(boolean original) {
-        return FuzzSettings.sneakingSlowDownDisabled ? false : original;
+        return !FuzzSettings.sneakingSlowDownDisabled && original;
     }
 }

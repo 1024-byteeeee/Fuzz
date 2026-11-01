@@ -11,7 +11,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,7 +51,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         return ClientCommandManager.argument("value", getArgumentType()).suggests(this::getSuggestions).executes(ctx -> executeSetValue(ctx, field));
     }
 
-    private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {
+    private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) {
         T value = parseValue(ctx);
 
         if (!validateInputValue(ctx, value)) {
@@ -69,9 +68,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
             return 0;
         }
 
-        if (!setNewValue(field, validatedValue)) {
-            return 0;
-        }
+        setNewValue(field, validatedValue);
 
         sendSuccessMessage(ctx, field, validatedValue);
         ObserverManager.notifyObservers(ctx.getSource(), field, oldValue.get(), validatedValue);
@@ -111,11 +108,10 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         }
     }
 
-    private boolean setNewValue(Field field, T value) {
+    private void setNewValue(Field field, T value) {
         try {
             field.set(null, value);
             FuzzConfig.saveConfig();
-            return true;
         } catch (Exception e) {
             throw new IllegalStateException("Failed to set field value", e);
         }

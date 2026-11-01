@@ -54,7 +54,9 @@ public class TextProcessor {
         String whole = sb.toString();
 
         Matcher m = COORD_PATTERN.matcher(whole);
-        if (!m.find()) return original;
+        if (!m.find()) {
+            return original;
+        }
         m.reset();
 
         List<MatchInfo> matches = new ArrayList<>();

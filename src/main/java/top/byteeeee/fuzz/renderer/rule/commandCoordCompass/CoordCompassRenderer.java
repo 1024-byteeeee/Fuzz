@@ -20,8 +20,12 @@
 
 package top.byteeeee.fuzz.renderer.rule.commandCoordCompass;
 
+//#if MC>=12000
 import com.mojang.blaze3d.vertex.PoseStack;
+//#endif
+//#if MC<260200
 import com.mojang.blaze3d.vertex.VertexConsumer;
+//#endif
 
 //#if MC>=12106
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
@@ -40,7 +44,9 @@ import net.minecraft.client.DeltaTracker;
 //#endif
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+//#if MC>=12109
 import net.minecraft.client.renderer.rendertype.RenderType;
+//#endif
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
@@ -60,7 +66,9 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 import top.byteeeee.fuzz.utils.EntityUtil;
 import top.byteeeee.fuzz.utils.IdentifierUtil;
 
+//#if MC<260200
 import java.util.Objects;
+//#endif
 
 public class CoordCompassRenderer {
     private static final Translator tr = new Translator("command.coordCompass");
@@ -79,7 +87,7 @@ public class CoordCompassRenderer {
     }
 
     protected static void renderWorld(WorldRenderContext context) {
-        if (!isActive || targetCoord == Vec3.ZERO || !FuzzSettings.commandCoordCompass) {
+        if (!isActive || targetCoord == null || targetCoord == Vec3.ZERO || !FuzzSettings.commandCoordCompass) {
             return;
         }
 
@@ -95,6 +103,11 @@ public class CoordCompassRenderer {
         Camera camera = client.gameRenderer.getMainCamera();
         //#endif
         PoseStack matrixStack = context.matrices();
+        //#if MC<12111
+        //$$ if (matrixStack == null) {
+        //$$     return;
+        //$$ }
+        //#endif
         matrixStack.pushPose();
         Vec3 cameraPos = camera.position();
         Vec3 offset = targetCoord.subtract(cameraPos);

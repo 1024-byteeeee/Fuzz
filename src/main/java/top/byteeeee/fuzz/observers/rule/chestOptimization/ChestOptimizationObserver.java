@@ -31,6 +31,8 @@ import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.settings.Observer;
 import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 public class ChestOptimizationObserver extends Observer<Boolean> {
 
@@ -41,9 +43,9 @@ public class ChestOptimizationObserver extends Observer<Boolean> {
         String id = BuiltinResourcesPackAdder.chestPackId();
         packManager.reload();
         java.util.List<String> selectedPacks = new java.util.ArrayList<>(packManager.getSelectedIds());
-        selectedPacks.removeIf(id::equals);
-        options.resourcePacks.removeIf(id::equals);
-        options.incompatibleResourcePacks.removeIf(id::equals);
+        selectedPacks.removeIf(packId -> Objects.equals(packId, id));
+        options.resourcePacks.removeIf(packId -> Objects.equals(packId, id));
+        options.incompatibleResourcePacks.removeIf(packId -> Objects.equals(packId, id));
         if (newValue && packManager.isAvailable(id)) {
             selectedPacks.add(id);
             options.resourcePacks.add(id);

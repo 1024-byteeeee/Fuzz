@@ -39,10 +39,6 @@ import top.byteeeee.fuzz.FuzzSettings;
 public abstract class MinecraftMixin {
     @ModifyReturnValue(method = "shouldEntityAppearGlowing", at = @At("RETURN"))
     private boolean clairvoyance(boolean original, Entity entity) {
-        if (FuzzSettings.commandHighlightEntities && FuzzSettings.highlightEntityList.contains(EntityType.getKey(entity.getType()).toString())) {
-            return true;
-        } else {
-            return original;
-        }
+        return (FuzzSettings.commandHighlightEntities && FuzzSettings.highlightEntityList.contains(EntityType.getKey(entity.getType()).toString())) || original;
     }
 }

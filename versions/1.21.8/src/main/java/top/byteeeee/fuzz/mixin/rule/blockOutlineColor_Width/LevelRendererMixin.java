@@ -20,24 +20,35 @@
 
 package top.byteeeee.fuzz.mixin.rule.blockOutlineColor_Width;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//#if MC>=12102
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+//#endif
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.helpers.rule.blockOutline.RainbowColorHelper;
 import top.byteeeee.fuzz.renderer.rule.blockOutline.OutlineRenderTypes;
 import top.byteeeee.fuzz.renderer.rule.blockOutline.WorldOutlineRenderer;
 import top.byteeeee.fuzz.validators.HexValidator;
 
+import java.util.Objects;
+
+@GameVersion(version = "Minecraft <= 1.21.8")
 @Mixin(LevelRenderer.class)
 public abstract class LevelRendererMixin {
     @WrapOperation(
@@ -58,13 +69,14 @@ public abstract class LevelRendererMixin {
         //#endif
     ) {
         double width = FuzzSettings.blockOutlineWidth;
-        if (width == 0.0D) return;
+        if (width == 0.0D) {
+            return;
+        }
 
         String color = FuzzSettings.blockOutlineColor;
-        boolean customColor = "rainbow".equals(color) || HexValidator.isValidHexColor(color);
+        boolean customColor = Objects.equals(color, "rainbow") || HexValidator.isValidHexColor(color);
         if (customColor) {
-            int argb = "rainbow".equals(color) ? RainbowColorHelper.getRainbowColor()
-                : (FuzzSettings.blockOutlineAlpha << 24) | Integer.parseInt(color.substring(1), 16);
+            int argb = Objects.equals(color, "rainbow") ? RainbowColorHelper.getRainbowColor() : (FuzzSettings.blockOutlineAlpha << 24) | Integer.parseInt(color.substring(1), 16);
             //#if MC>=12102
             originalColor = argb;
             //#else
@@ -75,7 +87,9 @@ public abstract class LevelRendererMixin {
             //#endif
         }
 
-        RenderType customLines = null;
+        //#if MC<11700
+        //$$ RenderType customLines = null;
+        //#endif
         MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
         if (width > 0.0D) {
             RenderType quads = OutlineRenderTypes.relativeQuads();
@@ -91,8 +105,6 @@ public abstract class LevelRendererMixin {
         //#if MC<11700
         //$$ if (customColor) {
         //$$     customLines = OutlineRenderTypes.lines(-1.0D);
-            // Fabric's outline callback restores the vanilla buffer before this call.
-            // Acquire and flush our buffer here, after that callback has completed.
         //$$     consumer = buffers.getBuffer(customLines);
         //$$ }
         //#endif
@@ -101,13 +113,17 @@ public abstract class LevelRendererMixin {
         //#else
         //$$ original.call(poses, consumer, shape, x, y, z, red, green, blue, alpha);
         //#endif
-        if (customLines != null) buffers.endBatch(customLines);
+        //#if MC<11700
+        //$$ if (customLines != null) {
+        //$$     buffers.endBatch(customLines);
+        //$$ }
+        //#endif
     }
 
     //#if MC>=12102
     @ModifyExpressionValue(method = "renderBlockOutline", at = @At(value = "INVOKE", target = "Ljava/lang/Boolean;booleanValue()Z"))
     private boolean useCustomOutline(boolean highContrast) {
-        return "false".equals(FuzzSettings.blockOutlineColor) && FuzzSettings.blockOutlineWidth == -1.0D && highContrast;
+        return Objects.equals(FuzzSettings.blockOutlineColor, "false") && FuzzSettings.blockOutlineWidth == -1.0D && highContrast;
     }
     //#endif
 }

@@ -33,6 +33,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 @Mixin(TranslatableContents.class)
 public abstract class TranslatableTextMixin {
@@ -52,7 +54,7 @@ public abstract class TranslatableTextMixin {
         )
     )
     private String applyModTranslation(String vanillaTranslatedFormattingString) {
-        if (this.key.startsWith("fuzz.") && vanillaTranslatedFormattingString.equals(this.key)) {
+        if (this.key.startsWith("fuzz.") && Objects.equals(vanillaTranslatedFormattingString, this.key)) {
             String modTranslated = FuzzTranslations.translateKeyToFormattedString(FuzzTranslations.getLanguage(), this.key);
             if (modTranslated != null) {
                 return modTranslated;

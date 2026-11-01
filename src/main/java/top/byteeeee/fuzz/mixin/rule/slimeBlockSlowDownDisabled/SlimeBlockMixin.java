@@ -44,11 +44,7 @@ public abstract class SlimeBlockMixin {
         )
     )
     private boolean skipStepOnLogic(boolean original) {
-        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
-            return true;
-        } else {
-            return original;
-        }
+        return (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) || original;
     }
 
     @ModifyExpressionValue(
@@ -59,21 +55,13 @@ public abstract class SlimeBlockMixin {
         )
     )
     private boolean skipFallOnLogic(boolean original) {
-        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
-            return true;
-        } else {
-            return original;
-        }
+        return (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) || original;
     }
 
     //#if MC<260200
     @ModifyExpressionValue(method = "updateEntityMovementAfterFallOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isSuppressingBounce()Z"))
     private boolean skipUpdateMovementLogic(boolean original) {
-        if (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) {
-            return true;
-        } else {
-            return original;
-        }
+        return (FuzzSettings.slimeBlockSlowDownDisabled && ClientUtil.isLocalPlayerTicking()) || original;
     }
     //#endif
 }

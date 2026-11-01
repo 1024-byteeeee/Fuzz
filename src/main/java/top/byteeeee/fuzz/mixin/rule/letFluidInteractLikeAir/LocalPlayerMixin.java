@@ -41,11 +41,7 @@ public abstract class LocalPlayerMixin {
     @WrapMethod(method = "updateIsUnderwater")
     private boolean preventSwimmingWhileSprinting(Operation<Boolean> original) {
         LocalPlayer player = (LocalPlayer) (Object) this;
-        if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(player) && !player.isOnFire()) {
-            return false;
-        } else {
-            return original.call();
-        }
+        return !(FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(player) && !player.isOnFire()) && original.call();
     }
 
     @ModifyExpressionValue(
@@ -60,6 +56,6 @@ public abstract class LocalPlayerMixin {
         )
     )
     private boolean hideSprintingFromServer(boolean original) {
-        return original && !FuzzSettings.letFluidInteractLikeAir;
+        return original && !(FuzzSettings.letFluidInteractLikeAir && ((EntityAccessor) (Object) this).fuzz$getWasTouchingWater());
     }
 }

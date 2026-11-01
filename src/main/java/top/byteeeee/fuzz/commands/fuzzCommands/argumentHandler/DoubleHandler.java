@@ -22,7 +22,6 @@ package top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -33,7 +32,6 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.commands.fuzzCommands.suggestionStrategy.SuggestionStrategy;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
@@ -41,11 +39,6 @@ public class DoubleHandler extends AbstractArgumentHandler<Double> {
     @Override
     public ArgumentType<Double> getArgumentType() {
         return DoubleArgumentType.doubleArg();
-    }
-
-    @Override
-    public void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field) {
-        super.configureArgument(literal, field);
     }
 
     @Override

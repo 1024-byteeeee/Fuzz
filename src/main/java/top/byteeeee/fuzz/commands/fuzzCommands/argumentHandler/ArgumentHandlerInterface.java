@@ -22,7 +22,6 @@ package top.byteeeee.fuzz.commands.fuzzCommands.argumentHandler;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
@@ -36,6 +35,6 @@ import java.util.concurrent.CompletableFuture;
 @Environment(EnvType.CLIENT)
 public interface ArgumentHandlerInterface<T> {
     void configureArgument(LiteralArgumentBuilder<FabricClientCommandSource> literal, Field field);
-    T parseValue(CommandContext<FabricClientCommandSource> ctx) throws CommandSyntaxException;
+    T parseValue(CommandContext<FabricClientCommandSource> ctx);
     CompletableFuture<Suggestions> getSuggestions(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder);
 }

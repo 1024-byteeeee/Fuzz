@@ -20,7 +20,6 @@
 
 package top.byteeeee.fuzz.mixin.rule.bubbleColumnInteractDisabled;
 
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.commandAnimatedFreeze.simpleBlockAnimationDisabled;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -32,17 +34,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import top.byteeeee.fuzz.FuzzSettings;
 
+@GameVersion(version = "Minecraft >= 1.19.3")
 @Environment(EnvType.CLIENT)
 @Mixin(SpriteContents.class)
 public abstract class SpriteContentsMixin {
-    //#if MC>=11700
-    //#if MC>=12111
-    @Inject(method = "createAnimationState", at = @At("HEAD"), cancellable = true)
-    //#elseif MC>=11903
-    //$$ @Inject(method = "createTicker", at = @At("HEAD"), cancellable = true)
-    //#else
-    //$$ @Inject(method = "getAnimationTicker", at = @At("HEAD"), cancellable = true)
-    //#endif
+    @Inject(
+        //#if MC>=12111
+        method = "createAnimationState",
+        //#else
+        //$$ method = "createTicker",
+        //#endif
+        at = @At("HEAD"),
+        cancellable = true
+    )
     private void noAnimation(CallbackInfoReturnable<?> cir) {
         for (String block : FuzzSettings.animationDisableList) {
             if (((SpriteContents) (Object) this).name().getPath().endsWith(block)) {
@@ -51,16 +55,4 @@ public abstract class SpriteContentsMixin {
             }
         }
     }
-    //#else
-    //$$ @org.spongepowered.asm.mixin.injection.Inject(method = "cycleFrames", at = @At("HEAD"), cancellable = true)
-    //$$ private void noAnimation(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
-    //$$     String path = ((net.minecraft.client.renderer.texture.TextureAtlasSprite) (Object) this).getName().getPath();
-    //$$     for (String block : FuzzSettings.animationDisableList) {
-    //$$         if (path.endsWith(block)) {
-    //$$             ci.cancel();
-    //$$             return;
-    //$$         }
-    //$$     }
-    //$$ }
-    //#endif
 }

@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
+import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -47,10 +48,9 @@ public abstract class PackRepositoryMixin {
 
     @ModifyVariable(method = "rebuildSelected", at = @At("HEAD"), argsOnly = true)
     private Collection<String> syncChestPack(Collection<String> selectedIds) {
-        // Config loading and the resource pack screen do not notify rule observers.
         String id = BuiltinResourcesPackAdder.chestPackId();
         Collection<String> selected = new ArrayList<>(selectedIds);
-        selected.removeIf(id::equals);
+        selected.removeIf(packId -> Objects.equals(packId, id));
         if (FuzzSettings.chestOptimization && isAvailable(id)) {
             selected.add(id);
         }
@@ -59,6 +59,6 @@ public abstract class PackRepositoryMixin {
 
     @ModifyReturnValue(method = "getAvailablePacks()Ljava/util/Collection;", at = @At("RETURN"))
     private Collection<Pack> modifyAvailablePacks(Collection<Pack> original) {
-        return original.stream().filter(pack -> !pack.getId().equals(top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())).collect(Collectors.toList());
+        return original.stream().filter(pack -> !Objects.equals(pack.getId(), top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())).collect(Collectors.toList());
     }
 }

@@ -101,11 +101,15 @@ public class Messenger {
     }
 
     public static void tell(MutableComponent text, boolean actionBar) {
-        if (actionBar) {
-            ClientUtil.getCurrentPlayer().displayClientMessage(text, true);
-        } else {
-            ClientUtil.getCurrentPlayer().displayClientMessage(text, false);
-        }
+        //#if MC>=260000
+        //$$ if (actionBar) {
+        //$$     ClientUtil.getCurrentPlayer().sendOverlayMessage(text);
+        //$$ } else {
+        //$$     ClientUtil.getCurrentPlayer().sendSystemMessage(text);
+        //$$ }
+        //#else
+        ClientUtil.getCurrentPlayer().displayClientMessage(text, actionBar);
+        //#endif
     }
 
     public static void sendChatCommand(String text) {

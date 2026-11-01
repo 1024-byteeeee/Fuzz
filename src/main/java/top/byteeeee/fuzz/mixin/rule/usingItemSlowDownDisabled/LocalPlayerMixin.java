@@ -20,6 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.usingItemSlowDownDisabled;
 
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
+
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
 import net.fabricmc.api.EnvType;
@@ -38,53 +40,35 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import top.byteeeee.fuzz.FuzzSettings;
 
-@SuppressWarnings("SimplifiableConditionalExpression")
+@GameVersion(version = "Minecraft >= 1.21.2")
 @Environment(EnvType.CLIENT)
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
     @ModifyExpressionValue(
-        //#if MC>=12102
         method = "modifyInput",
-        //#else
-        //$$ method = "aiStep",
-        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"
         )
     )
     private boolean usingItemNoSlowDown(boolean original) {
-        return FuzzSettings.usingItemSlowDownDisabled ? false : original;
+        return !FuzzSettings.usingItemSlowDownDisabled && original;
     }
 
-    //#if MC>=12102
     @ModifyReturnValue(method = "shouldStopRunSprinting", at = @At("RETURN"))
     private boolean shouldStopSprinting(boolean original) {
         LocalPlayer player = ClientUtil.getCurrentPlayer();
-        if (FuzzSettings.usingItemSlowDownDisabled && player != null && player.isSprinting() && player.isUsingItem()) {
-            return false;
-        } else {
-            return original;
-        }
+        return !(FuzzSettings.usingItemSlowDownDisabled && player != null && player.isSprinting() && player.isUsingItem()) && original;
     }
-    //#endif
 
     @WrapOperation(
-        //#if MC>=12102
         method = "modifyInput",
-        //#else
-        //$$ method = "aiStep",
-        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"
         )
     )
     private boolean noApplySlowDown(LocalPlayer player, Operation<Boolean> original) {
-        if (FuzzSettings.usingItemSlowDownDisabled && ClientUtil.isLocalPlayerSelf(player)) {
-            return false;
-        } else {
-            return original.call(player);
-        }
+        return !(FuzzSettings.usingItemSlowDownDisabled && ClientUtil.isLocalPlayerSelf(player)) && original.call(player);
     }
 }

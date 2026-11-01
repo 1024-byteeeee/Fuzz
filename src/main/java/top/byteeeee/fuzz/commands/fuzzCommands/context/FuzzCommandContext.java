@@ -40,11 +40,11 @@ import top.byteeeee.fuzz.utils.MessageTextEventUtils.ClickEventUtil;
 import top.byteeeee.fuzz.utils.MessageTextEventUtils.HoverEventUtil;
 import top.byteeeee.fuzz.utils.Messenger;
 
+import java.util.Objects;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("LoggingSimilarMessage")
 @Environment(EnvType.CLIENT)
 public abstract class FuzzCommandContext {
     protected static final Translator tr = new Translator("command");
@@ -171,14 +171,14 @@ public abstract class FuzzCommandContext {
         String[] options = getOptions(field, annotation);
         String currentValue = value.toString();
         String defaultValue = getDefaultValue(field);
-        boolean isDefaultState = currentValue.equals(defaultValue);
+        boolean isDefaultState = Objects.equals(currentValue, defaultValue);
 
         MutableComponent optionsText = Messenger.s("");
         boolean hasCustomValue = false;
 
         for (String option : options) {
-            boolean isCurrent = option.equals(currentValue);
-            boolean isDefaultOption = option.equals(defaultValue);
+            boolean isCurrent = Objects.equals(option, currentValue);
+            boolean isDefaultOption = Objects.equals(option, defaultValue);
             hasCustomValue = addOptionButton(optionsText, field, option, isCurrent, isDefaultOption, isDefaultState) || hasCustomValue;
         }
 
@@ -238,7 +238,7 @@ public abstract class FuzzCommandContext {
             String extraKey = "fuzz.rule." + field.getName() + ".extra." + i;
             String extraText = Messenger.tr(extraKey).getString();
 
-            if (extraKey.equals(extraText)) {
+            if (Objects.equals(extraKey, extraText)) {
                 break;
             }
 
