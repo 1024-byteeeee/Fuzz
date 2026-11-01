@@ -29,7 +29,6 @@ import net.minecraft.client.KeyMapping;
 import com.mojang.blaze3d.platform.InputConstants;
 
 //#if MC<260300
-import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 //#endif
 
