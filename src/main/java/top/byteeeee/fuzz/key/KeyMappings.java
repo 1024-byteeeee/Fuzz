@@ -77,7 +77,7 @@ public class KeyMappings {
         }
 
         @Override
-        public @NonNull String getName() {
+        public String getName() {
             return tr.tr(translationKey).getString();
         }
     }
