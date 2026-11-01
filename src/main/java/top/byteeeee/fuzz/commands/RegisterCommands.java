@@ -25,7 +25,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+//#if MC>=11900
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+//#else
+//$$ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+//#endif
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.commands.rule.animatedFreezeCommand.AnimatedFreezeCommand;
@@ -45,6 +49,10 @@ public class RegisterCommands {
     }
 
     private static void registerCommand(Consumer<CommandDispatcher<FabricClientCommandSource>> registrator) {
+        //#if MC>=11900
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> registrator.accept(dispatcher));
+        //#else
+        //$$ registrator.accept(ClientCommandManager.DISPATCHER);
+        //#endif
     }
 }

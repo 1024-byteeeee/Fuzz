@@ -20,8 +20,8 @@
 
 package top.byteeeee.fuzz.mixin.rule.chestOptimization;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+
 
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackCompatibility;
@@ -31,20 +31,14 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Pack.class)
 public abstract class PackMixin {
-    @WrapOperation(
-        method = "getCompatibility",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/server/packs/repository/Pack$Metadata;compatibility()Lnet/minecraft/server/packs/repository/PackCompatibility;"
-        )
-    )
-    private PackCompatibility setCompatible(Pack.Metadata metadata, Operation<PackCompatibility> original) {
+    @ModifyReturnValue(method = "getCompatibility", at = @At("RETURN"))
+    private PackCompatibility setCompatible(PackCompatibility original) {
         Pack pack = (Pack) (Object) this;
 
-        if (pack != null && pack.getId().equals("fuzz_mod:chest_optimization")) {
+        if (pack.getId().equals(top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())) {
             return PackCompatibility.COMPATIBLE;
         } else {
-            return original.call(metadata);
+            return original;
         }
     }
 }

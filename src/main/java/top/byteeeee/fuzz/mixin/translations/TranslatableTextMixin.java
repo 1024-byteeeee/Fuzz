@@ -44,7 +44,11 @@ public abstract class TranslatableTextMixin {
         method = "decompose",
         at = @At(
             value = "INVOKE",
+            //#if MC>=11800
             target = "Lnet/minecraft/network/chat/contents/TranslatableContents;decomposeTemplate(Ljava/lang/String;Ljava/util/function/Consumer;)V"
+            //#else
+            //$$ target = "Lnet/minecraft/network/chat/TranslatableComponent;decomposeTemplate(Ljava/lang/String;)V"
+            //#endif
         )
     )
     private String applyModTranslation(String vanillaTranslatedFormattingString) {

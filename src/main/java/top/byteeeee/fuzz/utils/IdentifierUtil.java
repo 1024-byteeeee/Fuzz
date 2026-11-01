@@ -28,10 +28,18 @@ import net.minecraft.resources.Identifier;
 @Environment(EnvType.CLIENT)
 public class IdentifierUtil {
     public static Identifier of(String namespace, String path) {
+        //#if MC>=12100
         return Identifier.fromNamespaceAndPath(namespace, path);
+        //#else
+        //$$ return new net.minecraft.resources.ResourceLocation(namespace, path);
+        //#endif
     }
 
     public static Identifier ofId(String id) {
+        //#if MC>=12100
         return Identifier.parse(id);
+        //#else
+        //$$ return new net.minecraft.resources.ResourceLocation(id);
+        //#endif
     }
 }

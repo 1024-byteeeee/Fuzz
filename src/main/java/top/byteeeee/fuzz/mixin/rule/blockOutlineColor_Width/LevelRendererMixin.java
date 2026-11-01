@@ -30,8 +30,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
-import net.minecraft.util.ARGB;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import top.byteeeee.fuzz.renderer.rule.blockOutline.WorldOutlineRenderer;
+import net.minecraft.client.renderer.state.BlockOutlineRenderState;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,7 +53,7 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         method = "renderBlockOutline",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;IF)V"
+            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/BlockOutlineRenderState;IF)V"
         )
     )
     private void renderBlockOutlineWrapper(
@@ -58,24 +62,21 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         BlockOutlineRenderState state,
         int color, float width, Operation<Void> original
     ) {
-        if (!Objects.equals(FuzzSettings.blockOutlineColor, "false")) {
-            String colorString = FuzzSettings.blockOutlineColor;
-            int customColor;
-            if (Objects.equals(FuzzSettings.blockOutlineColor, "rainbow")) {
-                customColor = RainbowColorHelper.getRainbowColor();
-            } else {
-                if (HexValidator.isValidHexColor(colorString)) {
-                    int red = Integer.parseInt(colorString.substring(1, 3), 16);
-                    int green = Integer.parseInt(colorString.substring(3, 5), 16);
-                    int blue = Integer.parseInt(colorString.substring(5, 7), 16);
-                    double alpha = FuzzSettings.blockOutlineAlpha;
-                    customColor = ARGB.color((int) alpha, red, green, blue);
-                } else {
-                    original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, color, width);
-                    return;
-                }
-            }
-            original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, customColor, width);
+        String configuredColor = FuzzSettings.blockOutlineColor;
+        if ("rainbow".equals(configuredColor)) {
+            color = RainbowColorHelper.getRainbowColor();
+        } else if (HexValidator.isValidHexColor(configuredColor)) {
+            color = (FuzzSettings.blockOutlineAlpha << 24) | Integer.parseInt(configuredColor.substring(1), 16);
+        }
+        double configuredWidth = FuzzSettings.blockOutlineWidth;
+        if (configuredWidth >= 0.0D) {
+            if (configuredWidth == 0.0D) return;
+            RenderType quads = RenderTypes.debugQuads();
+            MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+            WorldOutlineRenderer.render(poseStack.last(), buffers.getBuffer(quads), state.shape(),
+                state.pos().getX() - camX, state.pos().getY() - camY, state.pos().getZ() - camZ,
+                0, 0, 0, configuredWidth, color);
+            buffers.endBatch(quads);
         } else {
             original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, color, width);
         }
@@ -85,29 +86,7 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         method = "renderBlockOutline",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;DDDLnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;IF)V"
-        )
-    )
-    private void setBlockOutlineWidth(
-            LevelRenderer worldRenderer, PoseStack matrixStack, VertexConsumer vertexConsumer,
-            double cameraX, double cameraY, double cameraZ, BlockOutlineRenderState outlineRenderState, int color, float width,
-            Operation<Void> original
-    ) {
-        if (FuzzSettings.blockOutlineWidth != -1.0D) {
-            original.call(
-                worldRenderer, matrixStack, vertexConsumer,
-                cameraX, cameraY, cameraZ, outlineRenderState, color, (float) FuzzSettings.blockOutlineWidth
-            );
-        } else {
-            original.call(worldRenderer, matrixStack, vertexConsumer, cameraX, cameraY, cameraZ, outlineRenderState, color, width);
-        }
-    }
-
-    @WrapOperation(
-        method = "renderBlockOutline",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;highContrast()Z"
+            target = "Lnet/minecraft/client/renderer/state/BlockOutlineRenderState;highContrast()Z"
         )
     )
     private boolean setBlockOutlineColor(BlockOutlineRenderState outlineRenderState, Operation<Boolean> original) {

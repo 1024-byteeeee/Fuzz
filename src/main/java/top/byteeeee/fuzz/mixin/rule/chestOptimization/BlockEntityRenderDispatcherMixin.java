@@ -27,10 +27,8 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import org.jspecify.annotations.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,7 +40,7 @@ import top.byteeeee.fuzz.helpers.rule.commandAnimatedFreeze.EntityRenderBlock;
 @Mixin(BlockEntityRenderDispatcher.class)
 public abstract class BlockEntityRenderDispatcherMixin {
     @ModifyReturnValue(method = "getRenderer(Lnet/minecraft/world/level/block/entity/BlockEntity;)Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderer;", at = @At("RETURN"))
-    private <E extends BlockEntity, S extends BlockEntityRenderState> BlockEntityRenderer<E, S> get(@Nullable BlockEntityRenderer<E, S> original, E blockEntity) {
+    private BlockEntityRenderer get(BlockEntityRenderer original, BlockEntity blockEntity) {
         return EntityRenderBlock.isOf(blockEntity.getClass()) && FuzzSettings.chestOptimization ? null : original;
     }
 }

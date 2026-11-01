@@ -38,6 +38,7 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Environment(EnvType.CLIENT)
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
+    //#if MC>=260000
     @WrapOperation(
         method = "travel",
         at = @At(
@@ -52,4 +53,5 @@ public abstract class LivingEntityMixin {
             return original.call(entity,fluidState);
         }
     }
+    //#endif
 }

@@ -17,6 +17,7 @@
     "rule.campfireSmokeParticleDisabled.CampfireBlockMixin",
     "rule.chestOptimization.BlockEntityRenderDispatcherMixin",
     "rule.chestOptimization.ChestBlockMixin",
+    "rule.chestOptimization.ChestRenderShapeMixin",
     "rule.chestOptimization.EnderChestBlockMixin",
     "rule.chestOptimization.PackMixin",
     "rule.chestOptimization.PackRepositoryMixin",

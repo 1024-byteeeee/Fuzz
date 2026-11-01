@@ -25,36 +25,36 @@ import net.fabricmc.api.Environment;
 
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.repository.PackRepository;
 
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Observer;
-import top.byteeeee.fuzz.utils.IdentifierUtil;
+import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
 @Environment(EnvType.CLIENT)
 public class ChestOptimizationObserver extends Observer<Boolean> {
-    private static final Identifier PACK_ID = IdentifierUtil.of("fuzz_mod", "chest_optimization");
 
     @Override
     public void onValueChange(FabricClientCommandSource source, Boolean oldValue, Boolean newValue) {
         PackRepository packManager = FuzzModClient.minecraftClient.getResourcePackRepository();
-        var options = FuzzModClient.minecraftClient.options;
-        String id = PACK_ID.toString();
+        net.minecraft.client.Options options = FuzzModClient.minecraftClient.options;
+        String id = BuiltinResourcesPackAdder.chestPackId();
         boolean repoHas = packManager.isAvailable(id);
         boolean selected = options.resourcePacks.contains(id);
+        java.util.List<String> selectedPacks = new java.util.ArrayList<>(packManager.getSelectedIds());
 
         if (FuzzSettings.chestOptimization && !selected && repoHas) {
-            packManager.addPack(id);
+            selectedPacks.add(id);
             options.resourcePacks.add(id);
         }
 
         if (!FuzzSettings.chestOptimization && selected) {
-            packManager.removePack(id);
+            selectedPacks.remove(id);
             options.resourcePacks.remove(id);
         }
 
+        packManager.setSelected(selectedPacks);
         options.save();
         FuzzModClient.minecraftClient.reloadResourcePacks();
     }

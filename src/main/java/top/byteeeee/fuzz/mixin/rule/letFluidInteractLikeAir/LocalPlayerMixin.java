@@ -49,7 +49,11 @@ public abstract class LocalPlayerMixin {
     }
 
     @ModifyExpressionValue(
+        //#if MC>=11900
         method = "sendIsSprintingIfNeeded",
+        //#else
+        //$$ method = "sendPosition",
+        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;isSprinting()Z"

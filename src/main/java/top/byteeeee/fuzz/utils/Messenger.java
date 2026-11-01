@@ -102,9 +102,9 @@ public class Messenger {
 
     public static void tell(MutableComponent text, boolean actionBar) {
         if (actionBar) {
-            ClientUtil.getCurrentPlayer().sendOverlayMessage(text);
+            ClientUtil.getCurrentPlayer().displayClientMessage(text, true);
         } else {
-            ClientUtil.getCurrentPlayer().sendSystemMessage(text);
+            ClientUtil.getCurrentPlayer().displayClientMessage(text, false);
         }
     }
 
@@ -113,7 +113,11 @@ public class Messenger {
             if (text.startsWith("/")) {
                 text = text.substring(1);
             }
+            //#if MC>=11900
             ClientUtil.getCurrentPlayer().connection.sendCommand(text);
+            //#else
+            //$$ ClientUtil.getCurrentPlayer().chat("/" + text);
+            //#endif
         }
     }
 

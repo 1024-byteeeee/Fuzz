@@ -41,7 +41,11 @@ import java.util.Objects;
 @Mixin(BiomeSpecialEffects.class)
 public abstract class WaterRendererMixin {
     @WrapOperation(
+        //#if MC>=12111
         method = "waterColor",
+        //#else
+        //$$ method = "getWaterColor",
+        //#endif
         at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/world/level/biome/BiomeSpecialEffects;waterColor:I",

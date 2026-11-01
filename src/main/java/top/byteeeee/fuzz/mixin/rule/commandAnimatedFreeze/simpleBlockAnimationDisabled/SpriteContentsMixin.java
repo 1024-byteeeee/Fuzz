@@ -26,11 +26,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.resources.Identifier;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import top.byteeeee.fuzz.FuzzSettings;
@@ -38,18 +35,27 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Environment(EnvType.CLIENT)
 @Mixin(SpriteContents.class)
 public abstract class SpriteContentsMixin {
-    @Shadow
-    @Final
-    private Identifier name;
-
+    //#if MC>=11700
     @ModifyReturnValue(method = "getFrameCount", at = @At("RETURN"))
     private int noAnimation(int original) {
         for (String block : FuzzSettings.animationDisableList) {
-            if (this.name.getPath().endsWith(block)) {
+            if (((SpriteContents) (Object) this).name().getPath().endsWith(block)) {
                 return 0;
             }
         }
 
         return original;
     }
+    //#else
+    //$$ @org.spongepowered.asm.mixin.injection.Inject(method = "cycleFrames", at = @At("HEAD"), cancellable = true)
+    //$$ private void noAnimation(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+    //$$     String path = ((net.minecraft.client.renderer.texture.TextureAtlasSprite) (Object) this).getName().getPath();
+    //$$     for (String block : FuzzSettings.animationDisableList) {
+    //$$         if (path.endsWith(block)) {
+    //$$             ci.cancel();
+    //$$             return;
+    //$$         }
+    //$$     }
+    //$$ }
+    //#endif
 }

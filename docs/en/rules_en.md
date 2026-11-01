@@ -183,7 +183,7 @@ Modify the alpha of the block outline, Need enable `blockOutlineColor` rule.
 
 ## blockOutlineWidth
 
-Modify the line width of the block outline.
+Set outline width as a percentage of one block: `8` means `0.08` blocks. Lines scale with distance and FOV along with the block; `0` hides the outline and `-1` uses vanilla width.
 
 - Type: `double`
 

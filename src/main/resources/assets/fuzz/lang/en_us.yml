@@ -131,7 +131,7 @@ fuzz:
         '0': "Need enable blockOutlineColor rule"
     blockOutlineWidth:
       name: "blockOutlineWidth"
-      desc: "Modify the line width of the block outline"
+      desc: "Outline width as a percentage of one block (8=0.08 blocks), scaling with distance and FOV; 0 hides, -1 uses vanilla width"
     skyColor:
       name: "skyColor"
       desc: "Modify the color of the sky"

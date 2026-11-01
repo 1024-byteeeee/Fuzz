@@ -43,7 +43,11 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
     @ModifyExpressionValue(
+        //#if MC>=12102
         method = "modifyInput",
+        //#else
+        //$$ method = "aiStep",
+        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"
@@ -53,6 +57,7 @@ public abstract class LocalPlayerMixin {
         return FuzzSettings.usingItemSlowDownDisabled ? false : original;
     }
 
+    //#if MC>=12102
     @ModifyReturnValue(method = "shouldStopRunSprinting", at = @At("RETURN"))
     private boolean shouldStopSprinting(boolean original) {
         LocalPlayer player = ClientUtil.getCurrentPlayer();
@@ -62,9 +67,14 @@ public abstract class LocalPlayerMixin {
             return original;
         }
     }
+    //#endif
 
     @WrapOperation(
+        //#if MC>=12102
         method = "modifyInput",
+        //#else
+        //$$ method = "aiStep",
+        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"

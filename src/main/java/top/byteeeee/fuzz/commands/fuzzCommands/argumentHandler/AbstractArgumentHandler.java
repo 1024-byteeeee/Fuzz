@@ -16,7 +16,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.minecraft.ChatFormatting;
@@ -49,7 +49,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
     }
 
     private RequiredArgumentBuilder<FabricClientCommandSource, T> buildValueArgument(Field field) {
-        return ClientCommands.argument("value", getArgumentType()).suggests(this::getSuggestions).executes(ctx -> executeSetValue(ctx, field));
+        return ClientCommandManager.argument("value", getArgumentType()).suggests(this::getSuggestions).executes(ctx -> executeSetValue(ctx, field));
     }
 
     private int executeSetValue(CommandContext<FabricClientCommandSource> ctx, Field field) throws CommandSyntaxException {
@@ -65,7 +65,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
         }
 
         Optional<T> oldValue = getOldValue(field);
-        if (oldValue.isEmpty()) {
+        if (!oldValue.isPresent()) {
             return 0;
         }
 
@@ -93,7 +93,7 @@ public abstract class AbstractArgumentHandler<T> implements ArgumentHandlerInter
 
         if (validatedValue == null) {
             List<String> descriptions = ValidatorManager.getValidatorDescriptions(field);
-            String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.getFirst();
+            String errorMsg = descriptions.isEmpty() ? "Validation failed" : descriptions.get(0);
             Messenger.tell(ctx.getSource(), Messenger.s(errorMsg).withStyle(ChatFormatting.RED));
             return null;
         }

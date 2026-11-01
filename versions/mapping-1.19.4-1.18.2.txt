@@ -1,0 +1,7 @@
+net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource
+net.fabricmc.fabric.api.client.command.v2.ClientCommandManager net.fabricmc.fabric.api.client.command.v1.ClientCommandManager
+net.minecraft.core.registries.BuiltInRegistries net.minecraft.core.Registry
+net.minecraft.util.RandomSource java.util.Random
+net.minecraft.network.chat.contents.TranslatableContents net.minecraft.network.chat.TranslatableComponent
+net.minecraft.client.renderer.texture.SpriteContents net.minecraft.client.renderer.texture.TextureAtlasSprite
+net.minecraft.client.renderer.texture.SpriteContents name() net.minecraft.client.renderer.texture.TextureAtlasSprite getName()

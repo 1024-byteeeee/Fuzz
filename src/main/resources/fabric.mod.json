@@ -31,6 +31,6 @@
   "accessWidener": "fuzz.accesswidener",
   "depends": {
     "minecraft": "${minecraft_dependency}",
-    "fabric-api": "${fabric_api_dependency}"
+    "${fabric_api_mod_id}": "${fabric_api_dependency}"
   }
 }

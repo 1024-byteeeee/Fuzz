@@ -23,19 +23,30 @@ package top.byteeeee.fuzz.utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
-import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 
 @Environment(EnvType.CLIENT)
 public class BuiltinResourcesPackAdder {
+    private static final String CHEST_PACK_NAMESPACE = "fuzz_mod";
+    private static final String CHEST_PACK_PATH = "chest_optimization";
+
+    public static String chestPackId() {
+        //#if MC>=11900
+        return IdentifierUtil.of(CHEST_PACK_NAMESPACE, CHEST_PACK_PATH).toString();
+        //#else
+        //$$ return CHEST_PACK_NAMESPACE + "/" + CHEST_PACK_PATH;
+        //#endif
+    }
+
     public static void register() {
         FabricLoader.getInstance().getModContainer("fuzz").ifPresent(BuiltinResourcesPackAdder::add);
     }
 
     private static void add(ModContainer modContainer) {
-        ResourceLoader.registerBuiltinPack(IdentifierUtil.of("fuzz_mod", "chest_optimization"), modContainer, PackActivationType.NORMAL);
+        ResourceManagerHelper.registerBuiltinResourcePack(IdentifierUtil.of(CHEST_PACK_NAMESPACE, CHEST_PACK_PATH), modContainer, ResourcePackActivationType.NORMAL);
     }
 }

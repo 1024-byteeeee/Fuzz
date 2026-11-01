@@ -39,6 +39,6 @@ import java.util.stream.Collectors;
 public abstract class PackRepositoryMixin {
     @ModifyReturnValue(method = "getAvailablePacks()Ljava/util/Collection;", at = @At("RETURN"))
     private Collection<Pack> modifyAvailablePacks(Collection<Pack> original) {
-        return original.stream().filter(pack -> !pack.getId().equals("fuzz_mod:chest_optimization")).collect(Collectors.toList());
+        return original.stream().filter(pack -> !pack.getId().equals(top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())).collect(Collectors.toList());
     }
 }

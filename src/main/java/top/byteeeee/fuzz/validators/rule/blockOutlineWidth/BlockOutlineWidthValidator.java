@@ -36,7 +36,7 @@ public class BlockOutlineWidthValidator extends Validator<Double> {
 
     @Override
     public Double validate(FabricClientCommandSource source, Field field, Double value) {
-        return value >= -1.0D && value <= 80.0D ? value : null;
+        return value == -1.0D || (value >= 0.0D && value <= 80.0D) ? value : null;
     }
 
     @Override

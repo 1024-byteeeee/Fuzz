@@ -26,7 +26,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.minecraft.client.Minecraft;
@@ -65,9 +65,9 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
 
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
-            ClientCommands.literal(MAIN_CMD_NAME)
+            ClientCommandManager.literal(MAIN_CMD_NAME)
             // add
-            .then(ClientCommands.literal("add")
+            .then(ClientCommandManager.literal("add")
             .then(suggestions(StringArgumentType.greedyString())
             .executes(c -> checkEnabled(c, () -> add(
                 c.getSource(),
@@ -75,8 +75,8 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
             )))))
 
             // remove
-            .then(ClientCommands.literal("remove")
-            .then(ClientCommands.argument("texture", StringArgumentType.greedyString())
+            .then(ClientCommandManager.literal("remove")
+            .then(ClientCommandManager.argument("texture", StringArgumentType.greedyString())
             .suggests(ListSuggestionProvider.of(FuzzSettings.animationDisableList))
             .executes(c -> checkEnabled(c, () -> remove(
                 c.getSource(),
@@ -84,26 +84,30 @@ public class AnimatedFreezeCommand extends AbstractRuleCommand {
             )))))
 
             // removeAll
-            .then(ClientCommands.literal("removeAll")
+            .then(ClientCommandManager.literal("removeAll")
             .executes(c -> checkEnabled(c, () -> removeAll(c.getSource()))))
 
             // list
-            .then(ClientCommands.literal("list")
+            .then(ClientCommandManager.literal("list")
             .executes(c -> checkEnabled(c, () -> list(c.getSource()))))
 
             // help
-            .then(ClientCommands.literal("help")
+            .then(ClientCommandManager.literal("help")
             .executes(c -> checkEnabled(c, () -> help(c.getSource()))))
         );
     }
 
     private static RequiredArgumentBuilder<FabricClientCommandSource, String> suggestions(StringArgumentType type) {
-        return ClientCommands.argument("texture", type).suggests((context, builder) -> {
+        return ClientCommandManager.argument("texture", type).suggests((context, builder) -> {
             String remaining = builder.getRemaining().toLowerCase();
             Minecraft client = ClientUtil.getCurrentClient();
             ResourceManager resourceManager = client.getResourceManager();
 
+            //#if MC>=11900
             resourceManager.listResources("textures", id -> true).forEach((id, resource) -> {
+            //#else
+            //$$ resourceManager.listResources("textures", id -> true).forEach(id -> {
+            //#endif
                 String suggestion = id.getPath();
 
                 int dot = suggestion.lastIndexOf('.');

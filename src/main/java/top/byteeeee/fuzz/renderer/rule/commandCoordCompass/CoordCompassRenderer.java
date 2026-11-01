@@ -23,14 +23,23 @@ package top.byteeeee.fuzz.renderer.rule.commandCoordCompass;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+//#if MC>=12106
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
+//#else
+//$$ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+//#endif
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 
 import net.minecraft.client.Camera;
+//#if MC>=12100
 import net.minecraft.client.DeltaTracker;
+//#endif
+//#if MC<12000
+//$$ import net.minecraft.client.gui.GuiComponent;
+//#endif
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
@@ -39,7 +48,11 @@ import net.minecraft.world.phys.Vec3;
 //#if MC>=260300
 //$$ import org.joml.Matrix4f;
 //#endif
+//#if MC>=11904
 import org.joml.Quaternionf;
+//#else
+//$$ import com.mojang.math.Vector3f;
+//#endif
 
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.translations.Translator;
@@ -57,11 +70,15 @@ public class CoordCompassRenderer {
     private static final Identifier TARGET_ICON = IdentifierUtil.of("fuzz", "textures/waypoint/target_point.png");
 
     public static void register() {
+        //#if MC>=12106
         HudElementRegistry.addLast(IdentifierUtil.of("fuzz", "coord_compass_hud"), CoordCompassRenderer::renderHud);
-        LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(CoordCompassRenderer::renderWorld);
+        //#else
+        //$$ HudRenderCallback.EVENT.register(CoordCompassRenderer::renderHud);
+        //#endif
+        WorldRenderEvents.BEFORE_TRANSLUCENT.register(CoordCompassRenderer::renderWorld);
     }
 
-    protected static void renderWorld(LevelRenderContext context) {
+    protected static void renderWorld(WorldRenderContext context) {
         if (!isActive || targetCoord == Vec3.ZERO || !FuzzSettings.commandCoordCompass) {
             return;
         }
@@ -77,7 +94,7 @@ public class CoordCompassRenderer {
         //#else
         Camera camera = client.gameRenderer.getMainCamera();
         //#endif
-        PoseStack matrixStack = context.poseStack();
+        PoseStack matrixStack = context.matrices();
         matrixStack.pushPose();
         Vec3 cameraPos = camera.position();
         Vec3 offset = targetCoord.subtract(cameraPos);
@@ -101,8 +118,11 @@ public class CoordCompassRenderer {
         float pitch = camera.xRot();
         //#if MC>=260300
         //$$ matrixStack.mulPose(new Matrix4f().rotation(new Quaternionf().rotationYXZ((float)Math.toRadians(yaw), (float)Math.toRadians(pitch), 0)));
-        //#else
+        //#elseif MC>=11904
         matrixStack.mulPose(new Quaternionf().rotationYXZ((float)Math.toRadians(yaw), (float)Math.toRadians(pitch), 0));
+        //#else
+        //$$ matrixStack.mulPose(Vector3f.YP.rotationDegrees(yaw));
+        //$$ matrixStack.mulPose(Vector3f.XP.rotationDegrees(pitch));
         //#endif
         float scale = 1.0F;
         matrixStack.scale(scale, scale, scale);
@@ -118,16 +138,37 @@ public class CoordCompassRenderer {
         //$$     buffer.addVertex(pose, 1F, -1F, 0F).setColor(1F, 1F, 1F, 1).setUv(1F, 0F);
         //$$ });
         //#else
-        VertexConsumer vertexConsumer = Objects.requireNonNull(context.bufferSource()).getBuffer(renderLayer);
+        VertexConsumer vertexConsumer = Objects.requireNonNull(context.consumers()).getBuffer(renderLayer);
+        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), -1F, -1F, 0F).setUv(0F, 0F).setColor(-1).setLight(0xF000F0);
+        //#else
+        //$$ vertexConsumer.vertex(entry.pose(), -1F, -1F, 0F).color(255, 255, 255, 255).uv(0F, 0F).uv2(0xF000F0).endVertex();
+        //#endif
+        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), -1F, 1F, 0F).setUv(0F, 1F).setColor(-1).setLight(0xF000F0);
+        //#else
+        //$$ vertexConsumer.vertex(entry.pose(), -1F, 1F, 0F).color(255, 255, 255, 255).uv(0F, 1F).uv2(0xF000F0).endVertex();
+        //#endif
+        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), 1F, 1F, 0F).setUv(1F, 1F).setColor(-1).setLight(0xF000F0);
+        //#else
+        //$$ vertexConsumer.vertex(entry.pose(), 1F, 1F, 0F).color(255, 255, 255, 255).uv(1F, 1F).uv2(0xF000F0).endVertex();
+        //#endif
+        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), 1F, -1F, 0F).setUv(1F, 0F).setColor(-1).setLight(0xF000F0);
+        //#else
+        //$$ vertexConsumer.vertex(entry.pose(), 1F, -1F, 0F).color(255, 255, 255, 255).uv(1F, 0F).uv2(0xF000F0).endVertex();
+        //#endif
         //#endif
         matrixStack.popPose();
     }
 
-    protected static void renderHud(GuiGraphicsExtractor drawContext, DeltaTracker renderTickCounter) {
+    //#if MC>=12100
+    protected static void renderHud(GuiGraphics drawContext, DeltaTracker renderTickCounter) {
+        float partialTick = renderTickCounter.getGameTimeDeltaPartialTick(true);
+    //#else
+    //$$ protected static void renderHud(GuiGraphics drawContext, float partialTick) {
+    //#endif
         if (!isActive || targetCoord == Vec3.ZERO) {
             return;
         }
@@ -157,7 +198,7 @@ public class CoordCompassRenderer {
         } else if (isHorizontalClose) {
             renderCircle(drawContext, centerX, centerY);
         } else {
-            float playerYaw = client.player.getViewYRot(renderTickCounter.getGameTimeDeltaPartialTick(true));
+            float playerYaw = client.player.getViewYRot(partialTick);
             double targetYaw = Math.atan2(horizontalDirection.z, horizontalDirection.x) * 180.0 / Math.PI - 90.0;
             double angleDiff = ((targetYaw - playerYaw + 540) % 360) - 180;
             double angleRad = Math.toRadians(angleDiff);
@@ -179,7 +220,7 @@ public class CoordCompassRenderer {
             distanceText = String.format("§e%s %.1fm %s", verticalIndicator, distance, verticalIndicator);
         }
 
-        drawContext.centeredText(client.font, distanceText, centerX, centerY + 20, 0xFFFFFF00);
+        drawCenteredString(drawContext, client.font, distanceText, centerX, centerY + 20, 0xFFFFFF00);
 
         String targetX = formatCoord(targetCoord.x);
         String targetY = formatCoord(targetCoord.y);
@@ -189,7 +230,7 @@ public class CoordCompassRenderer {
         String playerZ = formatCoord(playerPos.z);
         String coordText = String.format("§b[ %s, %s, %s ]§f §r§a[ %s, %s, %s ]", targetX, targetY, targetZ, playerX, playerY, playerZ);
 
-        drawContext.centeredText(client.font, coordText, centerX, centerY + 30, 0xFF00FFFF);
+        drawCenteredString(drawContext, client.font, coordText, centerX, centerY + 30, 0xFF00FFFF);
     }
 
     private static int getArrowHudYPosition(int screenHeight) {
@@ -206,13 +247,13 @@ public class CoordCompassRenderer {
         return centerY;
     }
 
-    private static void renderXMark(GuiGraphicsExtractor drawContext, int centerX, int centerY) {
+    private static void renderXMark(GuiGraphics drawContext, int centerX, int centerY) {
         int size = 8;
         drawLine(drawContext, centerX - size, centerY - size, centerX + size, centerY + size);
         drawLine(drawContext, centerX - size, centerY + size, centerX + size, centerY - size);
     }
 
-    private static void renderCircle(GuiGraphicsExtractor drawContext, int centerX, int centerY) {
+    private static void renderCircle(GuiGraphics drawContext, int centerX, int centerY) {
         int radius = 13;
         int segments = 66;
 
@@ -243,7 +284,7 @@ public class CoordCompassRenderer {
         }
     }
 
-    private static void renderArrow(GuiGraphicsExtractor drawContext, int startX, int startY, int endX, int endY) {
+    private static void renderArrow(GuiGraphics drawContext, int startX, int startY, int endX, int endY) {
         drawLine(drawContext, startX, startY, endX, endY);
 
         double angle = Math.atan2(endY - startY, endX - startX);
@@ -258,7 +299,7 @@ public class CoordCompassRenderer {
         drawLine(drawContext, endX, endY, arrow2X, arrow2Y);
     }
 
-    private static void drawLine(GuiGraphicsExtractor drawContext, int x1, int y1, int x2, int y2) {
+    private static void drawLine(GuiGraphics drawContext, int x1, int y1, int x2, int y2) {
         int dx = Math.abs(x2 - x1);
         int dy = Math.abs(y2 - y1);
         int sx = x1 < x2 ? 1 : -1;
@@ -269,7 +310,11 @@ public class CoordCompassRenderer {
         int y = y1;
 
         while (true) {
+            //#if MC>=12000
             drawContext.fill(x, y, x + 1, y + 1, -16711936);
+            //#else
+            //$$ GuiComponent.fill(drawContext, x, y, x + 1, y + 1, -16711936);
+            //#endif
 
             if (x == x2 && y == y2) {
                 break;
@@ -287,5 +332,13 @@ public class CoordCompassRenderer {
                 y += sy;
             }
         }
+    }
+
+    private static void drawCenteredString(GuiGraphics graphics, net.minecraft.client.gui.Font font, String text, int x, int y, int color) {
+        //#if MC>=12000
+        graphics.drawCenteredString(font, text, x, y, color);
+        //#else
+        //$$ GuiComponent.drawCenteredString(graphics, font, text, x, y, color);
+        //#endif
     }
 }

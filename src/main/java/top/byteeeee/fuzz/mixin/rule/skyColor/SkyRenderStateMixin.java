@@ -26,8 +26,13 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+//#if MC>=12111
 import net.minecraft.client.renderer.SkyRenderer;
-import net.minecraft.client.renderer.state.level.SkyRenderState;
+import net.minecraft.client.renderer.state.SkyRenderState;
+//#else
+//$$ import net.minecraft.world.level.biome.BiomeSpecialEffects;
+//#endif
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
 //#if MC>=260300
 //$$ import org.joml.Vector3f;
@@ -42,8 +47,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import top.byteeeee.fuzz.FuzzSettings;
 
 @Environment(EnvType.CLIENT)
+//#if MC>=12111
 @Mixin(SkyRenderer.class)
+//#else
+//$$ @Mixin(BiomeSpecialEffects.class)
+//#endif
 public abstract class SkyRenderStateMixin {
+    //#if MC>=12111
     //#if MC>=260300
     //$$ @WrapOperation(
     //$$     method = "extractRenderState",
@@ -76,7 +86,7 @@ public abstract class SkyRenderStateMixin {
         method = "extractRenderState",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/client/renderer/state/level/SkyRenderState;skyColor:I",
+            target = "Lnet/minecraft/client/renderer/state/SkyRenderState;skyColor:I",
             opcode = Opcodes.PUTFIELD
         )
     )
@@ -93,5 +103,12 @@ public abstract class SkyRenderStateMixin {
         int customColor = Integer.parseInt(FuzzSettings.skyColor.substring(1), 16);
         original.call(state, customColor);
     }
+    //#endif
+    //#else
+    //$$ @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
+    //$$ private int modifySkyColor(int original) {
+    //$$     return top.byteeeee.fuzz.validators.HexValidator.isValidHexColor(FuzzSettings.skyColor)
+    //$$         ? Integer.parseInt(FuzzSettings.skyColor.substring(1), 16) : original;
+    //$$ }
     //#endif
 }

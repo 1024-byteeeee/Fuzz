@@ -20,34 +20,29 @@
 
 package top.byteeeee.fuzz.mixin.rule.bubbleColumnInteractDisabled;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BubbleColumnBlock;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.llamalad7.mixinextras.sugar.Local;
 
 import top.byteeeee.fuzz.FuzzSettings;
-import top.byteeeee.fuzz.helpers.Noop;
 import top.byteeeee.fuzz.utils.ClientUtil;
 
 @Environment(EnvType.CLIENT)
 @Mixin(BubbleColumnBlock.class)
 public abstract class BubbleColumnBlockMixin {
-    @WrapMethod(method = "entityInside")
-    private void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier handler, boolean bl, Operation<Void> original) {
+    @Inject(method = "entityInside", at = @At("HEAD"), cancellable = true)
+    private void onEntityCollision(CallbackInfo ci, @Local(argsOnly = true) Entity entity) {
         if (FuzzSettings.bubbleColumnInteractDisabled && ClientUtil.isLocalPlayerSelf(entity)) {
-            Noop.noop();
-        } else {
-            original.call(state, world, pos, entity,handler,bl);
+            ci.cancel();
         }
     }
 }

@@ -25,7 +25,11 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStackTemplate;
+//#if MC>=260000
+//$$ import net.minecraft.world.item.ItemStackTemplate;
+//#else
+import net.minecraft.world.item.ItemStack;
+//#endif
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,8 +49,18 @@ public class HoverEventUtil {
     }
 
     static {
+        //#if MC>=12105
         HOVER_EVENT_ACTION_MAP.put(SHOW_TEXT, value -> new HoverEvent.ShowText((Component) value));
-        HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent.ShowItem((ItemStackTemplate) value));
+        //#if MC>=260000
+        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent.ShowItem((ItemStackTemplate) value));
+        //#else
+        HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent.ShowItem((ItemStack) value));
+        //#endif
         HOVER_EVENT_ACTION_MAP.put(SHOW_ENTITY, value -> new HoverEvent.ShowEntity((HoverEvent.EntityTooltipInfo) value));
+        //#else
+        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_TEXT, value -> new HoverEvent(SHOW_TEXT, (Component) value));
+        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_ITEM, value -> new HoverEvent(SHOW_ITEM, new HoverEvent.ItemStackInfo((ItemStack) value)));
+        //$$ HOVER_EVENT_ACTION_MAP.put(SHOW_ENTITY, value -> new HoverEvent(SHOW_ENTITY, (HoverEvent.EntityTooltipInfo) value));
+        //#endif
     }
 }

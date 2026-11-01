@@ -37,8 +37,13 @@ import top.byteeeee.fuzz.utils.IdentifierUtil;
 import top.byteeeee.fuzz.utils.Messenger;
 
 @Environment(EnvType.CLIENT)
+//#if MC>=12109
 @Mixin(targets = "net.minecraft.client.KeyMapping$Category")
+//#else
+//$$ @Mixin(net.minecraft.client.resources.language.I18n.class)
+//#endif
 public abstract class KeyMapping_CategoryMixin {
+    //#if MC>=12109
     @Shadow
     @Final
     private Identifier id;
@@ -51,4 +56,14 @@ public abstract class KeyMapping_CategoryMixin {
             return original.call();
         }
     }
+    //#else
+    //$$ @org.spongepowered.asm.mixin.injection.Inject(method = "get", at = @org.spongepowered.asm.mixin.injection.At("HEAD"), cancellable = true)
+    //$$ private static void translateCategory(String key, Object[] args, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<String> cir) {
+    //$$     if ("fuzz.key.category.fuzz".equals(key)) {
+    //$$         String translated = top.byteeeee.fuzz.translations.FuzzTranslations.translateKeyToFormattedString(
+    //$$             top.byteeeee.fuzz.translations.FuzzTranslations.getLanguage(), key);
+    //$$         if (translated != null) cir.setReturnValue(translated);
+    //$$     }
+    //$$ }
+    //#endif
 }

@@ -26,7 +26,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.FuzzSettings;
@@ -54,33 +54,33 @@ public class HighLightEntityCommand extends AbstractRuleCommand {
     @Override
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
-            ClientCommands.literal(MAIN_CMD_NAME)
+            ClientCommandManager.literal(MAIN_CMD_NAME)
             // Add entity command
-            .then(ClientCommands.literal("add")
-            .then(ClientCommands.argument("entityId", StringArgumentType.greedyString())
+            .then(ClientCommandManager.literal("add")
+            .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(SetSuggestionProvider.fromEntityRegistry())
             .executes(c -> checkEnabled(
                 c, () -> add(c.getSource(), StringArgumentType.getString(c, "entityId"))
             ))))
 
             // Remove entity command
-            .then(ClientCommands.literal("remove")
-            .then(ClientCommands.argument("entityId", StringArgumentType.greedyString())
+            .then(ClientCommandManager.literal("remove")
+            .then(ClientCommandManager.argument("entityId", StringArgumentType.greedyString())
             .suggests(ListSuggestionProvider.of(FuzzSettings.highlightEntityList))
             .executes(c -> checkEnabled(
                 c, () -> remove(c.getSource(), StringArgumentType.getString(c, "entityId"))
             ))))
 
             // Clear all entities
-            .then(ClientCommands.literal("clear")
+            .then(ClientCommandManager.literal("clear")
             .executes(c -> checkEnabled(c, () -> clear(c.getSource()))))
 
             // List entities
-            .then(ClientCommands.literal("list")
+            .then(ClientCommandManager.literal("list")
             .executes(c -> checkEnabled(c, () -> list(c.getSource()))))
 
             // Show help
-            .then(ClientCommands.literal("help")
+            .then(ClientCommandManager.literal("help")
             .executes(c -> checkEnabled(c, () -> help(c.getSource()))))
         );
     }

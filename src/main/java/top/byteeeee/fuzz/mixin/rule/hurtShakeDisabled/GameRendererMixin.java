@@ -27,7 +27,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+//#if MC>=260000
+//$$ import net.minecraft.client.renderer.state.level.CameraRenderState;
+//#endif
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -40,11 +42,19 @@ import top.byteeeee.fuzz.helpers.Noop;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
     @WrapMethod(method = "bobHurt")
-    private void worldRenderDisabled(CameraRenderState cameraState, PoseStack poseStack, Operation<Void> original) {
+    //#if MC>=260000
+    //$$ private void worldRenderDisabled(CameraRenderState cameraState, PoseStack poseStack, Operation<Void> original) {
+    //#else
+    private void worldRenderDisabled(PoseStack poseStack, float partialTick, Operation<Void> original) {
+    //#endif
         if (FuzzSettings.hurtShakeDisabled) {
             Noop.noop();
         } else {
-            original.call(cameraState, poseStack);
+            //#if MC>=260000
+            //$$ original.call(cameraState, poseStack);
+            //#else
+            original.call(poseStack, partialTick);
+            //#endif
         }
     }
 }

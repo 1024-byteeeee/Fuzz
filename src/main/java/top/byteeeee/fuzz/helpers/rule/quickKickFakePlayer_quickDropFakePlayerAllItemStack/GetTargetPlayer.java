@@ -48,7 +48,8 @@ public class GetTargetPlayer {
 
         EntityHitResult entityHit = (EntityHitResult) hit;
         Entity target = entityHit.getEntity();
-        if (target instanceof Player targetPlayer) {
+        if (target instanceof Player) {
+            Player targetPlayer = (Player) target;
             return targetPlayer.getGameProfile().name();
         }
 

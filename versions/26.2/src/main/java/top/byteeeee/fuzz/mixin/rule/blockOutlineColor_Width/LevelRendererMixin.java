@@ -34,6 +34,9 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.util.ARGB;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.phys.Vec3;
+import top.byteeeee.fuzz.renderer.rule.blockOutline.WorldOutlineRenderer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -50,9 +53,9 @@ import java.util.Objects;
 public abstract class LevelRendererMixin implements LevelRendererAccessor {
 
     @Unique
-    private int getCustomOutlineColor() {
+    private int getCustomOutlineColor(int fallback) {
         String colorCfg = FuzzSettings.blockOutlineColor;
-        if (Objects.equals(colorCfg, "false")) return Integer.MIN_VALUE;
+        if (Objects.equals(colorCfg, "false")) return fallback;
         if (Objects.equals(colorCfg, "rainbow")) {
             return RainbowColorHelper.getRainbowColor();
         }
@@ -63,7 +66,7 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
             int alpha = Math.clamp(FuzzSettings.blockOutlineAlpha, 0, 255);
             return ARGB.color(alpha, r, g, b);
         }
-        return Integer.MIN_VALUE;
+        return fallback;
     }
 
     @WrapOperation(
@@ -79,32 +82,19 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
             int originalColor, float lineWidth, boolean translucent,
             Operation<Void> original
     ) {
-        int customColor = getCustomOutlineColor();
-
-        if (customColor == Integer.MIN_VALUE) {
-            original.call(instance, poseStack, submitNodeCollector, renderType, state, originalColor, lineWidth, translucent);
-            return;
-        }
-
-        if (renderType == RenderTypes.secondaryBlockOutline()) {
-            original.call(instance, poseStack, submitNodeCollector, renderType, state, customColor, lineWidth, translucent);
+        int color = getCustomOutlineColor(originalColor);
+        double width = FuzzSettings.blockOutlineWidth;
+        if (width >= 0.0D) {
+            if (width == 0.0D) return;
+            Vec3 eye = Minecraft.getInstance().gameRenderer.mainCamera().position();
+            double eyeX = eye.x() - state.pos().getX();
+            double eyeY = eye.y() - state.pos().getY();
+            double eyeZ = eye.z() - state.pos().getZ();
+            submitNodeCollector.order(0).submitCustomGeometry(poseStack, RenderTypes.debugQuads(), (pose, buffer) ->
+                WorldOutlineRenderer.render(pose, buffer, state.shape(), 0, 0, 0, eyeX, eyeY, eyeZ, width, color));
         } else {
-            original.call(instance, poseStack, submitNodeCollector, renderType, state, customColor, lineWidth, translucent);
+            original.call(instance, poseStack, submitNodeCollector, renderType, state, color, lineWidth, translucent);
         }
-    }
-
-    @WrapOperation(
-        method = "submitBlockOutline",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/LevelRenderer;submitHitOutline(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;IFZ)V"
-        )
-    )
-    private void wrapOutlineWidth(
-            LevelRenderer instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, RenderType renderType, BlockOutlineRenderState blockOutlineRenderState, int originalColor, float originalWidth, boolean b, Operation<Void> original
-    ) {
-        float finalWidth = FuzzSettings.blockOutlineWidth >= 0 ? (float) FuzzSettings.blockOutlineWidth : originalWidth;
-        original.call(instance, poseStack, submitNodeCollector, renderType, blockOutlineRenderState, originalColor, finalWidth, b);
     }
 
     @WrapOperation(
@@ -115,11 +105,6 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         )
     )
     private boolean wrapHighContrast(BlockOutlineRenderState state, Operation<Boolean> original) {
-        boolean customEnable = !Objects.equals(FuzzSettings.blockOutlineColor, "false") || FuzzSettings.blockOutlineWidth != -1.0D;
-        if (customEnable) {
-            return original.call(state);
-        }
-
-        return original.call(state);
+        return FuzzSettings.blockOutlineWidth < 0.0D && original.call(state);
     }
 }

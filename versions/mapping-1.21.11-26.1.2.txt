@@ -1,0 +1,16 @@
+net.minecraft.client.renderer.state.BlockOutlineRenderState net.minecraft.client.renderer.state.level.BlockOutlineRenderState
+net.minecraft.client.renderer.state.SkyRenderState net.minecraft.client.renderer.state.level.SkyRenderState
+net.minecraft.client.gui.GuiGraphics net.minecraft.client.gui.GuiGraphicsExtractor
+net.minecraft.client.renderer.state.CameraRenderState net.minecraft.client.renderer.state.level.CameraRenderState
+net.minecraft.client.gui.GuiGraphics drawCenteredString() centeredText()
+net.fabricmc.fabric.api.client.command.v2.ClientCommandManager net.fabricmc.fabric.api.client.command.v2.ClientCommands
+net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
+net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper registerKeyBinding() registerKeyMapping()
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext matrices() poseStack()
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext consumers() bufferSource()
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents BEFORE_TRANSLUCENT BEFORE_TRANSLUCENT_TERRAIN
+net.fabricmc.fabric.api.resource.ResourceManagerHelper net.fabricmc.fabric.api.resource.v1.ResourceLoader
+net.fabricmc.fabric.api.resource.ResourcePackActivationType net.fabricmc.fabric.api.resource.v1.pack.PackActivationType
+net.fabricmc.fabric.api.resource.ResourceManagerHelper registerBuiltinResourcePack() registerBuiltinPack()

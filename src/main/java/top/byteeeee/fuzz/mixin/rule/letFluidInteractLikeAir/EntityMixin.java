@@ -51,6 +51,7 @@ public abstract class EntityMixin {
         }
     }
 
+    //#if MC>=12111
     @ModifyReturnValue(method = "isInShallowWater", at = @At("RETURN"))
     private boolean isInShallowWater(boolean original) {
         Entity entity = (Entity) (Object) this;
@@ -60,6 +61,7 @@ public abstract class EntityMixin {
             return original;
         }
     }
+    //#endif
 
     @ModifyReturnValue(method = "isInLava", at = @At("RETURN"))
     private boolean isInLava(boolean original) {
@@ -71,7 +73,11 @@ public abstract class EntityMixin {
         }
     }
 
-    @ModifyReturnValue(method = "updateFluidInteraction", at = @At("RETURN"))
+    //#if MC>=260000
+    //$$ @ModifyReturnValue(method = "updateFluidInteraction", at = @At("RETURN"))
+    //#else
+    @ModifyReturnValue(method = "updateInWaterStateAndDoFluidPushing", at = @At("RETURN"))
+    //#endif
     private boolean noUpdate(boolean original) {
         Entity entity = (Entity) (Object) this;
         if (FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) {
@@ -82,7 +88,11 @@ public abstract class EntityMixin {
     }
 
     @WrapOperation(
-        method = "updateFluidInteraction",
+        //#if MC>=260000
+        //$$ method = "updateFluidInteraction",
+        //#else
+        method = "updateFluidHeightAndDoFluidPushing",
+        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;isPushedByFluid()Z"

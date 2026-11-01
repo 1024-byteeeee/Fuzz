@@ -41,7 +41,11 @@ import top.byteeeee.fuzz.utils.ClientUtil;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
     @WrapOperation(
+        //#if MC>=12102
         method = "travelInAir",
+        //#else
+        //$$ method = "travel",
+        //#endif
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/Block;getFriction()F"

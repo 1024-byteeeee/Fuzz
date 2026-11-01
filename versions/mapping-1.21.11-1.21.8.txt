@@ -1,0 +1,11 @@
+net.minecraft.resources.Identifier net.minecraft.resources.ResourceLocation
+net.minecraft.client.renderer.rendertype.RenderType net.minecraft.client.renderer.RenderType
+net.minecraft.client.renderer.rendertype.RenderTypes net.minecraft.client.renderer.RenderType
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext matrices() matrixStack()
+net.minecraft.client.Camera position() getPosition()
+net.minecraft.client.Camera yRot() getYRot()
+net.minecraft.client.Camera xRot() getXRot()
+com.mojang.authlib.GameProfile name() getName()
+net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents BEFORE_TRANSLUCENT AFTER_ENTITIES

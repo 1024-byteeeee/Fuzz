@@ -131,7 +131,7 @@ fuzz:
         '0': "需开启blockOutlineColor规则"
     blockOutlineWidth:
       name: "方块轮廓线宽度"
-      desc: "修改方块轮廓线的线宽"
+      desc: "按方块边长百分比设置线宽（8=0.08格），随距离与FOV缩放；0隐藏，-1使用原版宽度"
     skyColor:
       name: "天空颜色"
       desc: "修改天空颜色"

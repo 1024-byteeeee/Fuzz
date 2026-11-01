@@ -27,7 +27,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import top.byteeeee.fuzz.FuzzSettings;
@@ -57,7 +57,7 @@ public class FuzzCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> buildRootCommand(String name) {
-        LiteralArgumentBuilder<FabricClientCommandSource> root = ClientCommands.literal(name).executes(ctx -> FuzzCommandContext.showRuleList(ctx.getSource()));
+        LiteralArgumentBuilder<FabricClientCommandSource> root = ClientCommandManager.literal(name).executes(ctx -> FuzzCommandContext.showRuleList(ctx.getSource()));
 
         root.then(buildListCommand());
         registerRuleCommands(root);
@@ -71,9 +71,9 @@ public class FuzzCommand {
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> buildListCommand() {
         return
-            ClientCommands.literal("list")
+            ClientCommandManager.literal("list")
             .executes(ctx -> FuzzCommandContext.showAllRules(ctx.getSource()))
-            .then(ClientCommands.argument("category", StringArgumentType.string())
+            .then(ClientCommandManager.argument("category", StringArgumentType.string())
                 .suggests((context, builder) -> {
                     FuzzCategoriesContext.getAllCategories().forEach(builder::suggest);
                     return CompletableFuture.completedFuture(builder.build());
@@ -86,7 +86,7 @@ public class FuzzCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> buildRuleCommand(Field field) {
-        LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommands.literal(field.getName())
+        LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal(field.getName())
             .executes(context -> {
                 FuzzCommandContext.showRuleList(context.getSource());
                 FuzzCommandContext.showRuleInfo(context.getSource(), field);
