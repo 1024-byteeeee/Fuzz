@@ -28,7 +28,6 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.server.packs.repository.PackRepository;
 
 import top.byteeeee.fuzz.FuzzModClient;
-import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.settings.Observer;
 import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
@@ -40,18 +39,14 @@ public class ChestOptimizationObserver extends Observer<Boolean> {
         PackRepository packManager = FuzzModClient.minecraftClient.getResourcePackRepository();
         net.minecraft.client.Options options = FuzzModClient.minecraftClient.options;
         String id = BuiltinResourcesPackAdder.chestPackId();
-        boolean repoHas = packManager.isAvailable(id);
-        boolean selected = options.resourcePacks.contains(id);
+        packManager.reload();
         java.util.List<String> selectedPacks = new java.util.ArrayList<>(packManager.getSelectedIds());
-
-        if (FuzzSettings.chestOptimization && !selected && repoHas) {
+        selectedPacks.removeIf(id::equals);
+        options.resourcePacks.removeIf(id::equals);
+        options.incompatibleResourcePacks.removeIf(id::equals);
+        if (newValue && packManager.isAvailable(id)) {
             selectedPacks.add(id);
             options.resourcePacks.add(id);
-        }
-
-        if (!FuzzSettings.chestOptimization && selected) {
-            selectedPacks.remove(id);
-            options.resourcePacks.remove(id);
         }
 
         packManager.setSelected(selectedPacks);

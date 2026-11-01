@@ -20,8 +20,6 @@
 
 package top.byteeeee.fuzz.mixin.rule.commandAnimatedFreeze.simpleBlockAnimationDisabled;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -29,6 +27,8 @@ import net.minecraft.client.renderer.texture.SpriteContents;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import top.byteeeee.fuzz.FuzzSettings;
 
@@ -36,15 +36,20 @@ import top.byteeeee.fuzz.FuzzSettings;
 @Mixin(SpriteContents.class)
 public abstract class SpriteContentsMixin {
     //#if MC>=11700
-    @ModifyReturnValue(method = "getFrameCount", at = @At("RETURN"))
-    private int noAnimation(int original) {
+    //#if MC>=12111
+    @Inject(method = "createAnimationState", at = @At("HEAD"), cancellable = true)
+    //#elseif MC>=11903
+    //$$ @Inject(method = "createTicker", at = @At("HEAD"), cancellable = true)
+    //#else
+    //$$ @Inject(method = "getAnimationTicker", at = @At("HEAD"), cancellable = true)
+    //#endif
+    private void noAnimation(CallbackInfoReturnable<?> cir) {
         for (String block : FuzzSettings.animationDisableList) {
             if (((SpriteContents) (Object) this).name().getPath().endsWith(block)) {
-                return 0;
+                cir.setReturnValue(null);
+                return;
             }
         }
-
-        return original;
     }
     //#else
     //$$ @org.spongepowered.asm.mixin.injection.Inject(method = "cycleFrames", at = @At("HEAD"), cancellable = true)

@@ -29,14 +29,34 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 @Mixin(value = PackRepository.class, priority = 16888)
 public abstract class PackRepositoryMixin {
+    @Shadow
+    public abstract boolean isAvailable(String id);
+
+    @ModifyVariable(method = "rebuildSelected", at = @At("HEAD"), argsOnly = true)
+    private Collection<String> syncChestPack(Collection<String> selectedIds) {
+        // Config loading and the resource pack screen do not notify rule observers.
+        String id = BuiltinResourcesPackAdder.chestPackId();
+        Collection<String> selected = new ArrayList<>(selectedIds);
+        selected.removeIf(id::equals);
+        if (FuzzSettings.chestOptimization && isAvailable(id)) {
+            selected.add(id);
+        }
+        return selected;
+    }
+
     @ModifyReturnValue(method = "getAvailablePacks()Ljava/util/Collection;", at = @At("RETURN"))
     private Collection<Pack> modifyAvailablePacks(Collection<Pack> original) {
         return original.stream().filter(pack -> !pack.getId().equals(top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())).collect(Collectors.toList());

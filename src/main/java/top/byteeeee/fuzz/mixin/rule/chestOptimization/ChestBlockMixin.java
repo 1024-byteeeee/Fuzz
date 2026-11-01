@@ -20,36 +20,25 @@
 
 package top.byteeeee.fuzz.mixin.rule.chestOptimization;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.byteeeee.fuzz.FuzzSettings;
 
-//#if MC>=11700
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-//#else
-//$$ import net.minecraft.world.level.block.entity.ChestBlockEntity;
-//#endif
-
 @Environment(EnvType.CLIENT)
-//#if MC>=11700
-@Mixin(ChestBlock.class)
-//#else
-//$$ @Mixin(ChestBlockEntity.class)
-//#endif
+@Mixin(ChestBlockEntity.class)
 public abstract class ChestBlockMixin {
     //#if MC>=11700
-    @ModifyReturnValue(method = "getTicker", at = @At("RETURN"))
-    private <T extends BlockEntity> BlockEntityTicker<T> getTicker(BlockEntityTicker<T> original, @Local(argsOnly = true) Level level) {
-        return FuzzSettings.chestOptimization && level.isClientSide() ? null : original;
+    @Inject(method = "lidAnimateTick", at = @At("HEAD"), cancellable = true)
+    private static void skipAnimationTick(CallbackInfo ci) {
+        // Keep the ticker attached so loaded chests resume when the rule is disabled.
+        if (FuzzSettings.chestOptimization) ci.cancel();
     }
     //#else
     //$$ @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
