@@ -54,11 +54,15 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
-    //#if MC>=260000
-    //$$ @Inject(method = "pickBlockOrEntity", at = @At("HEAD"), cancellable = true)
-    //#else
-    @Inject(method = "pickBlock", at = @At("HEAD"), cancellable = true)
-    //#endif
+    @Inject(
+        //#if MC>=260000
+        //$$ method = "pickBlockOrEntity",
+        //#else
+        method = "pickBlock",
+        //#endif
+        at = @At("HEAD"),
+        cancellable = true
+    )
     private void doItemPick(CallbackInfo ci) {
         if (!Objects.equals(FuzzSettings.pickFluidBucketItemInCreative, "false")) {
             boolean needSneaking = Objects.equals(FuzzSettings.pickFluidBucketItemInCreative, "sneaking");

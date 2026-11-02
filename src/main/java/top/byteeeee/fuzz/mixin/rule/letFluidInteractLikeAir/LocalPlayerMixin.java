@@ -56,6 +56,6 @@ public abstract class LocalPlayerMixin {
         )
     )
     private boolean hideSprintingFromServer(boolean original) {
-        return original && !(FuzzSettings.letFluidInteractLikeAir && ((EntityAccessor) (Object) this).fuzz$getWasTouchingWater());
+        return original && !(FuzzSettings.letFluidInteractLikeAir && ((EntityAccessor) this).fuzz$getWasTouchingWater());
     }
 }

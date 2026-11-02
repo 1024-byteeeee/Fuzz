@@ -61,11 +61,14 @@ public abstract class EntityMixin {
         return !(FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) && original;
     }
 
-    //#if MC>=260000
-    //$$ @ModifyReturnValue(method = "updateFluidInteraction", at = @At("RETURN"))
-    //#else
-    @ModifyReturnValue(method = "updateInWaterStateAndDoFluidPushing", at = @At("RETURN"))
-    //#endif
+    @ModifyReturnValue(
+        //#if MC>=260000
+        //$$ method = "updateFluidInteraction",
+        //#else
+        method = "updateInWaterStateAndDoFluidPushing",
+        //#endif
+        at = @At("RETURN")
+    )
     private boolean noUpdate(boolean original) {
         Entity entity = (Entity) (Object) this;
         return !(FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && !entity.isOnFire()) && original;

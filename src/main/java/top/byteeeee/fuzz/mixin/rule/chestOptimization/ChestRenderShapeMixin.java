@@ -23,6 +23,7 @@ package top.byteeeee.fuzz.mixin.rule.chestOptimization;
 import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 
 import org.spongepowered.asm.mixin.Mixin;
+
 import top.byteeeee.fuzz.utils.compat.DummyClass;
 
 @GameVersion(version = "Minecraft >= 1.21.5")

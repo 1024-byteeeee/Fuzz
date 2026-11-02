@@ -22,12 +22,13 @@ package top.byteeeee.fuzz.mixin.rule.chestOptimization;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
-
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackCompatibility;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+
+import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public abstract class PackMixin {
     private PackCompatibility setCompatible(PackCompatibility original) {
         Pack pack = (Pack) (Object) this;
 
-        if (Objects.equals(pack.getId(), top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())) {
+        if (Objects.equals(pack.getId(), BuiltinResourcesPackAdder.chestPackId())) {
             return PackCompatibility.COMPATIBLE;
         } else {
             return original;

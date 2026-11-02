@@ -44,10 +44,13 @@ public abstract class FogRendererMixin {
     @ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
     private Vector4f modifyColor(Vector4f original) {
         String color = FuzzSettings.fogColor;
+
         if (!HexValidator.isValidHexColor(color)) {
             return original;
         }
+
         int rgb = Integer.parseInt(color.substring(1), 16);
+
         return new Vector4f(((rgb >>> 16) & 255) / 255.0F, ((rgb >>> 8) & 255) / 255.0F, (rgb & 255) / 255.0F, original.w);
     }
 }

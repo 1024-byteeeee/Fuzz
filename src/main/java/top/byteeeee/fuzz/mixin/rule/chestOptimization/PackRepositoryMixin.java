@@ -32,6 +32,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
@@ -51,14 +52,16 @@ public abstract class PackRepositoryMixin {
         String id = BuiltinResourcesPackAdder.chestPackId();
         Collection<String> selected = new ArrayList<>(selectedIds);
         selected.removeIf(packId -> Objects.equals(packId, id));
+
         if (FuzzSettings.chestOptimization && isAvailable(id)) {
             selected.add(id);
         }
+
         return selected;
     }
 
     @ModifyReturnValue(method = "getAvailablePacks()Ljava/util/Collection;", at = @At("RETURN"))
     private Collection<Pack> modifyAvailablePacks(Collection<Pack> original) {
-        return original.stream().filter(pack -> !Objects.equals(pack.getId(), top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder.chestPackId())).collect(Collectors.toList());
+        return original.stream().filter(pack -> !Objects.equals(pack.getId(), BuiltinResourcesPackAdder.chestPackId())).collect(Collectors.toList());
     }
 }

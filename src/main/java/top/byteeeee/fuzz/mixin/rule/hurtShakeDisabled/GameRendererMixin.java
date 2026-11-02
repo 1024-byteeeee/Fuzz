@@ -42,11 +42,14 @@ import top.byteeeee.fuzz.helpers.Noop;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
     @WrapMethod(method = "bobHurt")
-    //#if MC>=260000
-    //$$ private void worldRenderDisabled(CameraRenderState cameraState, PoseStack poseStack, Operation<Void> original) {
-    //#else
-    private void worldRenderDisabled(PoseStack poseStack, float partialTick, Operation<Void> original) {
-    //#endif
+    private void worldRenderDisabled(
+        //#if MC>=260000
+        //$$ CameraRenderState cameraState, PoseStack poseStack,
+        //#else
+        PoseStack poseStack, float partialTick,
+        //#endif
+        Operation<Void> original
+    ) {
         if (FuzzSettings.hurtShakeDisabled) {
             Noop.noop();
         } else {

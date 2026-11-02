@@ -32,9 +32,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderPipelines;
 //#else
 //$$ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-//#if MC>=11700
-//$$ import com.mojang.blaze3d.vertex.VertexFormat;
 //#endif
+//#if MC>=11700 && MC<12105
+//$$ import com.mojang.blaze3d.vertex.VertexFormat;
 //#endif
 import java.util.OptionalDouble;
 
@@ -42,8 +42,6 @@ import java.util.OptionalDouble;
 public final class OutlineRenderTypes extends RenderStateShard {
     //#if MC<11700
     //$$ private static final int LEGACY_LINE_BUFFER_SIZE = 256;
-    //#endif
-    //#if MC<11700
     //$$ private static final float LINE_SHADER_VIEW_SHRINK = 1.0F - 1.0F / 256.0F;
     //$$ private static final LayeringStateShard LEGACY_LINE_LAYERING = new LayeringStateShard(
     //$$     "fuzz_legacy_line_layering",

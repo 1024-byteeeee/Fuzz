@@ -20,33 +20,26 @@
 
 package top.byteeeee.fuzz.mixin.rule.letFluidInteractLikeAir;
 
-//#if MC>=260000
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-//#endif
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-//#if MC>=260000
 import net.minecraft.world.level.material.FluidState;
-//#endif
 import net.minecraft.world.entity.LivingEntity;
 
 import org.spongepowered.asm.mixin.Mixin;
-//#if MC>=260000
 import org.spongepowered.asm.mixin.injection.At;
-//#endif
 
-//#if MC>=260000
+import top.byteeeee.annotationtoolbox.annotation.GameVersion;
 import top.byteeeee.fuzz.FuzzSettings;
 import top.byteeeee.fuzz.utils.ClientUtil;
-//#endif
 
+@GameVersion(version = "Minecraft >= 1.21.11")
 @Environment(EnvType.CLIENT)
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
-    //#if MC>=260000
     @WrapOperation(
         method = "travel",
         at = @At(
@@ -57,5 +50,4 @@ public abstract class LivingEntityMixin {
     private boolean travel(LivingEntity entity, FluidState fluidState, Operation<Boolean> original) {
         return !(FuzzSettings.letFluidInteractLikeAir && ClientUtil.isLocalPlayerSelf(entity) && entity.isInLava()) && original.call(entity,fluidState);
     }
-    //#endif
 }

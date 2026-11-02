@@ -31,21 +31,23 @@ import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.settings.Observer;
 import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class ChestOptimizationObserver extends Observer<Boolean> {
-
     @Override
     public void onValueChange(FabricClientCommandSource source, Boolean oldValue, Boolean newValue) {
         PackRepository packManager = FuzzModClient.minecraftClient.getResourcePackRepository();
         net.minecraft.client.Options options = FuzzModClient.minecraftClient.options;
         String id = BuiltinResourcesPackAdder.chestPackId();
         packManager.reload();
-        java.util.List<String> selectedPacks = new java.util.ArrayList<>(packManager.getSelectedIds());
+        List<String> selectedPacks = new ArrayList<>(packManager.getSelectedIds());
         selectedPacks.removeIf(packId -> Objects.equals(packId, id));
         options.resourcePacks.removeIf(packId -> Objects.equals(packId, id));
         options.incompatibleResourcePacks.removeIf(packId -> Objects.equals(packId, id));
+
         if (newValue && packManager.isAvailable(id)) {
             selectedPacks.add(id);
             options.resourcePacks.add(id);

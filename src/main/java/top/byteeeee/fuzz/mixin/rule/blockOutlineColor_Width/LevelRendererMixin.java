@@ -76,14 +76,13 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         double configuredWidth = FuzzSettings.blockOutlineWidth;
 
         if (configuredWidth >= 0.0D) {
-            if (configuredWidth == 0.0D) {
-                return;
-            }
             RenderType quads = RenderTypes.debugQuads();
             MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
-            WorldOutlineRenderer.render(poseStack.last(), buffers.getBuffer(quads), state.shape(),
+            WorldOutlineRenderer.render(
+                poseStack.last(), buffers.getBuffer(quads), state.shape(),
                 state.pos().getX() - camX, state.pos().getY() - camY, state.pos().getZ() - camZ,
-                0, 0, 0, configuredWidth, color);
+                0, 0, 0, configuredWidth, color
+            );
             buffers.endBatch(quads);
         } else {
             original.call(levelRenderer, poseStack, vertexConsumer, camX, camY, camZ, state, color, width);

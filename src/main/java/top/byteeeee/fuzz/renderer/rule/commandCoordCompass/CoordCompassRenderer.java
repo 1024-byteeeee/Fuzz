@@ -150,28 +150,18 @@ public class CoordCompassRenderer {
         //$$     buffer.addVertex(pose, 1F, 1F, 0F).setColor(1F, 1F, 1F, 1).setUv(1F, 1F);
         //$$     buffer.addVertex(pose, 1F, -1F, 0F).setColor(1F, 1F, 1F, 1).setUv(1F, 0F);
         //$$ });
-        //#else
+        //#elseif MC>=12100
         VertexConsumer vertexConsumer = Objects.requireNonNull(context.consumers()).getBuffer(renderLayer);
-        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), -1F, -1F, 0F).setUv(0F, 0F).setColor(-1).setLight(0xF000F0);
-        //#else
-        //$$ vertexConsumer.vertex(entry.pose(), -1F, -1F, 0F).color(255, 255, 255, 255).uv(0F, 0F).uv2(0xF000F0).endVertex();
-        //#endif
-        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), -1F, 1F, 0F).setUv(0F, 1F).setColor(-1).setLight(0xF000F0);
-        //#else
-        //$$ vertexConsumer.vertex(entry.pose(), -1F, 1F, 0F).color(255, 255, 255, 255).uv(0F, 1F).uv2(0xF000F0).endVertex();
-        //#endif
-        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), 1F, 1F, 0F).setUv(1F, 1F).setColor(-1).setLight(0xF000F0);
-        //#else
-        //$$ vertexConsumer.vertex(entry.pose(), 1F, 1F, 0F).color(255, 255, 255, 255).uv(1F, 1F).uv2(0xF000F0).endVertex();
-        //#endif
-        //#if MC>=12100
         vertexConsumer.addVertex(entry.pose(), 1F, -1F, 0F).setUv(1F, 0F).setColor(-1).setLight(0xF000F0);
         //#else
+        //$$ VertexConsumer vertexConsumer = Objects.requireNonNull(context.consumers()).getBuffer(renderLayer);
+        //$$ vertexConsumer.vertex(entry.pose(), -1F, -1F, 0F).color(255, 255, 255, 255).uv(0F, 0F).uv2(0xF000F0).endVertex();
+        //$$ vertexConsumer.vertex(entry.pose(), -1F, 1F, 0F).color(255, 255, 255, 255).uv(0F, 1F).uv2(0xF000F0).endVertex();
+        //$$ vertexConsumer.vertex(entry.pose(), 1F, 1F, 0F).color(255, 255, 255, 255).uv(1F, 1F).uv2(0xF000F0).endVertex();
         //$$ vertexConsumer.vertex(entry.pose(), 1F, -1F, 0F).color(255, 255, 255, 255).uv(1F, 0F).uv2(0xF000F0).endVertex();
-        //#endif
         //#endif
         matrixStack.popPose();
     }

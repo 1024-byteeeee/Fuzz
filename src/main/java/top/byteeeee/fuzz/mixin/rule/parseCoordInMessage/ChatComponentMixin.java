@@ -38,13 +38,17 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 @Mixin(value = ChatComponent.class, priority = 1688)
 public abstract class ChatComponentMixin {
-    //#if MC>=260000
-    //$$ @ModifyVariable(method = "addPlayerMessage", at = @At("HEAD"), argsOnly = true)
-    //#elseif MC>=11900
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At("HEAD"), argsOnly = true)
-    //#else
-    //$$ @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At("HEAD"), argsOnly = true)
-    //#endif
+    @ModifyVariable(
+        //#if MC>=260000
+        //$$ method = "addPlayerMessage",
+        //#elseif MC>=11900
+        method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
+        //#else
+        //$$ method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V",
+        //#endif
+        at = @At("HEAD"),
+        argsOnly = true
+    )
     private Component parseCoordInMessage(Component original) {
         return !Objects.equals(FuzzSettings.parseCoordInMessage, "false") ? TextProcessor.processTextForCoordinates(original) : original;
     }
