@@ -94,15 +94,18 @@ public abstract class LevelRendererMixin implements LevelRendererAccessor {
         int color = getCustomOutlineColor(originalColor);
         double width = FuzzSettings.blockOutlineWidth;
         if (width >= 0.0D) {
-            if (width == 0.0D) {
-                return;
-            }
             Vec3 eye = Minecraft.getInstance().gameRenderer.mainCamera().position();
             double eyeX = eye.x() - state.pos().getX();
             double eyeY = eye.y() - state.pos().getY();
             double eyeZ = eye.z() - state.pos().getZ();
-            submitNodeCollector.order(0).submitCustomGeometry(poseStack, RenderTypes.debugQuads(), (pose, buffer) ->
-                WorldOutlineRenderer.render(pose, buffer, state.shape(), 0, 0, 0, eyeX, eyeY, eyeZ, width, color));
+            submitNodeCollector.order(0).submitCustomGeometry(
+                poseStack, RenderTypes.debugQuads(), (pose, buffer) ->
+                WorldOutlineRenderer.render(
+                    pose, buffer, state.shape(),
+                    0, 0, 0,
+                    eyeX, eyeY, eyeZ, width, color
+                )
+            );
         } else {
             original.call(instance, poseStack, submitNodeCollector, renderType, state, color, lineWidth, translucent);
         }
