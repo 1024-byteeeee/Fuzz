@@ -23,32 +23,24 @@ package top.byteeeee.fuzz;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import top.byteeeee.fuzz.config.FuzzRuleConfig;
 import top.byteeeee.fuzz.observers.ReloadClientResourceObserver;
 import top.byteeeee.fuzz.observers.rule.chestOptimization.ChestOptimizationObserver;
 import top.byteeeee.fuzz.observers.rule.fuzzCommandAlias.FuzzCommandAliasObserver;
-import top.byteeeee.fuzz.settings.ObserverManager;
 import top.byteeeee.fuzz.validators.rule.BiomeColor.BiomeColorValidator;
 import top.byteeeee.fuzz.validators.rule.fuzzCommandAlias.FuzzCommandAliasValidator;
 import top.byteeeee.fuzz.settings.Rule;
-import top.byteeeee.fuzz.config.FuzzConfig;
-import top.byteeeee.fuzz.settings.ValidatorManager;
 import top.byteeeee.fuzz.validators.rule.blockOutlineAlpha.BlockOutlineAlphaValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineColor.BlockOutlineColorValidator;
 import top.byteeeee.fuzz.validators.rule.blockOutlineWidth.BlockOutlineWidthValidator;
 import top.byteeeee.fuzz.validators.rule.rainbowBlockoutlineBlinkSpeed.RainbowBlockOutlineBlinkSpeedValidator;
 
-import java.util.Map;
 import java.util.List;
 import java.util.LinkedList;
-import java.lang.reflect.Field;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static top.byteeeee.fuzz.settings.RuleCategory.*;
 
 @Environment(EnvType.CLIENT)
 public class FuzzSettings {
-    public static final Map<String, Object> DEFAULT_VALUES = new ConcurrentHashMap<>();
     public static final List<String> highlightEntityList = new LinkedList<>();
     public static final List<String> animationDisableList = new LinkedList<>();
 
@@ -215,22 +207,4 @@ public class FuzzSettings {
         observers = ChestOptimizationObserver.class
     )
     public static boolean chestOptimization = false;
-
-    static {
-        for (Field field : FuzzSettings.class.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Rule.class)) {
-                try {
-                    field.setAccessible(true);
-                    Object defaultValue = field.get(null);
-                    DEFAULT_VALUES.put(field.getName(), defaultValue);
-                    ValidatorManager.init(field);
-                    ObserverManager.init(field);
-                } catch (IllegalAccessException e) {
-                    FuzzModClient.LOGGER.warn(e);
-                }
-            }
-        }
-        FuzzConfig.load();
-        FuzzRuleConfig.load();
-    }
 }

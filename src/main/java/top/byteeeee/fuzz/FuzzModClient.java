@@ -30,9 +30,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import top.byteeeee.fuzz.commands.RegisterCommands;
+import top.byteeeee.fuzz.config.FuzzConfig;
+import top.byteeeee.fuzz.config.FuzzRuleConfig;
 import top.byteeeee.fuzz.event.ClientEvent;
 import top.byteeeee.fuzz.key.KeyMappings;
 import top.byteeeee.fuzz.renderer.rule.commandCoordCompass.CoordCompassRenderer;
+import top.byteeeee.fuzz.settings.FuzzRuleRegistrar;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.utils.BuiltinResourcesPackAdder;
 
@@ -47,6 +50,9 @@ public class FuzzModClient implements ClientModInitializer {
     public void onInitializeClient() {
         LOGGER.info(MOD_NAME + " " + "loaded!");
         minecraftClient = Minecraft.getInstance();
+        FuzzRuleRegistrar.register(FuzzSettings.class);
+        FuzzConfig.load();
+        FuzzRuleConfig.load();
         RegisterCommands.register();
         ClientEvent.register();
         KeyMappings.register();

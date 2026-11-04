@@ -32,6 +32,7 @@ import net.minecraft.network.chat.MutableComponent;
 import top.byteeeee.fuzz.FuzzMod;
 import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.FuzzSettings;
+import top.byteeeee.fuzz.settings.FuzzRuleRegistrar;
 import top.byteeeee.fuzz.settings.Rule;
 import top.byteeeee.fuzz.translations.FuzzTranslations;
 import top.byteeeee.fuzz.translations.Translator;
@@ -76,7 +77,7 @@ public abstract class FuzzCommandContext {
             try {
                 field.setAccessible(true);
                 Object currentValue = field.get(null);
-                Object defaultValue = FuzzSettings.DEFAULT_VALUES.get(field.getName());
+                Object defaultValue = FuzzRuleRegistrar.getDefaultValue(field.getName());
                 if (!Objects.equals(currentValue, defaultValue)) {
                     messages.add(ruleEntryText(field, currentValue));
                     hasEnabledRules = true;
@@ -154,7 +155,7 @@ public abstract class FuzzCommandContext {
     private static List<MutableComponent> buildRuleInfoMessages(Field field) throws IllegalAccessException {
         List<MutableComponent> messages = new ArrayList<>();
         Object currentValue = getFieldValue(field);
-        Object defaultValue = FuzzSettings.DEFAULT_VALUES.get(field.getName());
+        Object defaultValue = FuzzRuleRegistrar.getDefaultValue(field.getName());
         Rule annotation = field.getAnnotation(Rule.class);
 
         addRuleHeader(messages, field);
@@ -317,7 +318,7 @@ public abstract class FuzzCommandContext {
     }
 
     private static String getDefaultValue(Field field) {
-        Object defaultValueObj = FuzzSettings.DEFAULT_VALUES.get(field.getName());
+        Object defaultValueObj = FuzzRuleRegistrar.getDefaultValue(field.getName());
         return defaultValueObj != null ? defaultValueObj.toString() : "";
     }
 
