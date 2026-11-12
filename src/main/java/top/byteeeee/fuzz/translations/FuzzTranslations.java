@@ -20,6 +20,9 @@
 
 package top.byteeeee.fuzz.translations;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,87 +32,101 @@ import top.byteeeee.fuzz.utils.FileUtil;
 import top.byteeeee.yaml.TinyYamlParser;
 import top.byteeeee.yaml.exception.YamlParseException;
 
-import java.util.Objects;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 public class FuzzTranslations {
-    private static final String LANG_DIR = "assets/fuzz/lang";
-    private static final String DEFAULT_LANGUAGE = "en_us";
-
-    public static final Map<String, Map<String, String>> translations = new LinkedHashMap<>();
-    public static final Set<String> languages = new HashSet<>();
+    private static final String LANG_DIR = "assets/" + FuzzModClient.MOD_ID + "/lang";
+    private static final Map<String, Map<String, String>> translations = new LinkedHashMap<>();
 
     public static void loadTranslations() {
+        Map<String, Object> yaml = readTranslationYaml(LANG_DIR + "/meta/languages.yml");
+        if (yaml == null || !(yaml.get("languages") instanceof List)) {
+            return;
+        }
+
+        for (String language : TinyYamlParser.getNestedStringList(yaml, "languages")) {
+            Map<String, Object> languageYaml = readTranslationYaml(LANG_DIR + "/" + language + ".yml");
+            if (languageYaml == null) {
+                continue;
+            }
+            Map<String, String> translation = new LinkedHashMap<>();
+            buildTranslationMap(translation, languageYaml);
+            translations.put(language, translation);
+        }
+    }
+
+    @Nullable
+    private static Map<String, Object> readTranslationYaml(String path) {
         try {
-            List<String> availableLanguages = getAvailableLanguages();
-            for (String language : availableLanguages) {
-                try {
-                    Map<String, String> translation = loadTranslationForLanguage(language);
-                    translations.put(language, translation);
-                    languages.add(language);
-                } catch (IOException | YamlParseException e) {
-                    FuzzModClient.LOGGER.warn("Failed to load translation for language: {}", language, e);
-                }
-            }
+            return TinyYamlParser.parse(FileUtil.readFile(path));
         } catch (IOException | YamlParseException e) {
-            FuzzModClient.LOGGER.warn("Failed to get available languages", e);
+            FuzzModClient.LOGGER.warn("Failed to load translation YAML: {}", path, e);
+            return null;
         }
     }
 
-    private static List<String> getAvailableLanguages() throws IOException, YamlParseException {
-        String yamlData = FileUtil.readFile(LANG_DIR + "/meta/languages.yml");
-        Map<String, Object> yamlMap = TinyYamlParser.parse(yamlData);
-        Object languagesObj = yamlMap.getOrDefault("languages", new ArrayList<>());
+    private static void buildTranslationMap(Map<String, String> translation, Map<?, ?> yaml) {
+        Deque<YamlFrame> stack = new ArrayDeque<>();
+        stack.push(new YamlFrame(yaml, ""));
 
-        if (languagesObj instanceof List) {
-            return TinyYamlParser.getNestedStringList(yamlMap, "languages");
-        }
-
-        return new ArrayList<>();
-    }
-
-    private static Map<String, String> loadTranslationForLanguage(String language) throws IOException, YamlParseException {
-        String path = LANG_DIR + "/" + language + ".yml";
-        String data = FileUtil.readFile(path);
-        Map<String, Object> yaml = TinyYamlParser.parse(data);
-        Map<String, String> translation = new LinkedHashMap<>();
-        buildTranslationMap(translation, yaml, "");
-        return translation;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void buildTranslationMap(Map<String, String> translation, Map<String, Object> yaml, String prefix) {
-        yaml.forEach((key, value) -> {
-            String fullKey = prefix.isEmpty() ? key : prefix + "." + key;
-            if (value instanceof String) {
-                translation.put(fullKey, (String) value);
-            } else if (value instanceof Map) {
-                buildTranslationMap(translation, (Map<String, Object>) value, fullKey);
-            } else if (value == null) {
-                translation.put(fullKey, "");
-            } else {
-                translation.put(fullKey, String.valueOf(value));
+        while (!stack.isEmpty()) {
+            YamlFrame frame = stack.peek();
+            if (!frame.entries.hasNext()) {
+                stack.pop();
+                continue;
             }
-        });
-    }
 
-    public static String getLanguage() {
-        String configLanguage = FuzzSettings.language;
-        return configLanguage.equalsIgnoreCase("none") ? DEFAULT_LANGUAGE : configLanguage;
+            Map.Entry<?, ?> entry = frame.entries.next();
+            String key = (String) entry.getKey();
+            String fullKey = frame.prefix.isEmpty() ? key : frame.prefix + "." + key;
+            Object value = entry.getValue();
+            if (value instanceof Map) {
+                stack.push(new YamlFrame((Map<?, ?>) value, fullKey));
+            } else {
+                translation.put(fullKey, Objects.toString(value, ""));
+            }
+        }
     }
 
     @NotNull
-    public static Map<String, String> getTranslation(String lang) {
-        return translations.getOrDefault(lang, Collections.emptyMap());
+    public static String getLanguage() {
+        String language = Objects.toString(FuzzSettings.language, TranslationConstants.DEFAULT_LANGUAGE).toLowerCase(Locale.ROOT);
+        return translations.containsKey(language) ? language : TranslationConstants.DEFAULT_LANGUAGE;
     }
 
     @Nullable
     public static String translateKeyToFormattedString(String lang, String key) {
-        return getTranslation(lang).get(key);
+        Map<String, String> translation = translations.get(lang);
+        String translated = translation == null ? null : translation.get(key);
+
+        if (translated != null || TranslationConstants.DEFAULT_LANGUAGE.equals(lang)) {
+            return translated;
+        }
+
+        Map<String, String> fallback = translations.get(TranslationConstants.DEFAULT_LANGUAGE);
+        return fallback == null ? null : fallback.get(key);
     }
 
     public static boolean isEnglish() {
-        return FuzzSettings.language.startsWith("en") || Objects.equals(FuzzSettings.language, "none");
+        return getLanguage().startsWith("en");
+    }
+
+    private static final class YamlFrame {
+        private final Iterator<? extends Map.Entry<?, ?>> entries;
+        private final String prefix;
+
+        private YamlFrame(Map<?, ?> yaml, String prefix) {
+            this.entries = yaml.entrySet().iterator();
+            this.prefix = prefix;
+        }
     }
 }

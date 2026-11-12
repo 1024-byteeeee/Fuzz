@@ -22,7 +22,6 @@ package top.byteeeee.fuzz.translations;
 
 import net.minecraft.network.chat.MutableComponent;
 
-import top.byteeeee.fuzz.FuzzModClient;
 import top.byteeeee.fuzz.utils.Messenger;
 
 public class Translator {
@@ -33,15 +32,15 @@ public class Translator {
     }
 
     public MutableComponent tr(String key, Object... args) {
-        String translationKey = FuzzModClient.MOD_ID + "." + this.translationPath + "." + key;
+        String translationKey = TranslationConstants.TRANSLATION_KEY_PREFIX + this.translationPath + "." + key;
         return Messenger.tr(translationKey, args);
     }
 
     public String getRuleNameTrKey(String name) {
-        return String.format("fuzz.rule.%s.name", name);
+        return TranslationConstants.TRANSLATION_KEY_PREFIX + "rule." + name + ".name";
     }
 
     public String getRuleDescTrKey(String name) {
-        return String.format("fuzz.rule.%s.desc", name);
+        return TranslationConstants.TRANSLATION_KEY_PREFIX + "rule." + name + ".desc";
     }
 }

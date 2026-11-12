@@ -23,15 +23,20 @@ package top.byteeeee.fuzz.mixin.translations;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.contents.TranslatableContents;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import top.byteeeee.fuzz.translations.FuzzTranslations;
+import top.byteeeee.fuzz.translations.TranslationConstants;
 
 import java.util.Objects;
 
@@ -42,20 +47,39 @@ public abstract class TranslatableTextMixin {
     @Final
     private String key;
 
+    @Shadow
+    private Language decomposedWith;
+
+    @Unique
+    private String fuzz$decomposedLanguage;
+
+    @Inject(method = "decompose", at = @At("HEAD"))
+    private void invalidateFuzzTranslation(CallbackInfo ci) {
+        if (this.key.startsWith(TranslationConstants.TRANSLATION_KEY_PREFIX)) {
+            String language = FuzzTranslations.getLanguage();
+            if (!language.equals(this.fuzz$decomposedLanguage)) {
+                this.fuzz$decomposedLanguage = language;
+                this.decomposedWith = null;
+            }
+        }
+    }
+
     @ModifyArg(
         method = "decompose",
         at = @At(
             value = "INVOKE",
-            //#if MC>=11800
+            //#if MC>=11900
             target = "Lnet/minecraft/network/chat/contents/TranslatableContents;decomposeTemplate(Ljava/lang/String;Ljava/util/function/Consumer;)V"
+            //#elseif MC>=11800
+            //$$ target = "Lnet/minecraft/network/chat/TranslatableComponent;decomposeTemplate(Ljava/lang/String;Ljava/util/function/Consumer;)V"
             //#else
             //$$ target = "Lnet/minecraft/network/chat/TranslatableComponent;decomposeTemplate(Ljava/lang/String;)V"
             //#endif
         )
     )
     private String applyModTranslation(String vanillaTranslatedFormattingString) {
-        if (this.key.startsWith("fuzz.") && Objects.equals(vanillaTranslatedFormattingString, this.key)) {
-            String modTranslated = FuzzTranslations.translateKeyToFormattedString(FuzzTranslations.getLanguage(), this.key);
+        if (this.fuzz$decomposedLanguage != null && Objects.equals(vanillaTranslatedFormattingString, this.key)) {
+            String modTranslated = FuzzTranslations.translateKeyToFormattedString(this.fuzz$decomposedLanguage, this.key);
             if (modTranslated != null) {
                 return modTranslated;
             }
